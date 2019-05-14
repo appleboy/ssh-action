@@ -3,6 +3,7 @@ workflow "Remote ssh commands" {
   resolves = [
     "Executing remote ssh commands",
     "Support Private Key",
+    "Multiple Commands",
   ]
 }
 
@@ -26,6 +27,19 @@ action "Support Private Key" {
   ]
   args = [
     "--user", "actions",
+    "--script", "'ls -al'",
+  ]
+}
+
+action "Multiple Commands" {
+  uses = "appleboy/ssh-action@master"
+  secrets = [
+    "HOST",
+    "KEY",
+  ]
+  args = [
+    "--user", "actions",
+    "--script", "'whoami'",
     "--script", "'ls -al'",
   ]
 }

@@ -65,6 +65,23 @@ action "Support Private Key" {
 }
 ```
 
+Multiple Commands
+
+```
+action "Multiple Commands" {
+  uses = "appleboy/ssh-action@master"
+  secrets = [
+    "HOST",
+    "KEY",
+  ]
+  args = [
+    "--user", "actions",
+    "--script", "'whoami'",
+    "--script", "'ls -al'",
+  ]
+}
+```
+
 see the detail of `drone-ssh` command
 
 ```

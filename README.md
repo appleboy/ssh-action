@@ -82,6 +82,8 @@ action "Multiple Commands" {
 }
 ```
 
+<img src="./images/multiple-command-result.png">
+
 see the detail of `drone-ssh` command
 
 ```

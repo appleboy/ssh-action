@@ -60,7 +60,7 @@ action "Support Private Key" {
   ]
   args = [
     "--user", "actions",
-    "--script", "ls -al",
+    "--script", "'ls -al'",
   ]
 }
 ```

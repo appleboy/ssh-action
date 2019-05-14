@@ -2,9 +2,11 @@
 
 [GitHub Action](https://developer.github.com/actions/) for executing remote ssh commands.
 
+<img src="./images/ssh-workflow.png">
+
 ## Usage
 
-copy files and artifacts via SSH as blow.
+Executing remote ssh commands.
 
 ```
 action "Copy multiple file" {

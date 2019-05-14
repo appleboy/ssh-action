@@ -9,10 +9,10 @@ action "Executing remote ssh commands" {
   uses = "appleboy/ssh-action@master"
   secrets = [
     "HOST",
-    "USERNAME",
     "PASSWORD",
   ]
   args = [
+    "--user", "actions",
     "--script", "whoami",
   ]
 }

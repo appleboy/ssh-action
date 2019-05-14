@@ -1,7 +1,8 @@
-workflow "Copy File Via SSH" {
+workflow "Remote ssh commands" {
   on = "push"
   resolves = [
     "Executing remote ssh commands",
+    "Support Private Key",
   ]
 }
 
@@ -14,5 +15,17 @@ action "Executing remote ssh commands" {
   args = [
     "--user", "actions",
     "--script", "whoami",
+  ]
+}
+
+action "Support Private Key" {
+  uses = "appleboy/ssh-action@master"
+  secrets = [
+    "HOST",
+    "KEY",
+  ]
+  args = [
+    "--user", "actions",
+    "--script", "ls -al",
   ]
 }

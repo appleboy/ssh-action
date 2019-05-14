@@ -84,6 +84,24 @@ action "Multiple Commands" {
 
 <img src="./images/multiple-command-result.png">
 
+Multiple Hosts
+
+```
+action "Multiple Hosts" {
+  uses = "appleboy/ssh-action@master"
+  secrets = [
+    "KEY",
+  ]
+  args = [
+    "--host", "foo.com",
+    "--host", "bar.com",
+    "--user", "actions",
+    "--script", "'whoami'",
+    "--script", "'ls -al'",
+  ]
+}
+```
+
 see the detail of `drone-ssh` command
 
 ```

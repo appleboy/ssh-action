@@ -98,6 +98,7 @@ action "Multiple Hosts" {
     "--user", "actions",
     "--script", "'whoami'",
     "--script", "'ls -al'",
+    "--script", "'cat test.txt'",
   ]
 }
 ```

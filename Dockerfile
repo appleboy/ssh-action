@@ -9,7 +9,7 @@ LABEL "com.github.actions.color"="gray-dark"
 LABEL "repository"="https://github.com/appleboy/ssh-action"
 LABEL "homepage"="https://github.com/appleboy"
 LABEL "maintainer"="Bo-Yi Wu <appleboy.tw@gmail.com>"
-LABEL "version"="0.0.1"
+LABEL "version"="0.0.2"
 
 ADD entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh

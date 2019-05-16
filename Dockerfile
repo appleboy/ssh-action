@@ -1,4 +1,4 @@
-FROM appleboy/drone-ssh:1.5.0-linux-amd64
+FROM appleboy/drone-ssh:1.5.1-linux-amd64
 
 # Github labels
 LABEL "com.github.actions.name"="SSH Commands"

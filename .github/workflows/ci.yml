@@ -56,8 +56,7 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.KEY }}
         port: ${{ secrets.PORT }}
-        envs:
-          - FOO
+        envs: FOO
         script: |
           echo "I am $FOO"
           echo "I am $BAR"

@@ -126,3 +126,17 @@ Pass environment variable to shell script
       echo "I am $FOO"
       echo "I am $BAR"
 ```
+
+Stop script after first failure. ex: missing `abc` folder
+
+```yaml
+- name: stop script if command error
+  uses: appleboy/ssh-action@master
+  with:
+    host: ${{ secrets.HOST }}
+    username: ${{ secrets.USERNAME }}
+    key: ${{ secrets.KEY }}
+    port: ${{ secrets.PORT }}
+    script_stop: true
+    script: "mkdir abc/def,ls -al"
+```

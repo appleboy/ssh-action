@@ -109,3 +109,21 @@ Multiple Hosts
       whoami
       ls -al
 ```
+
+Pass environment variable to shell script
+
+```diff
+- name: pass environment
+  uses: appleboy/ssh-action@master
++ env:
++   FOO: "BAR"
+  with:
+    host: ${{ secrets.HOST }}
+    username: ${{ secrets.USERNAME }}
+    key: ${{ secrets.KEY }}
+    port: ${{ secrets.PORT }}
++   envs: FOO
+    script: |
+      echo "I am $FOO"
+      echo "I am $BAR"
+```

@@ -1,0 +1,39 @@
+name: 'SSH Remote Commands'
+description: 'Executing remote ssh commands'
+author: 'Bo-Yi Wu'
+inputs:
+  host:
+    description: 'ssh remote host'
+  port:
+    description: 'ssh remote port'
+  username:
+    description: 'ssh username'
+  password:
+    description: 'ssh password'
+  timeout:
+    description: 'timeout for ssh to remote host'
+    default: "30s"
+  command_timeout:
+    description: 'timeout for ssh command'
+    default: "1m"
+  key:
+    description: 'content of ssh private key. ex raw content of ~/.ssh/id_rsa'
+  key_path:
+    description: 'path of ssh private key'
+  script:
+    description: 'execute commands'
+  script_stop:
+    description: 'stop script after first failure'
+    default: false
+  envs:
+    description: 'pass environment variable to shell script'
+  debug:
+    description: 'enable debug mode'
+    default: false
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+
+branding:
+  icon: 'terminal'
+  color: 'gray-dark'

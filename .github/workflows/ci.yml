@@ -34,3 +34,27 @@ jobs:
         script: |
           whoami
           ls -al
+
+    - name: stop script if command error
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        port: ${{ secrets.PORT }}
+        script: |
+          mkdir abc/def
+          ls -al
+
+    - name: pass environment
+      uses: appleboy/ssh-action@master
+      env:
+        FOO: "BAR"
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        port: ${{ secrets.PORT }}
+        script: |
+          echo "I am $FOO"
+          echo "I am $BAR"

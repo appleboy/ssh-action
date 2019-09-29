@@ -62,7 +62,7 @@ Executing remote ssh commands using password.
     username: ${{ secrets.USERNAME }}
     password: ${{ secrets.PASSWORD }}
     port: ${{ secrets.PORT }}
-    script: whoam
+    script: whoami
 ```
 
 Using private key
@@ -113,7 +113,6 @@ Multiple Hosts
 Pass environment variable to shell script
 
 ```diff
-- name: pass environment
   uses: appleboy/ssh-action@master
 + env:
 +   FOO: "BAR"

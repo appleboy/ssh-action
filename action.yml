@@ -6,6 +6,7 @@ inputs:
     description: 'ssh remote host'
   port:
     description: 'ssh remote port'
+    default: 22
   username:
     description: 'ssh username'
   password:

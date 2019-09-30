@@ -1,6 +1,6 @@
 # 🚀 SSH for GitHub Actions
 
-[GitHub Action](https://developer.github.com/actions/) for executing remote ssh commands.
+[GitHub Action](https://github.com/features/actions) for executing remote ssh commands.
 
 ![ssh workflow](./images/ssh-workflow.png)
 

@@ -46,7 +46,7 @@ Successfully executed commands to all host.
 see the [action.yml](./action.yml) file for more detail imformation.
 
 * host - scp remote host
-* port - scp remote port
+* port - scp remote port, default is `22`
 * username - scp username
 * password - scp password
 * timeout - timeout for ssh to remote host, default is `30s`

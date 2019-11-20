@@ -43,7 +43,9 @@ jobs:
     #     key: ${{ secrets.KEY }}
     #     port: ${{ secrets.PORT }}
     #     script_stop: true
-    #     script: "mkdir abc/def,ls -al"
+    #     script: |
+    #       mkdir abc/def
+    #       ls -al
 
     - name: pass environment
       uses: appleboy/ssh-action@master
@@ -56,5 +58,5 @@ jobs:
         port: ${{ secrets.PORT }}
         envs: FOO
         script: |
-          echo "I am $FOO"
-          echo "I am $BAR"
+          echo "I am $FOO, thanks"
+          echo "I am $BAR, thanks"

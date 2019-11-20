@@ -36,9 +36,9 @@ output:
 whoami
 ======END======
 out: ***
-==========================================
-Successfully executed commands to all host.
-==========================================
+==============================================
+✅ Successfully executed commands to all host.
+==============================================
 ```
 
 ## Input variables
@@ -106,45 +106,62 @@ Multiple Commands
 Multiple Hosts
 
 ```diff
-  uses: appleboy/ssh-action@master
-  with:
--   host: "foo.com"
-+   host: "foo.com,bar.com"
-    username: ${{ secrets.USERNAME }}
-    key: ${{ secrets.KEY }}
-    port: ${{ secrets.PORT }}
-    script: |
-      whoami
-      ls -al
+  - name: multiple host
+    uses: appleboy/ssh-action@master
+    with:
+-     host: "foo.com"
++     host: "foo.com,bar.com"
+      username: ${{ secrets.USERNAME }}
+      key: ${{ secrets.KEY }}
+      port: ${{ secrets.PORT }}
+      script: |
+        whoami
+        ls -al
 ```
 
 Pass environment variable to shell script
 
 ```diff
-  uses: appleboy/ssh-action@master
-+ env:
-+   FOO: "BAR"
-  with:
-    host: ${{ secrets.HOST }}
-    username: ${{ secrets.USERNAME }}
-    key: ${{ secrets.KEY }}
-    port: ${{ secrets.PORT }}
-+   envs: FOO
-    script: |
-      echo "I am $FOO"
-      echo "I am $BAR"
+  - name: pass environment
+    uses: appleboy/ssh-action@master
++   env:
++     FOO: "BAR"
+    with:
+      host: ${{ secrets.HOST }}
+      username: ${{ secrets.USERNAME }}
+      key: ${{ secrets.KEY }}
+      port: ${{ secrets.PORT }}
++     envs: FOO
+      script: |
+        echo "I am $FOO"
+        echo "I am $BAR"
 ```
 
 Stop script after first failure. ex: missing `abc` folder
 
-```yaml
-- name: stop script if command error
-  uses: appleboy/ssh-action@master
-  with:
-    host: ${{ secrets.HOST }}
-    username: ${{ secrets.USERNAME }}
-    key: ${{ secrets.KEY }}
-    port: ${{ secrets.PORT }}
-    script_stop: true
-    script: "mkdir abc/def,ls -al"
+```diff
+  - name: stop script if command error
+    uses: appleboy/ssh-action@master
+    with:
+      host: ${{ secrets.HOST }}
+      username: ${{ secrets.USERNAME }}
+      key: ${{ secrets.KEY }}
+      port: ${{ secrets.PORT }}
++     script_stop: true
+      script: |
+        mkdir abc/def
+        ls -al
+```
+
+output:
+
+```sh
+======CMD======
+mkdir abc/def
+ls -al
+
+======END======
+2019/11/21 01:16:21 Process exited with status 1
+err: mkdir: cannot create directory ‘abc/def’: No such file or directory
+##[error]Docker run failed with exit code 1
 ```

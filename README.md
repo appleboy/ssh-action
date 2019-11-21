@@ -43,14 +43,14 @@ out: ***
 
 ## Input variables
 
-see the [action.yml](./action.yml) file for more detail imformation.
+See [action.yml](./action.yml) for more detailed information.
 
-* host - scp remote host
-* port - scp remote port, default is `22`
-* username - scp username
-* password - scp password
+* host - remote host
+* port - remote port, default is `22`
+* username - ssh username
+* password - ssh password
 * timeout - timeout for ssh to remote host, default is `30s`
-* command_timeout - timeout for scp command, default is `1m`
+* command_timeout - timeout for ssh command, default is `1m`
 * key - content of ssh private key. ex raw content of ~/.ssh/id_rsa
 * key_path - path of ssh private key
 * script - execute commands

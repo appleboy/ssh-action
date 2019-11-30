@@ -16,7 +16,7 @@ inputs:
     default: "30s"
   command_timeout:
     description: 'timeout for ssh command'
-    default: "1m"
+    default: "10m"
   key:
     description: 'content of ssh private key. ex raw content of ~/.ssh/id_rsa'
   key_path:

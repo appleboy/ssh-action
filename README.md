@@ -50,7 +50,7 @@ See [action.yml](./action.yml) for more detailed information.
 * username - ssh username
 * password - ssh password
 * timeout - timeout for ssh to remote host, default is `30s`
-* command_timeout - timeout for ssh command, default is `1m`
+* command_timeout - timeout for ssh command, default is `10m`
 * key - content of ssh private key. ex raw content of ~/.ssh/id_rsa
 * key_path - path of ssh private key
 * script - execute commands

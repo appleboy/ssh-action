@@ -58,6 +58,16 @@ See [action.yml](./action.yml) for more detailed information.
 * envs - pass environment variable to shell script
 * debug - enable debug mode
 
+SSH Proxy Setting:
+
+* proxy_host - proxy host
+* proxy_port - proxy port, default is `22`
+* proxy_username - proxy username
+* proxy_password - proxy password
+* proxy_timeout - timeout for ssh to proxy host, default is `30s`
+* proxy_key - content of ssh proxy private key.
+* proxy_key_path - path of ssh proxy private key
+
 ### Example
 
 Executing remote ssh commands using password.
@@ -164,4 +174,47 @@ ls -al
 2019/11/21 01:16:21 Process exited with status 1
 err: mkdir: cannot create directory ‘abc/def’: No such file or directory
 ##[error]Docker run failed with exit code 1
+```
+
+How to connect remote server using `ProxyCommand`?
+
+```bash
++--------+       +----------+      +-----------+
+| Laptop | <-->  | Jumphost | <--> | FooServer |
++--------+       +----------+      +-----------+
+```
+
+in your `~/.ssh/config`, you will see the following.
+
+```bash
+Host Jumphost
+  HostName Jumphost
+  User ubuntu
+  Port 22
+  IdentityFile ~/.ssh/keys/jump_host.pem
+
+Host FooServer
+  HostName FooServer
+  User ubuntu
+  Port 22
+  ProxyCommand ssh -q -W %h:%p Jumphost
+```
+
+How to convert to YAML format of GitHubActions.
+
+```diff
+  - name: ssh proxy command
+    uses: appleboy/ssh-action@master
+    with:
+      host: ${{ secrets.HOST }}
+      username: ${{ secrets.USERNAME }}
+      key: ${{ secrets.KEY }}
+      port: ${{ secrets.PORT }}
++     proxy_host: ${{ secrets.PROXY_HOST }}
++     proxy_username: ${{ secrets.PROXY_USERNAME }}
++     proxy_key: ${{ secrets.PROXY_KEY }}
++     proxy_port: ${{ secrets.PROXY_PORT }}
+      script: |
+        mkdir abc/def
+        ls -al
 ```

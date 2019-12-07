@@ -136,12 +136,13 @@ Pass environment variable to shell script
     uses: appleboy/ssh-action@master
 +   env:
 +     FOO: "BAR"
++     BAR: "FOO"
     with:
       host: ${{ secrets.HOST }}
       username: ${{ secrets.USERNAME }}
       key: ${{ secrets.KEY }}
       port: ${{ secrets.PORT }}
-+     envs: FOO
++     envs: FOO,BAR
       script: |
         echo "I am $FOO"
         echo "I am $BAR"

@@ -60,3 +60,18 @@ jobs:
         script: |
           echo "I am $FOO, thanks"
           echo "I am $BAR, thanks"
+
+    - name: pass multiple environment
+      uses: appleboy/ssh-action@master
+      env:
+        FOO: "BAR"
+        BAR: "FOO"
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        port: ${{ secrets.PORT }}
+        envs: FOO,BAR
+        script: |
+          echo "I am $FOO, thanks"
+          echo "I am $BAR, thanks"

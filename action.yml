@@ -21,6 +21,22 @@ inputs:
     description: 'content of ssh private key. ex raw content of ~/.ssh/id_rsa'
   key_path:
     description: 'path of ssh private key'
+  proxy_host:
+    description: 'ssh proxy remote host'
+  proxy_port:
+    description: 'ssh proxy remote port'
+    default: 22
+  proxy_username:
+    description: 'ssh proxy username'
+  proxy_password:
+    description: 'ssh proxy password'
+  proxy_timeout:
+    description: 'timeout for ssh to proxy host'
+    default: "30s"
+  proxy_key:
+    description: 'content of ssh proxy private key. ex raw content of ~/.ssh/id_rsa'
+  proxy_key_path:
+    description: 'path of ssh proxy private key'
   script:
     description: 'execute commands'
   script_stop:

@@ -75,3 +75,15 @@ jobs:
         script: |
           echo "I am $FOO, thanks"
           echo "I am $BAR, thanks"
+
+    - name: ssh key passphrase
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY2 }}
+        port: ${{ secrets.PORT }}
+        passphrase: ${{ secrets.PASSPHRASE }}
+        script: |
+          whoami
+          ls -al

@@ -77,7 +77,7 @@ jobs:
           echo "I am $BAR, thanks"
 
     - name: ssh key passphrase
-      uses: appleboy/ssh-action@passphrase
+      uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}

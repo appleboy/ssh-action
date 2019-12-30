@@ -7,6 +7,8 @@ inputs:
   port:
     description: 'ssh remote port'
     default: 22
+  passphrase:
+    description: 'ssh key passphrase'
   username:
     description: 'ssh username'
   password:
@@ -30,6 +32,8 @@ inputs:
     description: 'ssh proxy username'
   proxy_password:
     description: 'ssh proxy password'
+  proxy_passphrase:
+    description: 'ssh proxy key passphrase'
   proxy_timeout:
     description: 'timeout for ssh to proxy host'
     default: "30s"

@@ -49,6 +49,7 @@ See [action.yml](./action.yml) for more detailed information.
 * port - remote port, default is `22`
 * username - ssh username
 * password - ssh password
+* passphrase - the passphrase is usually to encrypt the private key
 * timeout - timeout for ssh to remote host, default is `30s`
 * command_timeout - timeout for ssh command, default is `10m`
 * key - content of ssh private key. ex raw content of ~/.ssh/id_rsa
@@ -64,6 +65,7 @@ SSH Proxy Setting:
 * proxy_port - proxy port, default is `22`
 * proxy_username - proxy username
 * proxy_password - proxy password
+* proxy_passphrase - the passphrase is usually to encrypt the private key
 * proxy_timeout - timeout for ssh to proxy host, default is `30s`
 * proxy_key - content of ssh proxy private key.
 * proxy_key_path - path of ssh proxy private key
@@ -217,5 +219,21 @@ How to convert to YAML format of GitHubActions.
 +     proxy_port: ${{ secrets.PROXY_PORT }}
       script: |
         mkdir abc/def
+        ls -al
+```
+
+Protecting a Private Key. The purpose of the passphrase is usually to encrypt the private key. This makes the key file by itself useless to an attacker. It is not uncommon for files to leak from backups or decommissioned hardware, and hackers commonly exfiltrate files from compromised systems.
+
+```diff
+  - name: ssh key passphrase
+    uses: appleboy/ssh-action@master
+    with:
+      host: ${{ secrets.HOST }}
+      username: ${{ secrets.USERNAME }}
+      key: ${{ secrets.KEY }}
+      port: ${{ secrets.PORT }}
++     passphrase: ${{ secrets.PASSPHRASE }}
+      script: |
+        whoami
         ls -al
 ```

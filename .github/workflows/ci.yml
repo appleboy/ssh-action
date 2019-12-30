@@ -81,7 +81,7 @@ jobs:
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.KEY2 }}
+        key: ${{ secrets.SSH2 }}
         port: ${{ secrets.PORT }}
         passphrase: ${{ secrets.PASSPHRASE }}
         script: |

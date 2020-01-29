@@ -13,6 +13,9 @@ inputs:
     description: 'ssh username'
   password:
     description: 'ssh password'
+  sync:
+    description: 'synchronous execution if multiple hosts'
+    default: false
   timeout:
     description: 'timeout for ssh to remote host'
     default: "30s"

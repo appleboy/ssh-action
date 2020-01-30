@@ -50,6 +50,7 @@ See [action.yml](./action.yml) for more detailed information.
 * username - ssh username
 * password - ssh password
 * passphrase - the passphrase is usually to encrypt the private key
+* sync - synchronous execution if multiple hosts, default is false
 * timeout - timeout for ssh to remote host, default is `30s`
 * command_timeout - timeout for ssh command, default is `10m`
 * key - content of ssh private key. ex raw content of ~/.ssh/id_rsa
@@ -123,6 +124,22 @@ Multiple Hosts
     with:
 -     host: "foo.com"
 +     host: "foo.com,bar.com"
+      username: ${{ secrets.USERNAME }}
+      key: ${{ secrets.KEY }}
+      port: ${{ secrets.PORT }}
+      script: |
+        whoami
+        ls -al
+```
+
+Synchronous execution on multiple hosts
+
+```diff
+  - name: multiple host
+    uses: appleboy/ssh-action@master
+    with:
+      host: "foo.com,bar.com"
++     sync: true
       username: ${{ secrets.USERNAME }}
       key: ${{ secrets.KEY }}
       port: ${{ secrets.PORT }}

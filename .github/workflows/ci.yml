@@ -76,6 +76,7 @@ jobs:
         script: |
           echo "I am $FOO, thanks"
           echo "I am $BAR, thanks"
+          echo "sha: $SHA"
 
     - name: ssh key passphrase
       uses: appleboy/ssh-action@master

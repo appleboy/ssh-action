@@ -156,6 +156,7 @@ Pass environment variable to shell script
 +   env:
 +     FOO: "BAR"
 +     BAR: "FOO"
++     SHA: ${{ github.sha }}
     with:
       host: ${{ secrets.HOST }}
       username: ${{ secrets.USERNAME }}
@@ -165,6 +166,7 @@ Pass environment variable to shell script
       script: |
         echo "I am $FOO"
         echo "I am $BAR"
+        echo "sha: $SHA"
 ```
 
 Stop script after first failure. ex: missing `abc` folder

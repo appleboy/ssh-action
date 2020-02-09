@@ -66,12 +66,13 @@ jobs:
       env:
         FOO: "BAR"
         BAR: "FOO"
+        SHA: ${{ github.sha }}
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.KEY }}
         port: ${{ secrets.PORT }}
-        envs: FOO,BAR
+        envs: FOO,BAR,SHA
         script: |
           echo "I am $FOO, thanks"
           echo "I am $BAR, thanks"

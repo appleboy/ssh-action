@@ -1,5 +1,5 @@
 name: remote ssh command
-on: [push]
+on: [push, pull_request]
 jobs:
 
   build:
@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: executing remote ssh commands using password
-      uses: appleboy/ssh-action@master
+      uses: ./
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
@@ -16,7 +16,7 @@ jobs:
         script: whoami
 
     - name: executing remote ssh commands using ssh key
-      uses: appleboy/ssh-action@master
+      uses: ./
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
@@ -25,7 +25,7 @@ jobs:
         script: whoami
 
     - name: multiple command
-      uses: appleboy/ssh-action@master
+      uses: ./
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
@@ -36,7 +36,7 @@ jobs:
           ls -al
 
     # - name: stop script if command error
-    #   uses: appleboy/ssh-action@master
+    #   uses: ./
     #   with:
     #     host: ${{ secrets.HOST }}
     #     username: ${{ secrets.USERNAME }}
@@ -48,7 +48,7 @@ jobs:
     #       ls -al
 
     - name: pass environment
-      uses: appleboy/ssh-action@master
+      uses: ./
       env:
         FOO: "BAR"
       with:
@@ -62,7 +62,7 @@ jobs:
           echo "I am $BAR, thanks"
 
     - name: pass multiple environment
-      uses: appleboy/ssh-action@master
+      uses: ./
       env:
         FOO: "BAR"
         BAR: "FOO"
@@ -79,7 +79,7 @@ jobs:
           echo "sha: $SHA"
 
     - name: ssh key passphrase
-      uses: appleboy/ssh-action@master
+      uses: ./
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}

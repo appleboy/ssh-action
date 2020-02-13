@@ -3,9 +3,9 @@ description: 'Executing remote ssh commands'
 author: 'Bo-Yi Wu'
 inputs:
   host:
-    description: 'ssh remote host'
+    description: 'ssh host'
   port:
-    description: 'ssh remote port'
+    description: 'ssh port'
     default: 22
   passphrase:
     description: 'ssh key passphrase'
@@ -17,7 +17,7 @@ inputs:
     description: 'synchronous execution if multiple hosts'
     default: false
   timeout:
-    description: 'timeout for ssh to remote host'
+    description: 'timeout for ssh to host'
     default: "30s"
   command_timeout:
     description: 'timeout for ssh command'
@@ -27,9 +27,9 @@ inputs:
   key_path:
     description: 'path of ssh private key'
   proxy_host:
-    description: 'ssh proxy remote host'
+    description: 'ssh proxy host'
   proxy_port:
-    description: 'ssh proxy remote port'
+    description: 'ssh proxy port'
     default: 22
   proxy_username:
     description: 'ssh proxy username'

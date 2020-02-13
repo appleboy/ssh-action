@@ -45,8 +45,8 @@ out: ***
 
 See [action.yml](./action.yml) for more detailed information.
 
-* host - remote host
-* port - remote port, default is `22`
+* host - ssh host
+* port - ssh port, default is `22`
 * username - ssh username
 * password - ssh password
 * passphrase - the passphrase is usually to encrypt the private key

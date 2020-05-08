@@ -6,6 +6,8 @@
 
 [![Actions Status](https://github.com/appleboy/ssh-action/workflows/remote%20ssh%20command/badge.svg)](https://github.com/appleboy/ssh-action/actions)
 
+**Importment**: Only support **Linux** container.
+
 ## Usage
 
 Executing remote ssh commands.

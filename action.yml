@@ -26,6 +26,8 @@ inputs:
     description: 'content of ssh private key. ex raw content of ~/.ssh/id_rsa'
   key_path:
     description: 'path of ssh private key'
+  fingerprint:
+    description: 'sha256 fingerprint of the host public key'
   proxy_host:
     description: 'ssh proxy host'
   proxy_port:
@@ -44,6 +46,8 @@ inputs:
     description: 'content of ssh proxy private key. ex raw content of ~/.ssh/id_rsa'
   proxy_key_path:
     description: 'path of ssh proxy private key'
+  proxy_fingerprint:
+    description: 'sha256 fingerprint of the proxy host public key'
   script:
     description: 'execute commands'
   script_stop:

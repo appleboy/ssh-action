@@ -57,6 +57,7 @@ See [action.yml](./action.yml) for more detailed information.
 * command_timeout - timeout for ssh command, default is `10m`
 * key - content of ssh private key. ex raw content of ~/.ssh/id_rsa
 * key_path - path of ssh private key
+* fingerprint - fingerprint SHA256 of the host public key, default is to skip verification
 * script - execute commands
 * script_stop - stop script after first failure
 * envs - pass environment variable to shell script
@@ -72,6 +73,7 @@ SSH Proxy Setting:
 * proxy_timeout - timeout for ssh to proxy host, default is `30s`
 * proxy_key - content of ssh proxy private key.
 * proxy_key_path - path of ssh proxy private key
+* proxy_fingerprint - fingerprint SHA256 of the proxy host public key, default is to skip verification
 
 ### Example
 

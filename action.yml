@@ -16,6 +16,9 @@ inputs:
   sync:
     description: 'synchronous execution if multiple hosts'
     default: false
+  use_insecure_cipher:
+    description: 'include more ciphers with use_insecure_cipher'
+    default: false
   timeout:
     description: 'timeout for ssh to host'
     default: "30s"
@@ -48,6 +51,9 @@ inputs:
     description: 'path of ssh proxy private key'
   proxy_fingerprint:
     description: 'sha256 fingerprint of the proxy host public key'
+  proxy_use_insecure_cipher:
+    description: 'include more ciphers with use_insecure_cipher'
+    default: false
   script:
     description: 'execute commands'
   script_stop:

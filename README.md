@@ -62,6 +62,7 @@ See [action.yml](./action.yml) for more detailed information.
 * script_stop - stop script after first failure
 * envs - pass environment variable to shell script
 * debug - enable debug mode
+* use_insecure_cipher - include more ciphers with use_insecure_cipher (see [#56](https://github.com/appleboy/ssh-action/issues/56))
 
 SSH Proxy Setting:
 
@@ -74,6 +75,7 @@ SSH Proxy Setting:
 * proxy_key - content of ssh proxy private key.
 * proxy_key_path - path of ssh proxy private key
 * proxy_fingerprint - fingerprint SHA256 of the proxy host public key, default is to skip verification
+* proxy_use_insecure_cipher - include more ciphers with use_insecure_cipher (see [#56](https://github.com/appleboy/ssh-action/issues/56))
 
 ### Example
 

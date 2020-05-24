@@ -92,3 +92,13 @@ jobs:
         script: |
           whoami
           ls -al
+
+    - name: use insecure cipher
+      uses: ./
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
+        script: whoami
+        use_insecure_cipher: true

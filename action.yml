@@ -19,6 +19,8 @@ inputs:
   use_insecure_cipher:
     description: 'include more ciphers with use_insecure_cipher'
     default: false
+  cipher:
+    description: 'the allowed cipher algorithms. If unspecified then a sensible'
   timeout:
     description: 'timeout for ssh to host'
     default: "30s"
@@ -51,6 +53,8 @@ inputs:
     description: 'path of ssh proxy private key'
   proxy_fingerprint:
     description: 'sha256 fingerprint of the proxy host public key'
+  proxy_cipher:
+    description: 'the allowed cipher algorithms. If unspecified then a sensible'
   proxy_use_insecure_cipher:
     description: 'include more ciphers with use_insecure_cipher'
     default: false

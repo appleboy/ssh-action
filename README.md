@@ -177,6 +177,8 @@ Pass environment variable to shell script
         echo "sha: $SHA"
 ```
 
+_Inside `env` object, you need to pass every environment variable as a string, passing `Integer` data type or any other may output unexpected results._
+
 Stop script after first failure. ex: missing `abc` folder
 
 ```diff

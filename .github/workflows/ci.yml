@@ -104,3 +104,17 @@ jobs:
             ls \
               -lah
         use_insecure_cipher: true
+
+    # https://github.com/appleboy/ssh-action/issues/75#issuecomment-668314271
+    - name: Multiline SSH commands interpreted as single lines
+      uses: ./
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
+        script_stop: true
+        script: |
+            ls \
+              -lah
+        use_insecure_cipher: true

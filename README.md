@@ -79,6 +79,21 @@ SSH Proxy Setting:
 * proxy_use_insecure_cipher - include more ciphers with use_insecure_cipher (see [#56](https://github.com/appleboy/ssh-action/issues/56))
 * proxy_cipher - the allowed cipher algorithms. If unspecified then a sensible
 
+### Setting up SSH Key
+Make sure to follow the below steps while creating SSH Keys and using them. 
+* Login with username specified in Github Secrets.
+* Generate a RSA Key-Pair. 
+   ```bash 
+   ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+   ```
+* Add newly generated key into Authorized keys. Read more about authorized keys [here](https://www.ssh.com/ssh/authorized_keys/).
+    ```bash 
+    cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+    ```
+* Copy Private Key content and paste in Github Secrets. 
+   ```bash 
+   clip < ~/.ssh/id_rsa
+   ```
 ### Example
 
 Executing remote ssh commands using password.

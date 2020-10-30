@@ -82,6 +82,7 @@ SSH Proxy Setting:
 ### Setting up SSH Key
 
 Make sure to follow the below steps while creating SSH Keys and using them.
+The best practice is create the SSH Keys on local machine not remote machine.
 Login with username specified in Github Secrets. Generate a RSA Key-Pair:
 
  ```bash
@@ -91,7 +92,7 @@ Login with username specified in Github Secrets. Generate a RSA Key-Pair:
 Add newly generated key into Authorized keys. Read more about authorized keys [here](https://www.ssh.com/ssh/authorized_keys/).
 
 ```bash
-cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+cat .ssh/id_rsa.pub | ssh b@B 'cat >> .ssh/authorized_keys'
 ```
 
 Copy Private Key content and paste in Github Secrets.

@@ -164,6 +164,21 @@ Multiple Hosts
         ls -al
 ```
 
+Multiple Hosts with differebt port
+
+```diff
+  - name: multiple host
+    uses: appleboy/ssh-action@master
+    with:
+-     host: "foo.com"
++     host: "foo.com:1234,bar.com:5678"
+      username: ${{ secrets.USERNAME }}
+      key: ${{ secrets.KEY }}
+      script: |
+        whoami
+        ls -al
+```
+
 Synchronous execution on multiple hosts
 
 ```diff

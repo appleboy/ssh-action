@@ -164,7 +164,7 @@ Multiple Hosts
         ls -al
 ```
 
-Multiple Hosts with differebt port
+Multiple hosts with different port
 
 ```diff
   - name: multiple host

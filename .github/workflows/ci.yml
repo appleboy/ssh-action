@@ -118,3 +118,17 @@ jobs:
             ls \
               -lah
         use_insecure_cipher: true
+
+    # https://github.com/appleboy/ssh-action/issues/85
+    - name: Deployment to multiple hosts with different ports
+      uses: ./
+      with:
+        host: "${{ secrets.HOST }}:${{ secrets.PORT }}"
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: 1024
+        script_stop: true
+        script: |
+            ls \
+              -lah
+        use_insecure_cipher: true

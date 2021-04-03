@@ -79,27 +79,81 @@ out: ***
 ==============================================
 ```
 
-### Setting up SSH Key
+### Setting up a SSH Key
 
 Make sure to follow the below steps while creating SSH Keys and using them.
 The best practice is create the SSH Keys on local machine not remote machine.
 Login with username specified in Github Secrets. Generate a RSA Key-Pair:
 
- ```bash
- ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
- ```
+<details>
+<summary>rsa</summary>
+<p>
+
+```bash
+ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+```
+
+</p>
+</details>
+
+<details>
+<summary>ed25519</summary>
+<p>
+
+```bash
+ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
+```
+
+</p>
+</details>
 
 Add newly generated key into Authorized keys. Read more about authorized keys [here](https://www.ssh.com/ssh/authorized_keys/).
+
+<details>
+<summary>rsa</summary>
+<p>
 
 ```bash
 cat .ssh/id_rsa.pub | ssh b@B 'cat >> .ssh/authorized_keys'
 ```
 
+</p>
+</details>
+
+<details>
+<summary>ed25519</summary>
+<p>
+
+```bash
+cat .ssh/id_ed25519.pub | ssh b@B 'cat >> .ssh/authorized_keys'
+```
+
+</p>
+</details>
+
 Copy Private Key content and paste in Github Secrets.
+
+<details>
+<summary>rsa</summary>
+<p>
 
 ```bash
 clip < ~/.ssh/id_rsa
 ```
+
+</p>
+</details>
+
+<details>
+<summary>ed25519</summary>
+<p>
+
+```bash
+clip < ~/.ssh/id_ed25519
+```
+
+</p>
+</details>
 
 See the detail information about [SSH login without password](http://www.linuxproblem.org/art_9.html)
 

@@ -365,3 +365,9 @@ It is not uncommon for files to leak from backups or decommissioned hardware, an
         whoami
         ls -al
 ```
+
+## Contributing
+We would love for you to contribute to `appleboy/ssh-action`, pull requests are welcome!
+
+## License
+The scripts and documentation in this project are released under the [MIT License](LICENSE)

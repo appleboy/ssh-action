@@ -155,7 +155,13 @@ clip < ~/.ssh/id_ed25519
 </p>
 </details>
 
-See the detail information about [SSH login without password](http://www.linuxproblem.org/art_9.html)
+See the detail information about [SSH login without password](http://www.linuxproblem.org/art_9.html).
+
+**A note** from one of our readers: Depending on your version of SSH you might also have to do the following changes:
+
+* Put the public key in `.ssh/authorized_keys2`
+* Change the permissions of `.ssh` to 700
+* Change the permissions of `.ssh/authorized_keys2` to 640
 
 ### Example
 

@@ -378,7 +378,7 @@ Setting up SSH host fingerprint verification can help to prevent Person-in-the-M
 
 In modern OpenSSH releases, the _default_ key types to be fetched are `rsa` (since version 5.1), `ecdsa` (since version 6.0), and `ed25519` (since version 6.7).
 
-```
+```sh
 ssh example.com ssh-keygen -l -f /etc/ssh/ssh_host_ed25519_key.pub | cut -d ' ' -f2
 ```
 
@@ -399,7 +399,9 @@ Now you can adjust you config:
 ```
 
 ## Contributing
+
 We would love for you to contribute to `appleboy/ssh-action`, pull requests are welcome!
 
 ## License
+
 The scripts and documentation in this project are released under the [MIT License](LICENSE)

@@ -1,5 +1,10 @@
 name: remote ssh command
 on: [push]
+
+env:
+  FOO: "BAR"
+  BAR: "FOO"
+
 jobs:
 
   build:

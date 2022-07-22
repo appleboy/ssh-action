@@ -269,7 +269,7 @@ See the detail information about [SSH login without password](http://www.linuxpr
       username: ${{ secrets.USERNAME }}
       key: ${{ secrets.KEY }}
       port: ${{ secrets.PORT }}
-+     envs: FOO,BAR
++     envs: FOO,BAR,SHA
       script: |
         echo "I am $FOO"
         echo "I am $BAR"

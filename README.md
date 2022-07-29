@@ -398,6 +398,25 @@ Now you can adjust you config:
         ls -al
 ```
 
+## FAQ
+
+### Login with an EC2 instance
+
+See the [solution](https://github.com/appleboy/ssh-action/issues/80#issuecomment-1130407377). Open the following file
+
+```sh
+/etc/ssh/sshd_config
+```
+
+and add the following configuration
+
+```sh
+PubkeyAuthentication yes
+PubkeyAcceptedKeyTypes=+ssh-rsa
+```
+
+restart the ssh server finally.
+
 ## Contributing
 
 We would love for you to contribute to `appleboy/ssh-action`, pull requests are welcome!

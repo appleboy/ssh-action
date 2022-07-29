@@ -289,7 +289,7 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
       username: ${{ secrets.USERNAME }}
       key: ${{ secrets.KEY }}
       port: ${{ secrets.PORT }}
-+     envs: FOO,BAR
++     envs: FOO,BAR,SHA
       script: |
         echo "I am $FOO"
         echo "I am $BAR"

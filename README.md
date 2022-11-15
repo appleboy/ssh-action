@@ -20,7 +20,7 @@ See [action.yml](./action.yml) for more detailed information.
 * `sync` - synchronous execution if multiple hosts, default is false
 * `timeout` - timeout for ssh to remote host, default is `30s`
 * `command_timeout` - timeout for ssh command, default is `10m`
-* `key` - content of ssh private key. ex raw content of ~/.ssh/id_rsa, rembemer include the BEGIN and END lines 
+* `key` - content of ssh private key. ex raw content of ~/.ssh/id_rsa, remember include the BEGIN and END lines 
 * `key_path` - path of ssh private key
 * `fingerprint` - fingerprint SHA256 of the host public key, default is to skip verification
 * `script` - execute commands

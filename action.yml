@@ -1,4 +1,4 @@
-name: 'SSH Remote Commands'
+name: 'SSH Remote Commands for ARM64'
 description: 'Executing remote ssh commands'
 author: 'Bo-Yi Wu'
 inputs:

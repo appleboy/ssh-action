@@ -141,11 +141,11 @@ jobs:
               -lah
         use_insecure_cipher: true
 
-    - name: SSH ED25519 Private Key
-      uses: ./
-      with:
-        host: ${{ secrets.TUNNEL_HOST }}
-        username: ${{ secrets.TUNNEL_USERNAME }}
-        key: ${{ secrets.ID_ED25519 }}
-        port: ${{ secrets.TUNNEL_PORT }}
-        script: whoami
+    # - name: SSH ED25519 Private Key
+    #   uses: ./
+    #   with:
+    #     host: ${{ secrets.TUNNEL_HOST }}
+    #     username: ${{ secrets.TUNNEL_USERNAME }}
+    #     key: ${{ secrets.ID_ED25519 }}
+    #     port: ${{ secrets.TUNNEL_PORT }}
+    #     script: whoami

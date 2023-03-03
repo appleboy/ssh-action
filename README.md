@@ -85,13 +85,13 @@ Make sure to follow the below steps while creating SSH Keys and using them.
 The best practice is create the SSH Keys on local machine not remote machine.
 Login with username specified in Github Secrets. Generate a RSA Key-Pair:
 
-rsa
+### Generate rsa key
 
 ```bash
 ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
 ```
 
-ed25519
+### Generate ed25519 key
 
 ```bash
 ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
@@ -99,13 +99,13 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 Add newly generated key into Authorized keys. Read more about authorized keys [here](https://www.ssh.com/ssh/authorized_keys/).
 
-rsa
+### Add rsa key into Authorized keys
 
 ```bash
 cat .ssh/id_rsa.pub | ssh b@B 'cat >> .ssh/authorized_keys'
 ```
 
-ed25519
+### Add ed25519 key into Authorized keys
 
 ```bash
 cat .ssh/id_ed25519.pub | ssh b@B 'cat >> .ssh/authorized_keys'
@@ -113,13 +113,13 @@ cat .ssh/id_ed25519.pub | ssh b@B 'cat >> .ssh/authorized_keys'
 
 Copy Private Key content and paste in Github Secrets.
 
-rsa
+### Copy rsa Private key
 
 ```bash
 clip < ~/.ssh/id_rsa
 ```
 
-ed25519
+### Copy ed25519 Private key
 
 ```bash
 clip < ~/.ssh/id_ed25519

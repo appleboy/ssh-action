@@ -20,7 +20,7 @@ See [action.yml](./action.yml) for more detailed information.
 * `sync` - synchronous execution if multiple hosts, default is false
 * `timeout` - timeout for ssh to remote host, default is `30s`
 * `command_timeout` - timeout for ssh command, default is `10m`
-* `key` - content of ssh private key. ex raw content of ~/.ssh/id_rsa, remember include the BEGIN and END lines 
+* `key` - content of ssh private key. ex raw content of ~/.ssh/id_rsa, remember include the BEGIN and END lines
 * `key_path` - path of ssh private key
 * `fingerprint` - fingerprint SHA256 of the host public key, default is to skip verification
 * `script` - execute commands
@@ -85,75 +85,45 @@ Make sure to follow the below steps while creating SSH Keys and using them.
 The best practice is create the SSH Keys on local machine not remote machine.
 Login with username specified in Github Secrets. Generate a RSA Key-Pair:
 
-<details>
-<summary>rsa</summary>
-<p>
+rsa
 
 ```bash
 ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
 ```
 
-</p>
-</details>
-
-<details>
-<summary>ed25519</summary>
-<p>
+ed25519
 
 ```bash
 ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 ```
 
-</p>
-</details>
-
 Add newly generated key into Authorized keys. Read more about authorized keys [here](https://www.ssh.com/ssh/authorized_keys/).
 
-<details>
-<summary>rsa</summary>
-<p>
+rsa
 
 ```bash
 cat .ssh/id_rsa.pub | ssh b@B 'cat >> .ssh/authorized_keys'
 ```
 
-</p>
-</details>
-
-<details>
-<summary>ed25519</summary>
-<p>
+ed25519
 
 ```bash
 cat .ssh/id_ed25519.pub | ssh b@B 'cat >> .ssh/authorized_keys'
 ```
 
-</p>
-</details>
-
 Copy Private Key content and paste in Github Secrets.
 
-<details>
-<summary>rsa</summary>
-<p>
+rsa
 
 ```bash
 clip < ~/.ssh/id_rsa
 ```
 
-</p>
-</details>
-
-<details>
-<summary>ed25519</summary>
-<p>
+ed25519
 
 ```bash
 clip < ~/.ssh/id_ed25519
 ```
-
-</p>
-</details>
 
 See the detail information about [SSH login without password](http://www.linuxproblem.org/art_9.html).
 
@@ -171,8 +141,7 @@ If you are currently using OpenSSH and are getting the following error:
 ssh: handshake failed: ssh: unable to authenticate, attempted methods [none publickey]
 ```
 
-Make sure that your key algorithm of choice is supported. On Ubuntu 20.04 or later you must explicitly allow the use of the ssh-rsa algorithm. Add the following line to your OpenSSH daemon file (which is either `/etc/ssh/sshd_config` or a drop-in file under 
-`/etc/ssh/sshd_config.d/`):
+Make sure that your key algorithm of choice is supported. On Ubuntu 20.04 or later you must explicitly allow the use of the ssh-rsa algorithm. Add the following line to your OpenSSH daemon file (which is either `/etc/ssh/sshd_config` or a drop-in file under `/etc/ssh/sshd_config.d/`):
 
 ```bash
 CASignatureAlgorithms +ssh-rsa

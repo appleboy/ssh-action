@@ -63,18 +63,20 @@ jobs:
           whoami
           ls -al
 
-    # - name: stop script if command error
-    #   if: always()
-    #   uses: ./
-    #   with:
-    #     host: ${{ secrets.HOST }}
-    #     username: ${{ secrets.USERNAME }}
-    #     key: ${{ secrets.KEY }}
-    #     port: ${{ secrets.PORT }}
-    #     script_stop: true
-    #     script: |
-    #       mkdir abc/def
-    #       ls -al
+    - name: stop script if command error
+      uses: ./
+      continue-on-error: true
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        port: ${{ secrets.PORT }}
+        script_stop: true
+        sync: true
+        debug: true
+        script: |
+          mkdir abc/def
+          ls -al
 
     - name: pass environment
       uses: ./

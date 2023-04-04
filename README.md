@@ -10,6 +10,8 @@
 
 **Important**: Only support **Linux** [docker](https://www.docker.com/) container.
 
+This thing is built using [Golang](https://go.dev) and [drone-ssh](https://github.com/appleboy/drone-ssh). 🚀
+
 ## Input variables
 
 See [action.yml](./action.yml) for more detailed information.

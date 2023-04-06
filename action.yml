@@ -33,6 +33,10 @@ inputs:
     description: 'path of ssh private key'
   fingerprint:
     description: 'sha256 fingerprint of the host public key'
+  source:
+    description: 'path of file/folder'
+  target:
+    description: 'scp file/folder to server path'
   proxy_host:
     description: 'ssh proxy host'
   proxy_port:

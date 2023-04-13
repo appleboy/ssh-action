@@ -7,7 +7,7 @@ env:
 
 jobs:
 
-  build:
+  testing01:
     name: Build
     runs-on: ubuntu-latest
     steps:
@@ -172,3 +172,28 @@ jobs:
     #     key: ${{ secrets.ID_ED25519 }}
     #     port: ${{ secrets.TUNNEL_PORT }}
     #     script: whoami
+
+  testing02:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v1
+
+    - name: custom envs format
+      uses: ./
+      env:
+        FOO: "BAR"
+        AAA: "BBB"
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        port: ${{ secrets.PORT }}
+        envs: FOO,AAA
+        envs_format: export TEST_{NAME}={VALUE}
+        script: |
+          echo "I am $TEST_FOO, thanks"
+          echo "I am $TEST_BAR, thanks"
+          echo "I am $BAR, thanks"
+          echo "I am $TEST_AAA, thanks"

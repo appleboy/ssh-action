@@ -7,8 +7,8 @@ env:
 
 jobs:
 
-  build:
-    name: Build
+  testing01:
+    name: default flag testing
     runs-on: ubuntu-latest
     steps:
     - name: checkout
@@ -78,40 +78,6 @@ jobs:
           mkdir abc/def
           ls -al
 
-    - name: pass environment
-      uses: ./
-      env:
-        FOO: "BAR"
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.KEY }}
-        port: ${{ secrets.PORT }}
-        envs: FOO
-        script: |
-          echo "I am $FOO, thanks"
-          echo "I am $BAR, thanks"
-
-    - name: pass multiple environment
-      uses: ./
-      env:
-        FOO: "BAR"
-        BAR: "FOO"
-        SHA: ${{ github.sha }}
-        PORT: ${{ secrets.PORT }}
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.KEY }}
-        port: ${{ secrets.PORT }}
-        envs: FOO,BAR,SHA,PORT
-        script: |
-          echo "I am $FOO, thanks"
-          echo "I am $BAR, thanks"
-          echo "sha: $SHA"
-          echo "port: $PORT"
-          sh test.sh
-
     - name: ssh key passphrase
       uses: ./
       with:
@@ -172,3 +138,62 @@ jobs:
     #     key: ${{ secrets.ID_ED25519 }}
     #     port: ${{ secrets.TUNNEL_PORT }}
     #     script: whoami
+
+  testing02:
+    name: testing with envs
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v1
+
+    - name: pass environment
+      uses: ./
+      env:
+        FOO: "BAR"
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        port: ${{ secrets.PORT }}
+        envs: FOO
+        script: |
+          echo "I am $FOO, thanks"
+          echo "I am $BAR, thanks"
+
+    - name: pass multiple environment
+      uses: ./
+      env:
+        FOO: "BAR"
+        BAR: "FOO"
+        SHA: ${{ github.sha }}
+        PORT: ${{ secrets.PORT }}
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        port: ${{ secrets.PORT }}
+        envs: FOO,BAR,SHA,PORT
+        script: |
+          echo "I am $FOO, thanks"
+          echo "I am $BAR, thanks"
+          echo "sha: $SHA"
+          echo "port: $PORT"
+          sh test.sh
+
+    - name: custom envs format
+      uses: ./
+      env:
+        FOO: "BAR"
+        AAA: "BBB"
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        port: ${{ secrets.PORT }}
+        envs: FOO,BAR,AAA
+        envs_format: export TEST_{NAME}={VALUE}
+        script: |
+          echo "I am $TEST_FOO, thanks"
+          echo "I am $TEST_BAR, thanks"
+          echo "I am $BAR, thanks"
+          echo "I am $TEST_AAA, thanks"

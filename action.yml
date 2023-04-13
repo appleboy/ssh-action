@@ -65,6 +65,8 @@ inputs:
     default: false
   envs:
     description: 'pass environment variable to shell script'
+  envs_format:
+    description: 'flexible configuration of environment value transfer'
   debug:
     description: 'enable debug mode'
     default: false

@@ -190,7 +190,7 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.KEY }}
         port: ${{ secrets.PORT }}
-        envs: FOO,AAA
+        envs: FOO,BAR,AAA
         envs_format: export TEST_{NAME}={VALUE}
         script: |
           echo "I am $TEST_FOO, thanks"

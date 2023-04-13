@@ -212,6 +212,7 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.KEY }}
         port: ${{ secrets.PORT }}
+        script_stop: true
         script: |
-          git pull https://appleboy:${{ secrets.GITHUB_TOKEN }}@github.com/go-training/self-runner.git test_repository
+          git clone https://appleboy:${{ secrets.GITHUB_TOKEN }}@github.com/go-training/self-runner.git test_repository
           rm -rf test_repository

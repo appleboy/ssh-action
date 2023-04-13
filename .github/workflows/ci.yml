@@ -213,5 +213,5 @@ jobs:
         key: ${{ secrets.KEY }}
         port: ${{ secrets.PORT }}
         script: |
-          git pull "https://appleboy:${{ secrets.GITHUB_PASSWORD }}@github.com/go-training/self-runner.git" test_repository
+          git pull https://appleboy:${{ secrets.GITHUB_TOKEN }}@github.com/go-training/self-runner.git test_repository
           rm -rf test_repository

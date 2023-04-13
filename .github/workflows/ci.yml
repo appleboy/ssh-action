@@ -197,3 +197,22 @@ jobs:
           echo "I am $TEST_BAR, thanks"
           echo "I am $BAR, thanks"
           echo "I am $TEST_AAA, thanks"
+
+  testing03:
+    name: git clone and pull
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v1
+
+    - name: clone private repository
+      uses: ./
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        port: ${{ secrets.PORT }}
+        script_stop: true
+        script: |
+          git clone https://appleboy:${{ secrets.TEST_TOKEN }}@github.com/go-training/self-runner.git test_repository
+          rm -rf test_repository

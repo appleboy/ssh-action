@@ -33,6 +33,7 @@ See [action.yml](./action.yml) for more detailed information.
 * `debug` - enable debug mode
 * `use_insecure_cipher` - include more ciphers with use_insecure_cipher (see [#56](https://github.com/appleboy/ssh-action/issues/56))
 * `cipher` - the allowed cipher algorithms. If unspecified then a sensible
+* `envs_format` - flexible configuration of environment value transfer. default is `export {NAME}={VALUE}`
 
 SSH Proxy Setting:
 

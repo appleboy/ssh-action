@@ -214,5 +214,5 @@ jobs:
         port: ${{ secrets.PORT }}
         script_stop: true
         script: |
-          git clone https://appleboy:${{ secrets.GITHUB_TOKEN }}@github.com/appleboy/cpc-infra.git test_repository
+          git clone https://appleboy:${{ secrets.TEST_TOKEN }}@github.com/appleboy/cpc-infra.git test_repository
           rm -rf test_repository

@@ -216,3 +216,21 @@ jobs:
         script: |
           git clone https://appleboy:${{ secrets.TEST_TOKEN }}@github.com/go-training/self-runner.git test_repository
           rm -rf test_repository
+
+  testing04:
+    name: docker login and pull
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v1
+
+    - name: login GitHub Container Registry
+      uses: ./
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        port: ${{ secrets.PORT }}
+        script_stop: true
+        script: |
+          echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u github.actor --password-stdin

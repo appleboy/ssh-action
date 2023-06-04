@@ -16,38 +16,37 @@ This thing is built using [Golang](https://go.dev) and [drone-ssh](https://githu
 
 See [action.yml](./action.yml) for more detailed information.
 
-* `host` - ssh host
-* `port` - ssh port, default is `22`
-* `username` - ssh username
-* `password` - ssh password
-* `passphrase` - the passphrase is usually to encrypt the private key
-* `sync` - synchronous execution if multiple hosts, default is false
-* `timeout` - timeout for ssh to remote host, default is `30s`
-* `command_timeout` - timeout for ssh command, default is `10m`
-* `key` - content of ssh private key. ex raw content of ~/.ssh/id_rsa, remember include the BEGIN and END lines
-* `key_path` - path of ssh private key
-* `fingerprint` - fingerprint SHA256 of the host public key, default is to skip verification
-* `script` - execute commands
-* `script_stop` - stop script after first failure
-* `envs` - pass environment variable to shell script
-* `debug` - enable debug mode
-* `use_insecure_cipher` - include more ciphers with use_insecure_cipher (see [#56](https://github.com/appleboy/ssh-action/issues/56))
-* `cipher` - the allowed cipher algorithms. If unspecified then a sensible
-* `envs_format` - flexible configuration of environment value transfer. default is `export {NAME}={VALUE}`
-
-SSH Proxy Setting:
-
-* `proxy_host` - proxy host
-* `proxy_port` - proxy port, default is `22`
-* `proxy_username` - proxy username
-* `proxy_password` - proxy password
-* `proxy_passphrase` - the passphrase is usually to encrypt the private key
-* `proxy_timeout` - timeout for ssh to proxy host, default is `30s`
-* `proxy_key` - content of ssh proxy private key.
-* `proxy_key_path` - path of ssh proxy private key
-* `proxy_fingerprint` - fingerprint SHA256 of the proxy host public key, default is to skip verification
-* `proxy_use_insecure_cipher` - include more ciphers with use_insecure_cipher (see [#56](https://github.com/appleboy/ssh-action/issues/56))
-* `proxy_cipher` - the allowed cipher algorithms. If unspecified then a sensible
+| Input Parameter         | Description                                                     | Default Value |
+|-------------------------|-----------------------------------------------------------------|---------------|
+| host                    | SSH host address                                                |               |
+| port                    | SSH port number                                                 | 22            |
+| passphrase              | SSH key passphrase                                              |               |
+| username                | SSH username                                                    |               |
+| password                | SSH password                                                    |               |
+| sync                    | Enable synchronous execution if multiple hosts                  | false         |
+| use_insecure_cipher     | Include more ciphers with use_insecure_cipher                    | false         |
+| cipher                  | Allowed cipher algorithms. If unspecified, a sensible default   |               |
+| timeout                 | Timeout duration for SSH to host                                | 30s           |
+| command_timeout         | Timeout duration for SSH command                                | 10m           |
+| key                     | Content of SSH private key. e.g., raw content of ~/.ssh/id_rsa  |               |
+| key_path                | Path of SSH private key                                         |               |
+| fingerprint             | SHA256 fingerprint of the host public key                       |               |
+| proxy_host              | SSH proxy host                                                  |               |
+| proxy_port              | SSH proxy port                                                  | 22            |
+| proxy_username          | SSH proxy username                                              |               |
+| proxy_password          | SSH proxy password                                              |               |
+| proxy_passphrase        | SSH proxy key passphrase                                        |               |
+| proxy_timeout           | Timeout for SSH to proxy host                                    | 30s           |
+| proxy_key               | Content of SSH proxy private key                                 |               |
+| proxy_key_path          | Path of SSH proxy private key                                    |               |
+| proxy_fingerprint       | SHA256 fingerprint of the proxy host public key                  |               |
+| proxy_cipher            | Allowed cipher algorithms for the proxy                          |               |
+| proxy_use_insecure_cipher | Include more ciphers with use_insecure_cipher for the proxy      | false         |
+| script                  | Execute commands                                                |               |
+| script_stop             | Stop script after first failure                                  | false         |
+| envs                    | Pass environment variables to shell script                      |               |
+| envs_format             | Flexible configuration of environment value transfer            |               |
+| debug                   | Enable debug mode                                               | false         |
 
 ## Usage
 

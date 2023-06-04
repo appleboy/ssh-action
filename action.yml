@@ -3,73 +3,68 @@ description: 'Executing remote ssh commands'
 author: 'Bo-Yi Wu'
 inputs:
   host:
-    description: 'ssh host'
+    description: 'SSH host address.'
   port:
-    description: 'ssh port'
-    default: 22
+    description: 'SSH port number.'
+    default: "22"
   passphrase:
-    description: 'ssh key passphrase'
+    description: 'Passphrase for the SSH key.'
   username:
-    description: 'ssh username'
+    description: 'SSH username.'
   password:
-    description: 'ssh password'
+    description: 'SSH password.'
   sync:
-    description: 'synchronous execution if multiple hosts'
-    default: false
+    description: 'Enable synchronous execution if multiple hosts are involved.'
   use_insecure_cipher:
-    description: 'include more ciphers with use_insecure_cipher'
-    default: false
+    description: 'Include more ciphers by using insecure ciphers.'
   cipher:
-    description: 'the allowed cipher algorithms. If unspecified then a sensible'
+    description: 'Allowed cipher algorithms. If unspecified, a sensible default is used.'
   timeout:
-    description: 'timeout for ssh to host'
+    description: 'Timeout duration for establishing SSH connection to the host.'
     default: "30s"
   command_timeout:
-    description: 'timeout for ssh command'
+    description: 'Timeout duration for SSH commands execution.'
     default: "10m"
   key:
-    description: 'content of ssh private key. ex raw content of ~/.ssh/id_rsa'
+    description: 'Content of the SSH private key. For example, the raw content of ~/.ssh/id_rsa.'
   key_path:
-    description: 'path of ssh private key'
+    description: 'Path to the SSH private key file.'
   fingerprint:
-    description: 'sha256 fingerprint of the host public key'
+    description: 'SHA256 fingerprint of the host public key.'
   proxy_host:
-    description: 'ssh proxy host'
+    description: 'SSH proxy host address.'
   proxy_port:
-    description: 'ssh proxy port'
-    default: 22
+    description: 'SSH proxy port number.'
+    default: "22"
   proxy_username:
-    description: 'ssh proxy username'
+    description: 'SSH proxy username.'
   proxy_password:
-    description: 'ssh proxy password'
+    description: 'SSH proxy password.'
   proxy_passphrase:
-    description: 'ssh proxy key passphrase'
+    description: 'SSH proxy key passphrase.'
   proxy_timeout:
-    description: 'timeout for ssh to proxy host'
+    description: 'Timeout duration for establishing SSH connection to the proxy host.'
     default: "30s"
   proxy_key:
-    description: 'content of ssh proxy private key. ex raw content of ~/.ssh/id_rsa'
+    description: 'Content of the SSH proxy private key. For example, the raw content of ~/.ssh/id_rsa.'
   proxy_key_path:
-    description: 'path of ssh proxy private key'
+    description: 'Path to the SSH proxy private key file.'
   proxy_fingerprint:
-    description: 'sha256 fingerprint of the proxy host public key'
+    description: 'SHA256 fingerprint of the proxy host public key.'
   proxy_cipher:
-    description: 'the allowed cipher algorithms. If unspecified then a sensible'
+    description: 'Allowed cipher algorithms for the proxy. If unspecified, a sensible default is used.'
   proxy_use_insecure_cipher:
-    description: 'include more ciphers with use_insecure_cipher'
-    default: false
+    description: 'Include more ciphers for the proxy by using insecure ciphers.'
   script:
-    description: 'execute commands'
+    description: 'Commands to be executed.'
   script_stop:
-    description: 'stop script after first failure'
-    default: false
+    description: 'Stop the script after the first failure.'
   envs:
-    description: 'pass environment variable to shell script'
+    description: 'Environment variables to be passed to the shell script.'
   envs_format:
-    description: 'flexible configuration of environment value transfer'
+    description: 'Flexible configuration for environment value transfer.'
   debug:
-    description: 'enable debug mode'
-    default: false
+    description: 'Enable debug mode.'
 runs:
   using: 'docker'
   image: 'Dockerfile'

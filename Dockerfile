@@ -1,4 +1,4 @@
-FROM ghcr.io/appleboy/drone-ssh:1.6.14
+FROM ghcr.io/appleboy/drone-ssh:latest
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh

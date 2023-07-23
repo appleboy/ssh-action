@@ -198,7 +198,7 @@ jobs:
           echo "I am $BAR, thanks"
           echo "I am $TEST_AAA, thanks"
 
-    - name: custom envs format
+    - name: pass all ENV variables to script
       uses: ./
       env:
         INPUT_FOO: "BAR"
@@ -212,6 +212,8 @@ jobs:
         script: |
           echo "I am $INPUT_FOO, thanks"
           echo "I am $INPUT_AAA, thanks"
+          echo "$GITHUB_BASE_REF"
+          echo "$GITHUB_REF"
 
   testing03:
     name: git clone and pull

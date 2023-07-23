@@ -198,6 +198,23 @@ jobs:
           echo "I am $BAR, thanks"
           echo "I am $TEST_AAA, thanks"
 
+    - name: pass all ENV variables to script
+      uses: ./
+      env:
+        INPUT_FOO: "BAR"
+        INPUT_AAA: "BBB"
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        port: ${{ secrets.PORT }}
+        allenvs: true
+        script: |
+          echo "I am $INPUT_FOO, thanks"
+          echo "I am $INPUT_AAA, thanks"
+          echo "$GITHUB_BASE_REF"
+          echo "$GITHUB_REF"
+
   testing03:
     name: git clone and pull
     runs-on: ubuntu-latest
@@ -245,3 +262,4 @@ jobs:
         script_stop: true
         script: |
           echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+

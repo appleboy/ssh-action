@@ -47,6 +47,7 @@ See [action.yml](./action.yml) for more detailed information.
 | envs                    | Pass environment variables to shell script                      |               |
 | envs_format             | Flexible configuration of environment value transfer            |               |
 | debug                   | Enable debug mode                                               | false         |
+| allenvs                 | Pass all environment variables to shell script                  | false         |
 
 ## Usage
 

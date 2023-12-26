@@ -6,129 +6,128 @@ env:
   BAR: "FOO"
 
 jobs:
-
   testing01:
     name: default flag testing
     runs-on: ubuntu-latest
     steps:
-    - name: checkout
-      uses: actions/checkout@v1
+      - name: checkout
+        uses: actions/checkout@v1
 
-    - name: correct password but wrong key
-      uses: ./
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
-        key: "1234"
-        port: ${{ secrets.PORT }}
-        script: whoami
+      - name: correct password but wrong key
+        uses: ./
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          key: "1234"
+          port: ${{ secrets.PORT }}
+          script: whoami
 
-    - name: wrong password but correct key
-      uses: ./
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        password: "abcdef"
-        key: ${{ secrets.KEY }}
-        port: ${{ secrets.PORT }}
-        script: whoami
+      - name: wrong password but correct key
+        uses: ./
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: "abcdef"
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: whoami
 
-    - name: executing remote ssh commands using password
-      uses: ./
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
-        port: ${{ secrets.PORT }}
-        script: whoami
+      - name: executing remote ssh commands using password
+        uses: ./
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: whoami
 
-    - name: executing remote ssh commands using ssh key
-      uses: ./
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.KEY }}
-        port: ${{ secrets.PORT }}
-        script: whoami
+      - name: executing remote ssh commands using ssh key
+        uses: ./
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: whoami
 
-    - name: multiple command
-      uses: ./
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.KEY }}
-        port: ${{ secrets.PORT }}
-        script: |
-          whoami
-          ls -al
+      - name: multiple command
+        uses: ./
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            whoami
+            ls -al
 
-    - name: stop script if command error
-      uses: ./
-      continue-on-error: true
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.KEY }}
-        port: ${{ secrets.PORT }}
-        script_stop: true
-        sync: true
-        debug: true
-        script: |
-          mkdir abc/def
-          ls -al
+      - name: stop script if command error
+        uses: ./
+        continue-on-error: true
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script_stop: true
+          sync: true
+          debug: true
+          script: |
+            mkdir abc/def
+            ls -al
 
-    - name: ssh key passphrase
-      uses: ./
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.SSH2 }}
-        port: ${{ secrets.PORT }}
-        passphrase: ${{ secrets.PASSPHRASE }}
-        script: |
-          whoami
-          ls -al
+      - name: ssh key passphrase
+        uses: ./
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH2 }}
+          port: ${{ secrets.PORT }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          script: |
+            whoami
+            ls -al
 
-    - name: use insecure cipher
-      uses: ./
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
-        port: ${{ secrets.PORT }}
-        script: |
+      - name: use insecure cipher
+        uses: ./
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
             ls \
               -lah
-        use_insecure_cipher: true
+          use_insecure_cipher: true
 
-    # https://github.com/appleboy/ssh-action/issues/75#issuecomment-668314271
-    - name: Multiline SSH commands interpreted as single lines
-      uses: ./
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
-        port: ${{ secrets.PORT }}
-        script_stop: true
-        script: |
+      # https://github.com/appleboy/ssh-action/issues/75#issuecomment-668314271
+      - name: Multiline SSH commands interpreted as single lines
+        uses: ./
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script_stop: true
+          script: |
             ls \
               -lah
-        use_insecure_cipher: true
+          use_insecure_cipher: true
 
-    # https://github.com/appleboy/ssh-action/issues/85
-    - name: Deployment to multiple hosts with different ports
-      uses: ./
-      with:
-        host: "${{ secrets.HOST }}:${{ secrets.PORT }}"
-        username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
-        port: 1024
-        script_stop: true
-        script: |
+      # https://github.com/appleboy/ssh-action/issues/85
+      - name: Deployment to multiple hosts with different ports
+        uses: ./
+        with:
+          host: "${{ secrets.HOST }}:${{ secrets.PORT }}"
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: 1024
+          script_stop: true
+          script: |
             ls \
               -lah
-        use_insecure_cipher: true
+          use_insecure_cipher: true
 
     # - name: SSH ED25519 Private Key
     #   uses: ./
@@ -143,123 +142,122 @@ jobs:
     name: testing with envs
     runs-on: ubuntu-latest
     steps:
-    - name: checkout
-      uses: actions/checkout@v1
+      - name: checkout
+        uses: actions/checkout@v1
 
-    - name: pass environment
-      uses: ./
-      env:
-        FOO: "BAR"
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.KEY }}
-        port: ${{ secrets.PORT }}
-        envs: FOO
-        script: |
-          echo "I am $FOO, thanks"
-          echo "I am $BAR, thanks"
+      - name: pass environment
+        uses: ./
+        env:
+          FOO: "BAR"
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          envs: FOO
+          script: |
+            echo "I am $FOO, thanks"
+            echo "I am $BAR, thanks"
 
-    - name: pass multiple environment
-      uses: ./
-      env:
-        FOO: "BAR"
-        BAR: "FOO"
-        SHA: ${{ github.sha }}
-        PORT: ${{ secrets.PORT }}
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.KEY }}
-        port: ${{ secrets.PORT }}
-        envs: FOO,BAR,SHA,PORT
-        script: |
-          echo "I am $FOO, thanks"
-          echo "I am $BAR, thanks"
-          echo "sha: $SHA"
-          echo "port: $PORT"
-          sh test.sh
+      - name: pass multiple environment
+        uses: ./
+        env:
+          FOO: "BAR"
+          BAR: "FOO"
+          SHA: ${{ github.sha }}
+          PORT: ${{ secrets.PORT }}
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          envs: FOO,BAR,SHA,PORT
+          script: |
+            echo "I am $FOO, thanks"
+            echo "I am $BAR, thanks"
+            echo "sha: $SHA"
+            echo "port: $PORT"
+            sh test.sh
 
-    - name: custom envs format
-      uses: ./
-      env:
-        FOO: "BAR"
-        AAA: "BBB"
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.KEY }}
-        port: ${{ secrets.PORT }}
-        envs: FOO,BAR,AAA
-        envs_format: export TEST_{NAME}={VALUE}
-        script: |
-          echo "I am $TEST_FOO, thanks"
-          echo "I am $TEST_BAR, thanks"
-          echo "I am $BAR, thanks"
-          echo "I am $TEST_AAA, thanks"
+      - name: custom envs format
+        uses: ./
+        env:
+          FOO: "BAR"
+          AAA: "BBB"
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          envs: FOO,BAR,AAA
+          envs_format: export TEST_{NAME}={VALUE}
+          script: |
+            echo "I am $TEST_FOO, thanks"
+            echo "I am $TEST_BAR, thanks"
+            echo "I am $BAR, thanks"
+            echo "I am $TEST_AAA, thanks"
 
-    - name: pass all ENV variables to script
-      uses: ./
-      env:
-        INPUT_FOO: "BAR"
-        INPUT_AAA: "BBB"
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.KEY }}
-        port: ${{ secrets.PORT }}
-        allenvs: true
-        script: |
-          echo "I am $INPUT_FOO, thanks"
-          echo "I am $INPUT_AAA, thanks"
-          echo "$GITHUB_BASE_REF"
-          echo "$GITHUB_REF"
+      - name: pass all ENV variables to script
+        uses: ./
+        env:
+          INPUT_FOO: "BAR"
+          INPUT_AAA: "BBB"
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          allenvs: true
+          script: |
+            echo "I am $INPUT_FOO, thanks"
+            echo "I am $INPUT_AAA, thanks"
+            echo "$GITHUB_BASE_REF"
+            echo "$GITHUB_REF"
 
   testing03:
     name: git clone and pull
     runs-on: ubuntu-latest
     steps:
-    - name: checkout
-      uses: actions/checkout@v1
+      - name: checkout
+        uses: actions/checkout@v1
 
-    - name: clone private repository
-      uses: ./
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.KEY }}
-        port: ${{ secrets.PORT }}
-        script_stop: true
-        script: |
-          git clone https://appleboy:${{ secrets.TEST_TOKEN }}@github.com/go-training/self-runner.git test_repository
-          rm -rf test_repository
+      - name: clone private repository
+        uses: ./
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script_stop: true
+          script: |
+            git clone https://appleboy:${{ secrets.TEST_TOKEN }}@github.com/go-training/self-runner.git test_repository
+            rm -rf test_repository
 
   testing04:
     name: docker login and pull
     runs-on: ubuntu-latest
     steps:
-    - name: checkout
-      uses: actions/checkout@v1
+      - name: checkout
+        uses: actions/checkout@v1
 
-    - name: login GitHub Container Registry
-      uses: ./
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.KEY }}
-        port: ${{ secrets.PORT }}
-        script_stop: true
-        script: |
-          echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u github.actor --password-stdin
+      - name: login GitHub Container Registry
+        uses: ./
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script_stop: true
+          script: |
+            echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u github.actor --password-stdin
 
-    - name: login DockerHub Container Registry
-      uses: ./
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.KEY }}
-        port: ${{ secrets.PORT }}
-        script_stop: true
-        script: |
-          echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
-
+      - name: login DockerHub Container Registry
+        uses: ./
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script_stop: true
+          script: |
+            echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin

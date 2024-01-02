@@ -9,5 +9,6 @@ export GITHUB="true"
     sh -c "/bin/drone-ssh $*"
 } | tee /tmp/outFile
 
-stdout=$(cat /tmp/outFile)
-echo "stdout=${stdout//$'\n'/\\n}" >> $GITHUB_OUTPUT
+echo "stdout<<EOF" >> $GITHUB_OUTPUT
+cat /tmp/outFile >> $GITHUB_OUTPUT
+echo "EOF" >> $GITHUB_OUTPUT

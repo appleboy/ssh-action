@@ -70,8 +70,6 @@ inputs:
 outputs:
   stdout:
     description: 'Standard output of the executed commands.'
-  stderr:
-    description: 'Standard error of the executed commands.'
 runs:
   using: 'docker'
   image: 'Dockerfile'

@@ -67,6 +67,11 @@ inputs:
     description: 'Enable debug mode.'
   allenvs:
     description: 'pass all environment variable to shell script.'
+outputs:
+  stdout:
+    description: 'Standard output of the executed commands.'
+  stderr:
+    description: 'Standard error of the executed commands.'
 runs:
   using: 'docker'
   image: 'Dockerfile'

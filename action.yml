@@ -1,76 +1,78 @@
-name: 'SSH Remote Commands'
-description: 'Executing remote ssh commands'
-author: 'Bo-Yi Wu'
+name: "SSH Remote Commands"
+description: "Executing remote ssh commands"
+author: "Bo-Yi Wu"
 inputs:
   host:
-    description: 'SSH host address.'
+    description: "SSH host address."
   port:
-    description: 'SSH port number.'
+    description: "SSH port number."
     default: "22"
   passphrase:
-    description: 'Passphrase for the SSH key.'
+    description: "Passphrase for the SSH key."
   username:
-    description: 'SSH username.'
+    description: "SSH username."
   password:
-    description: 'SSH password.'
+    description: "SSH password."
   sync:
-    description: 'Enable synchronous execution if multiple hosts are involved.'
+    description: "Enable synchronous execution if multiple hosts are involved."
   use_insecure_cipher:
-    description: 'Include more ciphers by using insecure ciphers.'
+    description: "Include more ciphers by using insecure ciphers."
   cipher:
-    description: 'Allowed cipher algorithms. If unspecified, a sensible default is used.'
+    description: "Allowed cipher algorithms. If unspecified, a sensible default is used."
   timeout:
-    description: 'Timeout duration for establishing SSH connection to the host.'
+    description: "Timeout duration for establishing SSH connection to the host."
     default: "30s"
   command_timeout:
-    description: 'Timeout duration for SSH commands execution.'
+    description: "Timeout duration for SSH commands execution."
     default: "10m"
   key:
-    description: 'Content of the SSH private key. For example, the raw content of ~/.ssh/id_rsa.'
+    description: "Content of the SSH private key. For example, the raw content of ~/.ssh/id_rsa."
   key_path:
-    description: 'Path to the SSH private key file.'
+    description: "Path to the SSH private key file."
   fingerprint:
-    description: 'SHA256 fingerprint of the host public key.'
+    description: "SHA256 fingerprint of the host public key."
   proxy_host:
-    description: 'SSH proxy host address.'
+    description: "SSH proxy host address."
   proxy_port:
-    description: 'SSH proxy port number.'
+    description: "SSH proxy port number."
     default: "22"
   proxy_username:
-    description: 'SSH proxy username.'
+    description: "SSH proxy username."
   proxy_password:
-    description: 'SSH proxy password.'
+    description: "SSH proxy password."
   proxy_passphrase:
-    description: 'SSH proxy key passphrase.'
+    description: "SSH proxy key passphrase."
   proxy_timeout:
-    description: 'Timeout duration for establishing SSH connection to the proxy host.'
+    description: "Timeout duration for establishing SSH connection to the proxy host."
     default: "30s"
   proxy_key:
-    description: 'Content of the SSH proxy private key. For example, the raw content of ~/.ssh/id_rsa.'
+    description: "Content of the SSH proxy private key. For example, the raw content of ~/.ssh/id_rsa."
   proxy_key_path:
-    description: 'Path to the SSH proxy private key file.'
+    description: "Path to the SSH proxy private key file."
   proxy_fingerprint:
-    description: 'SHA256 fingerprint of the proxy host public key.'
+    description: "SHA256 fingerprint of the proxy host public key."
   proxy_cipher:
-    description: 'Allowed cipher algorithms for the proxy. If unspecified, a sensible default is used.'
+    description: "Allowed cipher algorithms for the proxy. If unspecified, a sensible default is used."
   proxy_use_insecure_cipher:
-    description: 'Include more ciphers for the proxy by using insecure ciphers.'
+    description: "Include more ciphers for the proxy by using insecure ciphers."
   script:
-    description: 'Commands to be executed.'
+    description: "Commands to be executed."
   script_stop:
-    description: 'Stop the script after the first failure.'
+    description: "Stop the script after the first failure."
   envs:
-    description: 'Environment variables to be passed to the shell script.'
+    description: "Environment variables to be passed to the shell script."
   envs_format:
-    description: 'Flexible configuration for environment value transfer.'
+    description: "Flexible configuration for environment value transfer."
   debug:
-    description: 'Enable debug mode.'
+    description: "Enable debug mode."
   allenvs:
-    description: 'pass all environment variable to shell script.'
+    description: "pass all environment variable to shell script."
+  request_pty:
+    description: "Request a pseudo-terminal from the server."
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
+  using: "docker"
+  image: "Dockerfile"
 
 branding:
-  icon: 'terminal'
-  color: 'gray-dark'
+  icon: "terminal"
+  color: "gray-dark"

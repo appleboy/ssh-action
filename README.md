@@ -48,6 +48,7 @@ See [action.yml](./action.yml) for more detailed information.
 | envs_format             | Flexible configuration of environment value transfer            |               |
 | debug                   | Enable debug mode                                               | false         |
 | allenvs                 | Pass all environment variables to shell script                  | false         |
+| request_pty            | Request a pseudo-terminal from the server                        | false         |
 
 ## Usage
 

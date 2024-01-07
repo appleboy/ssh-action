@@ -261,3 +261,24 @@ jobs:
           script_stop: true
           script: |
             echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+
+  testing05:
+    name: switch user
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v1
+
+      - name: switch to root user
+        uses: ./
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script_stop: true
+          request_pty: true
+          command_timeout: 30s
+          script: |
+            whoami && echo 'hello world' && touch todo.txt
+            sudo whoami

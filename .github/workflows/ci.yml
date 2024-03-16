@@ -298,7 +298,6 @@ jobs:
       - name: testing ipv6 for command
         run: |
           curl -m 9 --ipv6 --verbose https://google.com
-          ping6 2402:1f00:8000:800::2628 -c 4
 
       - name: testing ipv6
         uses: ./

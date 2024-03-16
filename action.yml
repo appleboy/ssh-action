@@ -72,9 +72,7 @@ inputs:
     description: "pass all environment variable to shell script."
   request_pty:
     description: "Request a pseudo-terminal from the server."
-# runs:
-#   using: "docker"
-#   image: "Dockerfile"
+
 runs:
   using: "composite"
   steps:

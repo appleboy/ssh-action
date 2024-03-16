@@ -47,7 +47,7 @@ See [action.yml](./action.yml) for more detailed information.
 | envs                    | Pass environment variables to shell script                      |               |
 | envs_format             | Flexible configuration of environment value transfer            |               |
 | debug                   | Enable debug mode                                               | false         |
-| allenvs                 | pass the environment variables with prefix value of GITHUB_ and INPUT_ to the script | false |
+| allenvs                 | pass the environment variables with prefix value of `GITHUB_` and `INPUT_` to the script | false |
 | request_pty             | Request a pseudo-terminal from the server                        | false              |
 
 ## Usage

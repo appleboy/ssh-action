@@ -6,6 +6,7 @@ set -o pipefail
 
 export GITHUB="true"
 
+GITHUB_ACTION_PATH="${GITHUB_ACTION_PATH%/}"
 DRONE_SSH_RELEASE_URL="${DRONE_SSH_RELEASE_URL:-https://github.com/appleboy/drone-ssh/releases/download}"
 DRONE_SSH_VERSION="${DRONE_SSH_VERSION:-1.7.4}"
 
@@ -36,8 +37,6 @@ function detect_client_info() {
   if [ -n "${SSH_CLIENT_ARCH-}" ]; then
     CLIENT_ARCH="${SSH_CLIENT_ARCH}"
   else
-    # TODO: migrate the kube::util::host_platform function out of hack/lib and
-    # use it here.
     local machine
     machine="$(uname -m)"
     case "${machine}" in
@@ -60,7 +59,8 @@ function detect_client_info() {
 detect_client_info
 DOWNLOAD_URL_PREFIX="${DRONE_SSH_RELEASE_URL}/v${DRONE_SSH_VERSION}"
 CLIENT_BINARY="drone-ssh-${DRONE_SSH_VERSION}-${CLIENT_PLATFORM}-${CLIENT_ARCH}"
+TARGET="${GITHUB_ACTION_PATH}/${CLIENT_BINARY}"
 echo "Will download ${CLIENT_BINARY} from ${DOWNLOAD_URL_PREFIX}"
-curl -fL --retry 3 --keepalive-time 2 "${DOWNLOAD_URL_PREFIX}/${CLIENT_BINARY}" -o ${GITHUB_ACTION_PATH}/drone-ssh
-chmod +x ${GITHUB_ACTION_PATH}drone-ssh
-sh -c "${GITHUB_ACTION_PATH}/drone-ssh $*"
+curl -fL --retry 3 --keepalive-time 2 "${DOWNLOAD_URL_PREFIX}/${CLIENT_BINARY}" -o ${TARGET}
+chmod +x ${TARGET}
+sh -c "${TARGET} $*"

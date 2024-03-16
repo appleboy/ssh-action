@@ -13,6 +13,9 @@ inputs:
     description: "SSH username."
   password:
     description: "SSH password."
+  protocol:
+    description: 'The IP protocol to use. Valid values are "tcp". "tcp4" or "tcp6". Default to tcp.'
+    default: "tcp"
   sync:
     description: "Enable synchronous execution if multiple hosts are involved."
   use_insecure_cipher:
@@ -69,9 +72,52 @@ inputs:
     description: "pass all environment variable to shell script."
   request_pty:
     description: "Request a pseudo-terminal from the server."
+
 runs:
-  using: "docker"
-  image: "Dockerfile"
+  using: "composite"
+  steps:
+    - name: Set GitHub Path
+      run: echo "$GITHUB_ACTION_PATH" >> $GITHUB_PATH
+      shell: bash
+      env:
+        GITHUB_ACTION_PATH: ${{ github.action_path }}
+    - name: Run entrypoint.sh
+      run: entrypoint.sh
+      shell: bash
+      env:
+        GITHUB_ACTION_PATH: ${{ github.action_path }}
+        INPUT_HOST: ${{ inputs.host }}
+        INPUT_PORT: ${{ inputs.port }}
+        INPUT_PROTOCOL: ${{ inputs.protocol }}
+        INPUT_USERNAME: ${{ inputs.username }}
+        INPUT_PASSWORD: ${{ inputs.password }}
+        INPUT_PASSPHRASE: ${{ inputs.passphrase }}
+        INPUT_KEY: ${{ inputs.key }}
+        INPUT_KEY_PATH: ${{ inputs.key_path }}
+        INPUT_FINGERPRINT: ${{ inputs.fingerprint }}
+        INPUT_PROXY_HOST: ${{ inputs.proxy_host }}
+        INPUT_PROXY_PORT: ${{ inputs.proxy_port }}
+        INPUT_PROXY_USERNAME: ${{ inputs.proxy_username }}
+        INPUT_PROXY_PASSWORD: ${{ inputs.proxy_password }}
+        INPUT_PROXY_PASSPHRASE: ${{ inputs.proxy_passphrase }}
+        INPUT_PROXY_KEY: ${{ inputs.proxy_key }}
+        INPUT_PROXY_KEY_PATH: ${{ inputs.proxy_key_path }}
+        INPUT_PROXY_FINGERPRINT: ${{ inputs.proxy_fingerprint }}
+        INPUT_TIMEOUT: ${{ inputs.timeout }}
+        INPUT_PROXY_TIMEOUT: ${{ inputs.proxy_timeout }}
+        INPUT_COMMAND_TIMEOUT: ${{ inputs.command_timeout }}
+        INPUT_SCRIPT: ${{ inputs.script }}
+        INPUT_SCRIPT_STOP: ${{ inputs.script_stop }}
+        INPUT_ENVS: ${{ inputs.envs }}
+        INPUT_ENVS_FORMAT: ${{ inputs.envs_format }}
+        INPUT_DEBUG: ${{ inputs.debug }}
+        INPUT_ALL_ENVS: ${{ inputs.allenvs }}
+        INPUT_REQUEST_PTY: ${{ inputs.request_pty }}
+        INPUT_USE_INSECURE_CIPHER: ${{ inputs.use_insecure_cipher }}
+        INPUT_CIPHER: ${{ inputs.cipher }}
+        INPUT_PROXY_USE_INSECURE_CIPHER: ${{ inputs.proxy_use_insecure_cipher }}
+        INPUT_PROXY_CIPHER: ${{ inputs.proxy_cipher }}
+        INPUT_SYNC: ${{ inputs.sync }}
 
 branding:
   icon: "terminal"

@@ -24,7 +24,7 @@ See [action.yml](./action.yml) for more detailed information.
 | username                | SSH username                                                    |               |
 | password                | SSH password                                                    |               |
 | sync                    | Enable synchronous execution if multiple hosts                  | false         |
-| use_insecure_cipher     | Include more ciphers with use_insecure_cipher                    | false         |
+| use_insecure_cipher     | Include more ciphers with use_insecure_cipher                   | false        |
 | cipher                  | Allowed cipher algorithms. If unspecified, a sensible default   |               |
 | timeout                 | Timeout duration for SSH to host                                | 30s           |
 | command_timeout         | Timeout duration for SSH command                                | 10m           |
@@ -36,19 +36,19 @@ See [action.yml](./action.yml) for more detailed information.
 | proxy_username          | SSH proxy username                                              |               |
 | proxy_password          | SSH proxy password                                              |               |
 | proxy_passphrase        | SSH proxy key passphrase                                        |               |
-| proxy_timeout           | Timeout for SSH to proxy host                                    | 30s           |
-| proxy_key               | Content of SSH proxy private key                                 |               |
-| proxy_key_path          | Path of SSH proxy private key                                    |               |
-| proxy_fingerprint       | SHA256 fingerprint of the proxy host public key                  |               |
-| proxy_cipher            | Allowed cipher algorithms for the proxy                          |               |
-| proxy_use_insecure_cipher | Include more ciphers with use_insecure_cipher for the proxy      | false         |
+| proxy_timeout           | Timeout for SSH to proxy host                                   | 30s           |
+| proxy_key               | Content of SSH proxy private key                                |               |
+| proxy_key_path          | Path of SSH proxy private key                                   |               |
+| proxy_fingerprint       | SHA256 fingerprint of the proxy host public key                 |               |
+| proxy_cipher            | Allowed cipher algorithms for the proxy                         |               |
+| proxy_use_insecure_cipher | Include more ciphers with use_insecure_cipher for the proxy   | false         |
 | script                  | Execute commands                                                |               |
-| script_stop             | Stop script after first failure                                  | false         |
+| script_stop             | Stop script after first failure                                 | false         |
 | envs                    | Pass environment variables to shell script                      |               |
 | envs_format             | Flexible configuration of environment value transfer            |               |
 | debug                   | Enable debug mode                                               | false         |
-| allenvs                 | Pass all environment variables to shell script                  | false         |
-| request_pty            | Request a pseudo-terminal from the server                        | false         |
+| allenvs                 | pass the environment variables with prefix value of GITHUB_ and INPUT_ to the script | false |
+| request_pty             | Request a pseudo-terminal from the server                        | false              |
 
 ## Usage
 

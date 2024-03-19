@@ -7,7 +7,7 @@ env:
 
 jobs:
   testing01:
-    name: default flag testing
+    name: testing new bash flow
     runs-on: ubuntu-latest
     steps:
       - name: checkout

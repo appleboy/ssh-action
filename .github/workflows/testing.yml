@@ -1,0 +1,26 @@
+name: testing master
+on: [push]
+
+env:
+  FOO: "BAR"
+  BAR: "FOO"
+
+jobs:
+  testing01:
+    name: default flag testing
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v1
+
+      - name: try bash script
+        uses: appleboy/ssh-action@master
+        with:
+          host: 2402:1f00:8000:800::2628
+          username: ubuntu
+          password: ${{ secrets.OVH_PASSWORD }}
+          protocol: tcp6
+          port: 22
+          command_timeout: 30s
+          script: |
+            whoami

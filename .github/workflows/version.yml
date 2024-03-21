@@ -1,0 +1,312 @@
+name: the stable version of ssh-action
+on: [push]
+
+env:
+  FOO: "BAR"
+  BAR: "FOO"
+
+jobs:
+  testing01:
+    name: default flag testing
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: correct password but wrong key
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          key: "1234"
+          port: ${{ secrets.PORT }}
+          script: whoami
+
+      - name: wrong password but correct key
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: "abcdef"
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: whoami
+
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: whoami
+
+      - name: executing remote ssh commands using ssh key
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: whoami
+
+      - name: multiple command
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            whoami
+            ls -al
+
+      - name: stop script if command error
+        uses: appleboy/ssh-action@v1.0.3
+        continue-on-error: true
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script_stop: true
+          sync: true
+          debug: true
+          script: |
+            mkdir abc/def
+            ls -al
+
+      - name: ssh key passphrase
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH2 }}
+          port: ${{ secrets.PORT }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          script: |
+            whoami
+            ls -al
+
+      - name: use insecure cipher
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            ls \
+              -lah
+          use_insecure_cipher: true
+
+      # https://github.com/appleboy/ssh-action/issues/75#issuecomment-668314271
+      - name: Multiline SSH commands interpreted as single lines
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script_stop: true
+          script: |
+            ls \
+              -lah
+          use_insecure_cipher: true
+
+      # https://github.com/appleboy/ssh-action/issues/85
+      - name: Deployment to multiple hosts with different ports
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: "${{ secrets.HOST }}:${{ secrets.PORT }}"
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: 1024
+          script_stop: true
+          script: |
+            ls \
+              -lah
+          use_insecure_cipher: true
+
+    # - name: SSH ED25519 Private Key
+    #   uses: appleboy/ssh-action@v1.0.3
+    #   with:
+    #     host: ${{ secrets.TUNNEL_HOST }}
+    #     username: ${{ secrets.TUNNEL_USERNAME }}
+    #     key: ${{ secrets.ID_ED25519 }}
+    #     port: ${{ secrets.TUNNEL_PORT }}
+    #     script: whoami
+
+  testing02:
+    name: testing with envs
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: pass environment
+        uses: appleboy/ssh-action@v1.0.3
+        env:
+          FOO: "BAR"
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          envs: FOO
+          script: |
+            echo "I am $FOO, thanks"
+            echo "I am $BAR, thanks"
+
+      - name: pass multiple environment
+        uses: appleboy/ssh-action@v1.0.3
+        env:
+          FOO: "BAR"
+          BAR: "FOO"
+          SHA: ${{ github.sha }}
+          PORT: ${{ secrets.PORT }}
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          envs: FOO,BAR,SHA,PORT
+          script: |
+            echo "I am $FOO, thanks"
+            echo "I am $BAR, thanks"
+            echo "sha: $SHA"
+            echo "port: $PORT"
+            sh test.sh
+
+      - name: custom envs format
+        uses: appleboy/ssh-action@v1.0.3
+        env:
+          FOO: "BAR"
+          AAA: "BBB"
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          envs: FOO,BAR,AAA
+          envs_format: export TEST_{NAME}={VALUE}
+          script: |
+            echo "I am $TEST_FOO, thanks"
+            echo "I am $TEST_BAR, thanks"
+            echo "I am $BAR, thanks"
+            echo "I am $TEST_AAA, thanks"
+
+      - name: pass all ENV variables to script
+        uses: appleboy/ssh-action@v1.0.3
+        env:
+          INPUT_FOO: "BAR"
+          INPUT_AAA: "BBB"
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          allenvs: true
+          script: |
+            echo "I am $INPUT_FOO, thanks"
+            echo "I am $INPUT_AAA, thanks"
+            echo "$GITHUB_BASE_REF"
+            echo "$GITHUB_REF"
+
+  testing03:
+    name: git clone and pull
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: clone private repository
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script_stop: true
+          script: |
+            git clone https://appleboy:${{ secrets.TEST_TOKEN }}@github.com/go-training/self-runner.git test_repository
+            rm -rf test_repository
+
+  testing04:
+    name: docker login and pull
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: login GitHub Container Registry
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script_stop: true
+          script: |
+            echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u github.actor --password-stdin
+
+      - name: login DockerHub Container Registry
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script_stop: true
+          script: |
+            echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+
+  testing05:
+    name: switch user
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: switch to root user
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script_stop: true
+          request_pty: true
+          command_timeout: 30s
+          script: |
+            whoami && echo 'hello world' && touch todo.txt
+            sudo whoami
+
+  testing06:
+    name: testing ipv6
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: Set up WARP
+        uses: fscarmen/warp-on-actions@v1.1
+        with:
+          stack: dual
+
+      - name: testing ipv6 for command
+        run: |
+          curl -m 9 --ipv6 --verbose https://google.com
+
+      - name: testing ipv6
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: 2402:1f00:8000:800::2628
+          username: ubuntu
+          password: ${{ secrets.OVH_PASSWORD }}
+          protocol: tcp6
+          port: 22
+          command_timeout: 30s
+          script: |
+            whoami

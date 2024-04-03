@@ -71,4 +71,4 @@ chmod +x ${TARGET}
 stdout=$(cat /tmp/outFile)
 stderr=$(cat /tmp/errFile)
 echo "stdout=${stdout//$'\n'/\\n}" >> $GITHUB_OUTPUT
-echo "stderr=${stderr//$'\n'/\\n}" >> $GITHUB_OUTPUT)
+echo "stderr=${stderr//$'\n'/\\n}" >> $GITHUB_OUTPUT

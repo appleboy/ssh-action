@@ -73,6 +73,12 @@ inputs:
   request_pty:
     description: "Request a pseudo-terminal from the server."
 
+outputs:
+  stdout:
+    description: 'Standard output of the executed commands.'
+  stderr:
+    description: 'Standard error of the executed commands.'
+
 runs:
   using: "composite"
   steps:

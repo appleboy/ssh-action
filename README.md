@@ -399,7 +399,7 @@ Now you can adjust you config:
 
 ### Command not found (npm or other command)
 
-See the [issue comment](https://github.com/appleboy/ssh-action/issues/31#issuecomment-1006565847) about interactive vs non interactive shell.
+See the [issue comment](https://github.com/appleboy/ssh-action/issues/31#issuecomment-1006565847) about interactive vs non interactive shell. Thanks @kocyigityunus for the solution.
 
 Basically, if you are running a command in a non interactive shell, like ssh-action, on many linux distros,
 

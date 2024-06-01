@@ -11,9 +11,28 @@ assignees: appleboy
 
 A clear and concise description of what the bug is. If applicable, add screenshots to help explain your problem.
 
-## Yaml Config 
+## Yaml Config
 
 Please post your Yaml configuration file along with the output results.
+
+```yaml
+name: remote ssh command
+on: [push]
+jobs:
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - name: executing remote ssh commands using password
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
+        script: whoami
+```
 
 ## Related environment
 

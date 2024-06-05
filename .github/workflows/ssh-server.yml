@@ -29,6 +29,7 @@ jobs:
           echo "======= container ip address ========="
           cat ip.txt
           echo "======================================"
+          sleep 5
 
       - name: executing remote ssh commands using password (1.0.3)
         uses: appleboy/ssh-action@v1.0.3

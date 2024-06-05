@@ -276,7 +276,7 @@ jobs:
       - name: Deployment to multiple hosts with different ports
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: "${{ env.REMOTE_HOST_01 }}:2222,${{ env.REMOTE_HOST_02 }}:2223"
+          host: "${{ env.REMOTE_HOST_01 }}:2222,${{ env.REMOTE_HOST_02 }}:2222"
           username: linuxserver.io
           key: ${{ env.PRIVATE_KEY }}
           passphrase: 1234

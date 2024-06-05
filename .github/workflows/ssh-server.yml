@@ -5,7 +5,6 @@ on: [push]
 jobs:
   default-user-name-password:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -29,7 +28,7 @@ jobs:
           echo "======= container ip address ========="
           cat ip.txt
           echo "======================================"
-          sleep 5
+          sleep 3
 
       - name: executing remote ssh commands using password (1.0.3)
         uses: appleboy/ssh-action@v1.0.3
@@ -38,4 +37,44 @@ jobs:
           username: linuxserver.io
           password: password
           port: 2222
+          script: whoami
+
+  check-ssh-key:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: create new ssh server
+        run: |
+          docker run -d \
+          --name=openssh-server \
+          --hostname=openssh-server \
+          -p 2223:2222 \
+          -e PUBLIC_KEY=$(cat testdata/.ssh/id_rsa.pub) \
+          -e SUDO_ACCESS=false \
+          -e PASSWORD_ACCESS=true  \
+          -e USER_PASSWORD=password  \
+          -e USER_NAME=linuxserver.io \
+          --restart unless-stopped \
+          lscr.io/linuxserver/openssh-server:latest
+          docker exec openssh-server sh -c "hostname -i" > ip.txt
+          echo "REMOTE_HOST<<EOF" >> $GITHUB_ENV
+          cat ip.txt >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "PRIVATE_KEY<<EOF" >> $GITHUB_ENV
+          cat testdata/.ssh/id_rsa >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "======= container ip address ========="
+          cat ip.txt
+          echo "======================================"
+          sleep 3
+
+      - name: executing remote ssh commands using password (1.0.3)
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ env.REMOTE_HOST }}
+          username: linuxserver.io
+          key: ${{ env.PRIVATE_KEY }}
+          port: 2223
           script: whoami

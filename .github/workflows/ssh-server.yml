@@ -181,3 +181,15 @@ jobs:
           script: |
             whoami
             ls -al
+
+      - name: missing ssh key passphrase
+        uses: appleboy/ssh-action@v1.0.3
+        continue-on-error: true
+        with:
+          host: ${{ env.REMOTE_HOST }}
+          username: linuxserver.io
+          key: ${{ env.PRIVATE_KEY }}
+          port: 2222
+          script: |
+            whoami
+            ls -al

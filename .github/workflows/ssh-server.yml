@@ -366,7 +366,7 @@ jobs:
           --hostname=openssh-server \
           -p 2222:2222 \
           -e PUBLIC_KEY="${{ env.PUBLIC_KEY }}" \
-          -e SUDO_ACCESS=false \
+          -e SUDO_ACCESS=true \
           -e PASSWORD_ACCESS=true  \
           -e USER_PASSWORD=password  \
           -e USER_NAME=linuxserver.io \
@@ -459,3 +459,17 @@ jobs:
             echo "I am $INPUT_AAA, thanks"
             echo "$GITHUB_BASE_REF"
             echo "$GITHUB_REF"
+
+      - name: switch to root user
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ env.REMOTE_HOST }}
+          username: linuxserver.io
+          key: ${{ env.PRIVATE_KEY }}
+          port: 2222
+          script_stop: true
+          request_pty: true
+          command_timeout: 30s
+          script: |
+            whoami && echo 'hello world' && touch todo.txt
+            sudo whoami

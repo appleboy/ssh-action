@@ -465,7 +465,7 @@ jobs:
         with:
           host: ${{ env.REMOTE_HOST }}
           username: linuxserver.io
-          key: ${{ env.PRIVATE_KEY }}
+          password: password
           port: 2222
           script_stop: true
           request_pty: true

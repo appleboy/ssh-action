@@ -209,17 +209,77 @@ jobs:
               -lah
           use_insecure_cipher: true
 
+  multiple-server:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: add public key to env
+        run: |
+          echo "PUBLIC_KEY<<EOF" >> $GITHUB_ENV
+          cat testdata/.ssh/id_passphrase.pub >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "======= public key ========="
+          cat testdata/.ssh/id_passphrase.pub
+          echo "============================"
+          echo "PRIVATE_KEY<<EOF" >> $GITHUB_ENV
+          cat testdata/.ssh/id_passphrase >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "======= private key ========="
+          cat testdata/.ssh/id_passphrase
+          echo "============================"
+
+      - name: create new ssh server
+        run: |
+          docker run -d \
+          --name=openssh-server-01 \
+          --hostname=openssh-server-01 \
+          -p 2222:2222 \
+          -e PUBLIC_KEY="${{ env.PUBLIC_KEY }}" \
+          -e SUDO_ACCESS=false \
+          -e PASSWORD_ACCESS=true  \
+          -e USER_PASSWORD=password  \
+          -e USER_NAME=linuxserver.io \
+          --restart unless-stopped \
+          lscr.io/linuxserver/openssh-server:latest
+          docker exec openssh-server-01 sh -c "hostname -i" > ip01.txt
+          echo "REMOTE_HOST_01<<EOF" >> $GITHUB_ENV
+          cat ip01.txt >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "======= container ip address ========="
+          cat ip01.txt
+          echo "======================================"
+
+          docker run -d \
+          --name=openssh-server-02 \
+          --hostname=openssh-server-02 \
+          -p 2223:2222 \
+          -e PUBLIC_KEY="${{ env.PUBLIC_KEY }}" \
+          -e SUDO_ACCESS=false \
+          -e PASSWORD_ACCESS=true  \
+          -e USER_PASSWORD=password  \
+          -e USER_NAME=linuxserver.io \
+          --restart unless-stopped \
+          lscr.io/linuxserver/openssh-server:latest
+          docker exec openssh-server-02 sh -c "hostname -i" > ip02.txt
+          echo "REMOTE_HOST_02<<EOF" >> $GITHUB_ENV
+          cat ip02.txt >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "======= container ip address ========="
+          cat ip02.txt
+          echo "======================================"
+
+          sleep 2
+
       # https://github.com/appleboy/ssh-action/issues/85
       - name: Deployment to multiple hosts with different ports
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: "${{ env.REMOTE_HOST }}:2222"
+          host: "${{ env.REMOTE_HOST_01 }}:2222,${{ env.REMOTE_HOST_02 }}:2223"
           username: linuxserver.io
           key: ${{ env.PRIVATE_KEY }}
-          port: 1111
           passphrase: 1234
           script_stop: true
           script: |
-            ls \
-              -lah
-          use_insecure_cipher: true
+            whoami

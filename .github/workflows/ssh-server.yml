@@ -368,7 +368,6 @@ jobs:
           -e PUBLIC_KEY="${{ env.PUBLIC_KEY }}" \
           -e SUDO_ACCESS=true \
           -e PASSWORD_ACCESS=true  \
-          -e USER_PASSWORD=password  \
           -e USER_NAME=linuxserver.io \
           --restart unless-stopped \
           lscr.io/linuxserver/openssh-server:latest
@@ -465,7 +464,7 @@ jobs:
         with:
           host: ${{ env.REMOTE_HOST }}
           username: linuxserver.io
-          password: password
+          key: ${{ env.PRIVATE_KEY }}
           port: 2222
           script_stop: true
           request_pty: true

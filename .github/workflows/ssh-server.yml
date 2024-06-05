@@ -424,7 +424,6 @@ jobs:
             echo "I am $BAR, thanks"
             echo "sha: $SHA"
             echo "port: $PORT"
-            sh test.sh
 
       - name: custom envs format
         uses: appleboy/ssh-action@v1.0.3

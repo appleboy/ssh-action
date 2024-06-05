@@ -45,13 +45,28 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: add public key to env
+        run: |
+          echo "PUBLIC_KEY<<EOF" >> $GITHUB_ENV
+          cat testdata/.ssh/id_rsa.pub >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "======= public key ========="
+          cat testdata/.ssh/id_rsa.pub
+          echo "============================"
+          echo "PRIVATE_KEY<<EOF" >> $GITHUB_ENV
+          cat testdata/.ssh/id_rsa >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "======= private key ========="
+          cat testdata/.ssh/id_rsa
+          echo "============================"
+
       - name: create new ssh server
         run: |
           docker run -d \
           --name=openssh-server \
           --hostname=openssh-server \
           -p 2223:2222 \
-          -e PUBLIC_KEY=$(cat testdata/.ssh/id_rsa.pub) \
+          -e PUBLIC_KEY="${{ env.PUBLIC_KEY }}" \
           -e SUDO_ACCESS=false \
           -e PASSWORD_ACCESS=true  \
           -e USER_PASSWORD=password  \
@@ -61,9 +76,6 @@ jobs:
           docker exec openssh-server sh -c "hostname -i" > ip.txt
           echo "REMOTE_HOST<<EOF" >> $GITHUB_ENV
           cat ip.txt >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-          echo "PRIVATE_KEY<<EOF" >> $GITHUB_ENV
-          cat testdata/.ssh/id_rsa >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
           echo "======= container ip address ========="
           cat ip.txt

@@ -126,3 +126,58 @@ jobs:
           script: |
             mkdir abc/def
             ls -al
+
+  support-key-passphrase:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: add public key to env
+        run: |
+          echo "PUBLIC_KEY<<EOF" >> $GITHUB_ENV
+          cat testdata/.ssh/id_passphrase.pub >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "======= public key ========="
+          cat testdata/.ssh/id_passphrase.pub
+          echo "============================"
+          echo "PRIVATE_KEY<<EOF" >> $GITHUB_ENV
+          cat testdata/.ssh/id_passphrase >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "======= private key ========="
+          cat testdata/.ssh/id_passphrase
+          echo "============================"
+
+      - name: create new ssh server
+        run: |
+          docker run -d \
+          --name=openssh-server \
+          --hostname=openssh-server \
+          -p 2222:2222 \
+          -e PUBLIC_KEY="${{ env.PUBLIC_KEY }}" \
+          -e SUDO_ACCESS=false \
+          -e PASSWORD_ACCESS=true  \
+          -e USER_PASSWORD=password  \
+          -e USER_NAME=linuxserver.io \
+          --restart unless-stopped \
+          lscr.io/linuxserver/openssh-server:latest
+          docker exec openssh-server sh -c "hostname -i" > ip.txt
+          echo "REMOTE_HOST<<EOF" >> $GITHUB_ENV
+          cat ip.txt >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "======= container ip address ========="
+          cat ip.txt
+          echo "======================================"
+          sleep 2
+
+      - name: ssh key passphrase
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ env.REMOTE_HOST }}
+          username: linuxserver.io
+          key: ${{ env.PRIVATE_KEY }}
+          port: 2222
+          passphrase: 1234
+          script: |
+            whoami
+            ls -al

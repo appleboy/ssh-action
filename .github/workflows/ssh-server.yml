@@ -193,3 +193,18 @@ jobs:
           script: |
             whoami
             ls -al
+
+      # https://github.com/appleboy/ssh-action/issues/75#issuecomment-668314271
+      - name: Multiline SSH commands interpreted as single lines
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ env.REMOTE_HOST }}
+          username: linuxserver.io
+          key: ${{ env.PRIVATE_KEY }}
+          port: 2222
+          passphrase: 1234
+          script_stop: true
+          script: |
+            ls \
+              -lah
+          use_insecure_cipher: true

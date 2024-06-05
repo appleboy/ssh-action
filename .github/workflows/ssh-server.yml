@@ -82,11 +82,31 @@ jobs:
           echo "======================================"
           sleep 2
 
-      - name: ssh by private
+      - name: ssh by private key
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ env.REMOTE_HOST }}
           username: linuxserver.io
           key: ${{ env.PRIVATE_KEY }}
+          port: 2222
+          script: whoami
+
+      - name: wrong password but correct key
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ env.REMOTE_HOST }}
+          username: linuxserver.io
+          password: "abcdef"
+          key: ${{ env.PRIVATE_KEY }}
+          port: 2222
+          script: whoami
+
+      - name: correct password but wrong key
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ env.REMOTE_HOST }}
+          username: linuxserver.io
+          password: password
+          key: password
           port: 2222
           script: whoami

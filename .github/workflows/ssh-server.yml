@@ -1,4 +1,4 @@
-name: openssh-server
+name: testing stable version
 
 on: [push]
 

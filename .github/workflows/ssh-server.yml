@@ -28,9 +28,9 @@ jobs:
           echo "======= container ip address ========="
           cat ip.txt
           echo "======================================"
-          sleep 3
+          sleep 2
 
-      - name: executing remote ssh commands using password (1.0.3)
+      - name: ssh by username and password
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ env.REMOTE_HOST }}
@@ -65,7 +65,7 @@ jobs:
           docker run -d \
           --name=openssh-server \
           --hostname=openssh-server \
-          -p 2223:2222 \
+          -p 2222:2222 \
           -e PUBLIC_KEY="${{ env.PUBLIC_KEY }}" \
           -e SUDO_ACCESS=false \
           -e PASSWORD_ACCESS=true  \
@@ -80,13 +80,13 @@ jobs:
           echo "======= container ip address ========="
           cat ip.txt
           echo "======================================"
-          sleep 3
+          sleep 2
 
-      - name: executing remote ssh commands using password (1.0.3)
+      - name: ssh by private
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ env.REMOTE_HOST }}
           username: linuxserver.io
           key: ${{ env.PRIVATE_KEY }}
-          port: 2223
+          port: 2222
           script: whoami

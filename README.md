@@ -221,6 +221,8 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
         ls -al
 ```
 
+The default value of `port` is `22`.
+
 #### Multiple hosts with different port
 
 ```diff

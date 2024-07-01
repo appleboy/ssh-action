@@ -1,5 +1,5 @@
-FROM appleboy/drone-ssh:1.6.4-linux-amd64
+FROM ghcr.io/appleboy/drone-ssh:1.7.4
 
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
+COPY entrypoint.sh /bin/entrypoint.sh
+
+ENTRYPOINT ["/bin/entrypoint.sh"]

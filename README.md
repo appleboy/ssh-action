@@ -1,5 +1,7 @@
 # 🚀 SSH for GitHub Actions
 
+[繁體中文](./README.zh-tw.md)
+
 [GitHub Action](https://github.com/features/actions) for executing remote ssh commands.
 
 ![ssh workflow](./images/ssh-workflow.png)
@@ -8,41 +10,46 @@
 
 **Important**: Only support **Linux** [docker](https://www.docker.com/) container.
 
+This thing is built using [Golang](https://go.dev) and [drone-ssh](https://github.com/appleboy/drone-ssh). 🚀
+
 ## Input variables
 
 See [action.yml](./action.yml) for more detailed information.
 
-* `host` - ssh host
-* `port` - ssh port, default is `22`
-* `username` - ssh username
-* `password` - ssh password
-* `passphrase` - the passphrase is usually to encrypt the private key
-* `sync` - synchronous execution if multiple hosts, default is false
-* `timeout` - timeout for ssh to remote host, default is `30s`
-* `command_timeout` - timeout for ssh command, default is `10m`
-* `key` - content of ssh private key. ex raw content of ~/.ssh/id_rsa, rembemer include the BEGIN and END lines 
-* `key_path` - path of ssh private key
-* `fingerprint` - fingerprint SHA256 of the host public key, default is to skip verification
-* `script` - execute commands
-* `script_stop` - stop script after first failure
-* `envs` - pass environment variable to shell script
-* `debug` - enable debug mode
-* `use_insecure_cipher` - include more ciphers with use_insecure_cipher (see [#56](https://github.com/appleboy/ssh-action/issues/56))
-* `cipher` - the allowed cipher algorithms. If unspecified then a sensible
-
-SSH Proxy Setting:
-
-* `proxy_host` - proxy host
-* `proxy_port` - proxy port, default is `22`
-* `proxy_username` - proxy username
-* `proxy_password` - proxy password
-* `proxy_passphrase` - the passphrase is usually to encrypt the private key
-* `proxy_timeout` - timeout for ssh to proxy host, default is `30s`
-* `proxy_key` - content of ssh proxy private key.
-* `proxy_key_path` - path of ssh proxy private key
-* `proxy_fingerprint` - fingerprint SHA256 of the proxy host public key, default is to skip verification
-* `proxy_use_insecure_cipher` - include more ciphers with use_insecure_cipher (see [#56](https://github.com/appleboy/ssh-action/issues/56))
-* `proxy_cipher` - the allowed cipher algorithms. If unspecified then a sensible
+| Input Parameter           | Description                                                                              | Default Value |
+|---------------------------|------------------------------------------------------------------------------------------|---------------|
+| host                      | SSH host address                                                                         |               |
+| port                      | SSH port number                                                                          | 22            |
+| passphrase                | SSH key passphrase                                                                       |               |
+| username                  | SSH username                                                                             |               |
+| password                  | SSH password                                                                             |               |
+| protocol                  | SSH protocol version (tcp, tcp4, tcp6)                                                   | tcp           |
+| sync                      | Enable synchronous execution if multiple hosts                                           | false         |
+| use_insecure_cipher       | Include more ciphers with use_insecure_cipher                                            | false         |
+| cipher                    | Allowed cipher algorithms. If unspecified, a sensible default                            |               |
+| timeout                   | Timeout duration for SSH to host                                                         | 30s           |
+| command_timeout           | Timeout duration for SSH command                                                         | 10m           |
+| key                       | Content of SSH private key. e.g., raw content of ~/.ssh/id_rsa                           |               |
+| key_path                  | Path of SSH private key                                                                  |               |
+| fingerprint               | SHA256 fingerprint of the host public key                                                |               |
+| proxy_host                | SSH proxy host                                                                           |               |
+| proxy_port                | SSH proxy port                                                                           | 22            |
+| proxy_username            | SSH proxy username                                                                       |               |
+| proxy_password            | SSH proxy password                                                                       |               |
+| proxy_passphrase          | SSH proxy key passphrase                                                                 |               |
+| proxy_timeout             | Timeout for SSH to proxy host                                                            | 30s           |
+| proxy_key                 | Content of SSH proxy private key                                                         |               |
+| proxy_key_path            | Path of SSH proxy private key                                                            |               |
+| proxy_fingerprint         | SHA256 fingerprint of the proxy host public key                                          |               |
+| proxy_cipher              | Allowed cipher algorithms for the proxy                                                  |               |
+| proxy_use_insecure_cipher | Include more ciphers with use_insecure_cipher for the proxy                              | false         |
+| script                    | Execute commands                                                                         |               |
+| script_stop               | Stop script after first failure                                                          | false         |
+| envs                      | Pass environment variables to shell script                                               |               |
+| envs_format               | Flexible configuration of environment value transfer                                     |               |
+| debug                     | Enable debug mode                                                                        | false         |
+| allenvs                   | pass the environment variables with prefix value of `GITHUB_` and `INPUT_` to the script | false         |
+| request_pty               | Request a pseudo-terminal from the server                                                | false         |
 
 ## Usage
 
@@ -58,7 +65,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: executing remote ssh commands using password
-      uses: appleboy/ssh-action@master
+      uses: appleboy/ssh-action@v1.0.3
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
@@ -85,75 +92,45 @@ Make sure to follow the below steps while creating SSH Keys and using them.
 The best practice is create the SSH Keys on local machine not remote machine.
 Login with username specified in Github Secrets. Generate a RSA Key-Pair:
 
-<details>
-<summary>rsa</summary>
-<p>
+### Generate rsa key
 
 ```bash
 ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
 ```
 
-</p>
-</details>
-
-<details>
-<summary>ed25519</summary>
-<p>
+### Generate ed25519 key
 
 ```bash
 ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 ```
 
-</p>
-</details>
-
 Add newly generated key into Authorized keys. Read more about authorized keys [here](https://www.ssh.com/ssh/authorized_keys/).
 
-<details>
-<summary>rsa</summary>
-<p>
+### Add rsa key into Authorized keys
 
 ```bash
 cat .ssh/id_rsa.pub | ssh b@B 'cat >> .ssh/authorized_keys'
 ```
 
-</p>
-</details>
-
-<details>
-<summary>ed25519</summary>
-<p>
+### Add ed25519 key into Authorized keys
 
 ```bash
 cat .ssh/id_ed25519.pub | ssh b@B 'cat >> .ssh/authorized_keys'
 ```
 
-</p>
-</details>
-
 Copy Private Key content and paste in Github Secrets.
 
-<details>
-<summary>rsa</summary>
-<p>
+### Copy rsa Private key
 
 ```bash
 clip < ~/.ssh/id_rsa
 ```
 
-</p>
-</details>
-
-<details>
-<summary>ed25519</summary>
-<p>
+### Copy ed25519 Private key
 
 ```bash
 clip < ~/.ssh/id_ed25519
 ```
-
-</p>
-</details>
 
 See the detail information about [SSH login without password](http://www.linuxproblem.org/art_9.html).
 
@@ -171,8 +148,7 @@ If you are currently using OpenSSH and are getting the following error:
 ssh: handshake failed: ssh: unable to authenticate, attempted methods [none publickey]
 ```
 
-Make sure that your key algorithm of choice is supported. On Ubuntu 20.04 or later you must explicitly allow the use of the ssh-rsa algorithm. Add the following line to your OpenSSH daemon file (which is either `/etc/ssh/sshd_config` or a drop-in file under 
-`/etc/ssh/sshd_config.d/`):
+Make sure that your key algorithm of choice is supported. On Ubuntu 20.04 or later you must explicitly allow the use of the ssh-rsa algorithm. Add the following line to your OpenSSH daemon file (which is either `/etc/ssh/sshd_config` or a drop-in file under `/etc/ssh/sshd_config.d/`):
 
 ```bash
 CASignatureAlgorithms +ssh-rsa
@@ -190,7 +166,7 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 ```yaml
 - name: executing remote ssh commands using password
-  uses: appleboy/ssh-action@master
+  uses: appleboy/ssh-action@v1.0.3
   with:
     host: ${{ secrets.HOST }}
     username: ${{ secrets.USERNAME }}
@@ -203,7 +179,7 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 ```yaml
 - name: executing remote ssh commands using ssh key
-  uses: appleboy/ssh-action@master
+  uses: appleboy/ssh-action@v1.0.3
   with:
     host: ${{ secrets.HOST }}
     username: ${{ secrets.USERNAME }}
@@ -216,7 +192,7 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 ```yaml
 - name: multiple command
-  uses: appleboy/ssh-action@master
+  uses: appleboy/ssh-action@v1.0.3
   with:
     host: ${{ secrets.HOST }}
     username: ${{ secrets.USERNAME }}
@@ -233,7 +209,7 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 ```diff
   - name: multiple host
-    uses: appleboy/ssh-action@master
+    uses: appleboy/ssh-action@v1.0.3
     with:
 -     host: "foo.com"
 +     host: "foo.com,bar.com"
@@ -245,11 +221,13 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
         ls -al
 ```
 
+The default value of `port` is `22`.
+
 #### Multiple hosts with different port
 
 ```diff
   - name: multiple host
-    uses: appleboy/ssh-action@master
+    uses: appleboy/ssh-action@v1.0.3
     with:
 -     host: "foo.com"
 +     host: "foo.com:1234,bar.com:5678"
@@ -264,7 +242,7 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 ```diff
   - name: multiple host
-    uses: appleboy/ssh-action@master
+    uses: appleboy/ssh-action@v1.0.3
     with:
       host: "foo.com,bar.com"
 +     sync: true
@@ -280,7 +258,7 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 ```diff
   - name: pass environment
-    uses: appleboy/ssh-action@master
+    uses: appleboy/ssh-action@v1.0.3
 +   env:
 +     FOO: "BAR"
 +     BAR: "FOO"
@@ -305,7 +283,7 @@ _Inside `env` object, you need to pass every environment variable as a string, p
 
 ```diff
   - name: stop script if command error
-    uses: appleboy/ssh-action@master
+    uses: appleboy/ssh-action@v1.0.3
     with:
       host: ${{ secrets.HOST }}
       username: ${{ secrets.USERNAME }}
@@ -358,7 +336,7 @@ Host FooServer
 
 ```diff
   - name: ssh proxy command
-    uses: appleboy/ssh-action@master
+    uses: appleboy/ssh-action@v1.0.3
     with:
       host: ${{ secrets.HOST }}
       username: ${{ secrets.USERNAME }}
@@ -381,7 +359,7 @@ It is not uncommon for files to leak from backups or decommissioned hardware, an
 
 ```diff
   - name: ssh key passphrase
-    uses: appleboy/ssh-action@master
+    uses: appleboy/ssh-action@v1.0.3
     with:
       host: ${{ secrets.HOST }}
       username: ${{ secrets.USERNAME }}
@@ -407,7 +385,7 @@ Now you can adjust you config:
 
 ```diff
   - name: ssh key passphrase
-    uses: appleboy/ssh-action@master
+    uses: appleboy/ssh-action@v1.0.3
     with:
       host: ${{ secrets.HOST }}
       username: ${{ secrets.USERNAME }}
@@ -418,6 +396,29 @@ Now you can adjust you config:
         whoami
         ls -al
 ```
+
+## Q&A
+
+### Command not found (npm or other command)
+
+See the [issue comment](https://github.com/appleboy/ssh-action/issues/31#issuecomment-1006565847) about interactive vs non interactive shell. Thanks @kocyigityunus for the solution.
+
+Basically, if you are running a command in a non interactive shell, like ssh-action, on many linux distros,
+
+`/etc/bash.bashrc` file has a specific command that returns only, so some of the files didn't run and some specific commands doesn't add to path,
+
+```sh
+# /etc/bash.bashrc
+# System-wide .bashrc file for interactive bash(1) shells.
+
+# To enable the settings / commands in this file for login shells as well,
+# this file has to be sourced in /etc/profile.
+
+# If not running interactively, don't do anything
+[ -z "$PS1" ] && return`
+```
+
+just comment out the line that returns early and everything should work fine, or you can use the real paths of the commands that you would like to use.
 
 ## Contributing
 

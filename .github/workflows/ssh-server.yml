@@ -1,4 +1,4 @@
-name: testing main branch
+name: testing stable version
 
 on: [push]
 
@@ -31,7 +31,7 @@ jobs:
           sleep 2
 
       - name: ssh by username and password
-        uses: ./
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ env.REMOTE_HOST }}
           username: linuxserver.io
@@ -83,7 +83,7 @@ jobs:
           sleep 2
 
       - name: ssh by private key
-        uses: ./
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ env.REMOTE_HOST }}
           username: linuxserver.io
@@ -92,7 +92,7 @@ jobs:
           script: whoami
 
       - name: wrong password but correct key
-        uses: ./
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ env.REMOTE_HOST }}
           username: linuxserver.io
@@ -102,7 +102,7 @@ jobs:
           script: whoami
 
       - name: correct password but wrong key
-        uses: ./
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ env.REMOTE_HOST }}
           username: linuxserver.io
@@ -112,7 +112,7 @@ jobs:
           script: whoami
 
       - name: stop script if command error
-        uses: ./
+        uses: appleboy/ssh-action@v1.0.3
         continue-on-error: true
         with:
           host: ${{ env.REMOTE_HOST }}
@@ -171,7 +171,7 @@ jobs:
           sleep 2
 
       - name: ssh key passphrase
-        uses: ./
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ env.REMOTE_HOST }}
           username: linuxserver.io
@@ -183,7 +183,7 @@ jobs:
             ls -al
 
       - name: missing ssh key passphrase
-        uses: ./
+        uses: appleboy/ssh-action@v1.0.3
         continue-on-error: true
         with:
           host: ${{ env.REMOTE_HOST }}
@@ -196,7 +196,7 @@ jobs:
 
       # https://github.com/appleboy/ssh-action/issues/75#issuecomment-668314271
       - name: Multiline SSH commands interpreted as single lines
-        uses: ./
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ env.REMOTE_HOST }}
           username: linuxserver.io
@@ -274,7 +274,7 @@ jobs:
 
       # https://github.com/appleboy/ssh-action/issues/85
       - name: Deployment to multiple hosts with different ports
-        uses: ./
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: "${{ env.REMOTE_HOST_01 }}:2222,${{ env.REMOTE_HOST_02 }}:2222"
           username: linuxserver.io
@@ -328,7 +328,7 @@ jobs:
           sleep 2
 
       - name: testing id_ed25519 key
-        uses: ./
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ env.REMOTE_HOST }}
           username: linuxserver.io
@@ -381,7 +381,7 @@ jobs:
           sleep 2
 
       - name: testing id_ed25519 key
-        uses: ./
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ env.REMOTE_HOST }}
           username: linuxserver.io
@@ -392,7 +392,7 @@ jobs:
             ls -al
 
       - name: pass environment
-        uses: ./
+        uses: appleboy/ssh-action@v1.0.3
         env:
           FOO: "BAR"
         with:
@@ -406,7 +406,7 @@ jobs:
             echo "I am $BAR, thanks"
 
       - name: pass multiple environment
-        uses: ./
+        uses: appleboy/ssh-action@v1.0.3
         env:
           FOO: "BAR"
           BAR: "FOO"
@@ -425,7 +425,7 @@ jobs:
             echo "port: $PORT"
 
       - name: custom envs format
-        uses: ./
+        uses: appleboy/ssh-action@v1.0.3
         env:
           FOO: "BAR"
           AAA: "BBB"
@@ -443,7 +443,7 @@ jobs:
             echo "I am $TEST_AAA, thanks"
 
       - name: pass all ENV variables to script
-        uses: ./
+        uses: appleboy/ssh-action@v1.0.3
         env:
           INPUT_FOO: "BAR"
           INPUT_AAA: "BBB"
@@ -460,7 +460,7 @@ jobs:
             echo "$GITHUB_REF"
 
       - name: switch to root user
-        uses: ./
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ env.REMOTE_HOST }}
           username: linuxserver.io
@@ -472,31 +472,3 @@ jobs:
           script: |
             whoami && echo 'hello world' && touch todo.txt
             sudo whoami
-
-  testing06:
-    name: testing ipv6
-    runs-on: ubuntu-latest
-    steps:
-      - name: checkout
-        uses: actions/checkout@v4
-
-      - name: Set up WARP
-        uses: fscarmen/warp-on-actions@v1.1
-        with:
-          stack: dual
-
-      - name: testing ipv6 for command
-        run: |
-          curl -m 9 --ipv6 --verbose https://google.com
-
-      - name: testing ipv6
-        uses: ./
-        with:
-          host: 2402:1f00:8000:800::2628
-          username: ubuntu
-          password: ${{ secrets.OVH_PASSWORD }}
-          protocol: tcp6
-          port: 22
-          command_timeout: 30s
-          script: |
-            whoami

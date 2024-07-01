@@ -1,6 +1,7 @@
 name: testing main branch
 
-on: [push]
+on:
+  workflow_dispatch:
 
 jobs:
   default-user-name-password:

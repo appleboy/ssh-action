@@ -1,6 +1,7 @@
 name: testing stable version
 
-on: [push]
+on: 
+  workflow_dispatch:
 
 jobs:
   default-user-name-password:

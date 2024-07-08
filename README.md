@@ -221,6 +221,8 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
         ls -al
 ```
 
+The default value of `port` is `22`.
+
 #### Multiple hosts with different port
 
 ```diff
@@ -394,6 +396,29 @@ Now you can adjust you config:
         whoami
         ls -al
 ```
+
+## Q&A
+
+### Command not found (npm or other command)
+
+See the [issue comment](https://github.com/appleboy/ssh-action/issues/31#issuecomment-1006565847) about interactive vs non interactive shell. Thanks @kocyigityunus for the solution.
+
+Basically, if you are running a command in a non interactive shell, like ssh-action, on many linux distros,
+
+`/etc/bash.bashrc` file has a specific command that returns only, so some of the files didn't run and some specific commands doesn't add to path,
+
+```sh
+# /etc/bash.bashrc
+# System-wide .bashrc file for interactive bash(1) shells.
+
+# To enable the settings / commands in this file for login shells as well,
+# this file has to be sourced in /etc/profile.
+
+# If not running interactively, don't do anything
+[ -z "$PS1" ] && return`
+```
+
+just comment out the line that returns early and everything should work fine, or you can use the real paths of the commands that you would like to use.
 
 ## Contributing
 

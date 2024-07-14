@@ -8,7 +8,7 @@ export GITHUB="true"
 
 GITHUB_ACTION_PATH="${GITHUB_ACTION_PATH%/}"
 DRONE_SSH_RELEASE_URL="${DRONE_SSH_RELEASE_URL:-https://github.com/appleboy/drone-ssh/releases/download}"
-DRONE_SSH_VERSION="${DRONE_SSH_VERSION:-1.7.4}"
+DRONE_SSH_VERSION="${DRONE_SSH_VERSION:-1.7.7}"
 
 function detect_client_info() {
   if [ -n "${SSH_CLIENT_OS-}" ]; then

@@ -61,7 +61,7 @@ DOWNLOAD_URL_PREFIX="${DRONE_SSH_RELEASE_URL}/v${DRONE_SSH_VERSION}"
 CLIENT_BINARY="drone-ssh-${DRONE_SSH_VERSION}-${CLIENT_PLATFORM}-${CLIENT_ARCH}"
 TARGET="${GITHUB_ACTION_PATH}/${CLIENT_BINARY}"
 echo "Will download ${CLIENT_BINARY} from ${DOWNLOAD_URL_PREFIX}"
-curl -fL --retry 5 --keepalive-time 2 "${DOWNLOAD_URL_PREFIX}/${CLIENT_BINARY}" -o ${TARGET}
+curl -fsSL --retry 5 --keepalive-time 2 "${DOWNLOAD_URL_PREFIX}/${CLIENT_BINARY}" -o ${TARGET}
 chmod +x ${TARGET}
 echo "======= CLI Version ======="
 sh -c "${TARGET} --version" # print version

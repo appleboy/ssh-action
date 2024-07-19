@@ -122,14 +122,29 @@ Copy Private Key content and paste in Github Secrets.
 
 ### Copy rsa Private key
 
+Before copying the private key, install `clip` command as shown below:
+
 ```bash
-clip < ~/.ssh/id_rsa
+# Ubuntu
+sudo apt-get install xclip
+```
+
+copy the private key:
+
+```bash
+# macOS
+pbcopy < ~/.ssh/id_rsa
+# Ubuntu
+xclip < ~/.ssh/id_rsa
 ```
 
 ### Copy ed25519 Private key
 
 ```bash
-clip < ~/.ssh/id_ed25519
+# macOS
+pbcopy < ~/.ssh/id_ed25519
+# Ubuntu
+xclip < ~/.ssh/id_ed25519
 ```
 
 See the detail information about [SSH login without password](http://www.linuxproblem.org/art_9.html).

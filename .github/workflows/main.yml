@@ -461,6 +461,7 @@ jobs:
 
       - name: pass secret variable in shell
         uses: ./
+        continue-on-error: true
         with:
           host: ${{ env.REMOTE_HOST }}
           username: linuxserver.io

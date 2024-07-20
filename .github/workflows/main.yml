@@ -459,6 +459,15 @@ jobs:
             echo "$GITHUB_BASE_REF"
             echo "$GITHUB_REF"
 
+      - name: pass secret variable in shell
+        uses: ./
+        with:
+          host: ${{ env.REMOTE_HOST }}
+          username: linuxserver.io
+          key: ${{ env.PRIVATE_KEY }}
+          port: 2222
+          script: cd ${{ secrets.PORT }}
+
       - name: switch to root user
         uses: ./
         with:

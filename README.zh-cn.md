@@ -1,6 +1,6 @@
 # 🚀 用于 GitHub Actions 的 SSH
 
-[GitHub Action](https://github.com/features/actions) for executing remote ssh commands.
+[GitHub Action](https://github.com/features/actions) 用于执行远程 SSH 命令。
 
 ![ssh workflow](./images/ssh-workflow.png)
 

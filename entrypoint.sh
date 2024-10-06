@@ -63,7 +63,15 @@ TARGET="${GITHUB_ACTION_PATH}/${CLIENT_BINARY}"
 echo "Will download ${CLIENT_BINARY} from ${DOWNLOAD_URL_PREFIX}"
 curl -fsSL --retry 5 --keepalive-time 2 "${DOWNLOAD_URL_PREFIX}/${CLIENT_BINARY}" -o ${TARGET}
 chmod +x ${TARGET}
+
 echo "======= CLI Version ======="
 sh -c "${TARGET} --version" # print version
 echo "==========================="
-sh -c "${TARGET} $*" # run the command
+{
+  sh -c "${TARGET} $*" # run the command
+} 2> /tmp/errFile | tee /tmp/outFile
+
+stdout=$(cat /tmp/outFile)
+stderr=$(cat /tmp/errFile)
+echo "stdout=${stdout//$'\n'/\\n}" >> $GITHUB_OUTPUT
+echo "stderr=${stderr//$'\n'/\\n}" >> $GITHUB_OUTPUT

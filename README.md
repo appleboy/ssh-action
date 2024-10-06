@@ -18,7 +18,7 @@ This thing is built using [Golang](https://go.dev) and [drone-ssh](https://githu
 See [action.yml](./action.yml) for more detailed information.
 
 | Input Parameter           | Description                                                                              | Default Value |
-|---------------------------|------------------------------------------------------------------------------------------|---------------|
+| ------------------------- | ---------------------------------------------------------------------------------------- | ------------- |
 | host                      | SSH host address                                                                         |               |
 | port                      | SSH port number                                                                          | 22            |
 | passphrase                | SSH key passphrase                                                                       |               |
@@ -66,7 +66,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: executing remote ssh commands using password
-      uses: appleboy/ssh-action@v1.0.3
+      uses: appleboy/ssh-action@v1.1.0
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
@@ -182,7 +182,7 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 ```yaml
 - name: executing remote ssh commands using password
-  uses: appleboy/ssh-action@v1.0.3
+  uses: appleboy/ssh-action@v1.1.0
   with:
     host: ${{ secrets.HOST }}
     username: ${{ secrets.USERNAME }}
@@ -195,7 +195,7 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 ```yaml
 - name: executing remote ssh commands using ssh key
-  uses: appleboy/ssh-action@v1.0.3
+  uses: appleboy/ssh-action@v1.1.0
   with:
     host: ${{ secrets.HOST }}
     username: ${{ secrets.USERNAME }}
@@ -208,7 +208,7 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 ```yaml
 - name: multiple command
-  uses: appleboy/ssh-action@v1.0.3
+  uses: appleboy/ssh-action@v1.1.0
   with:
     host: ${{ secrets.HOST }}
     username: ${{ secrets.USERNAME }}
@@ -225,7 +225,7 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 ```diff
   - name: multiple host
-    uses: appleboy/ssh-action@v1.0.3
+    uses: appleboy/ssh-action@v1.1.0
     with:
 -     host: "foo.com"
 +     host: "foo.com,bar.com"
@@ -243,7 +243,7 @@ The default value of `port` is `22`.
 
 ```diff
   - name: multiple host
-    uses: appleboy/ssh-action@v1.0.3
+    uses: appleboy/ssh-action@v1.1.0
     with:
 -     host: "foo.com"
 +     host: "foo.com:1234,bar.com:5678"
@@ -258,7 +258,7 @@ The default value of `port` is `22`.
 
 ```diff
   - name: multiple host
-    uses: appleboy/ssh-action@v1.0.3
+    uses: appleboy/ssh-action@v1.1.0
     with:
       host: "foo.com,bar.com"
 +     sync: true
@@ -274,7 +274,7 @@ The default value of `port` is `22`.
 
 ```diff
   - name: pass environment
-    uses: appleboy/ssh-action@v1.0.3
+    uses: appleboy/ssh-action@v1.1.0
 +   env:
 +     FOO: "BAR"
 +     BAR: "FOO"
@@ -299,7 +299,7 @@ _Inside `env` object, you need to pass every environment variable as a string, p
 
 ```diff
   - name: stop script if command error
-    uses: appleboy/ssh-action@v1.0.3
+    uses: appleboy/ssh-action@v1.1.0
     with:
       host: ${{ secrets.HOST }}
       username: ${{ secrets.USERNAME }}
@@ -352,7 +352,7 @@ Host FooServer
 
 ```diff
   - name: ssh proxy command
-    uses: appleboy/ssh-action@v1.0.3
+    uses: appleboy/ssh-action@v1.1.0
     with:
       host: ${{ secrets.HOST }}
       username: ${{ secrets.USERNAME }}
@@ -375,7 +375,7 @@ It is not uncommon for files to leak from backups or decommissioned hardware, an
 
 ```diff
   - name: ssh key passphrase
-    uses: appleboy/ssh-action@v1.0.3
+    uses: appleboy/ssh-action@v1.1.0
     with:
       host: ${{ secrets.HOST }}
       username: ${{ secrets.USERNAME }}
@@ -401,7 +401,7 @@ Now you can adjust you config:
 
 ```diff
   - name: ssh key passphrase
-    uses: appleboy/ssh-action@v1.0.3
+    uses: appleboy/ssh-action@v1.1.0
     with:
       host: ${{ secrets.HOST }}
       username: ${{ secrets.USERNAME }}

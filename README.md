@@ -82,9 +82,9 @@ output:
 whoami
 ======END======
 out: ***
-==============================================
-✅ Successfully executed commands to all host.
-==============================================
+===============================================
+✅ Successfully executed commands to all hosts.
+===============================================
 ```
 
 ### Setting up a SSH Key

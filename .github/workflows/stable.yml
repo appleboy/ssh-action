@@ -37,7 +37,10 @@ jobs:
           username: linuxserver.io
           password: password
           port: 2222
-          script: whoami
+          script: |
+            #!/usr/bin/env bash
+            set -e
+            whoami
 
   check-ssh-key:
     runs-on: ubuntu-latest

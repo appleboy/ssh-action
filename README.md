@@ -35,6 +35,7 @@ See [action.yml](./action.yml) for more detailed information.
 | fingerprint               | SHA256 fingerprint of the host public key                                                |               |
 | proxy_host                | SSH proxy host                                                                           |               |
 | proxy_port                | SSH proxy port                                                                           | 22            |
+| proxy_protocol            | SSH proxy protocol version (tcp, tcp4, tcp6)                                             | tcp           |
 | proxy_username            | SSH proxy username                                                                       |               |
 | proxy_password            | SSH proxy password                                                                       |               |
 | proxy_passphrase          | SSH proxy key passphrase                                                                 |               |

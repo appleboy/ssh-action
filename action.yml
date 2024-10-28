@@ -43,6 +43,9 @@ inputs:
     description: "SSH proxy username."
   proxy_password:
     description: "SSH proxy password."
+  proxy_protocol:
+    description: 'The IP protocol to use. Valid values are "tcp". "tcp4" or "tcp6". Default to tcp.'
+    default: "tcp"
   proxy_passphrase:
     description: "SSH proxy key passphrase."
   proxy_timeout:

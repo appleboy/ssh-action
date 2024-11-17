@@ -46,6 +46,7 @@ See [action.yml](./action.yml) for more detailed information.
 | proxy_cipher              | Allowed cipher algorithms for the proxy                                                  |               |
 | proxy_use_insecure_cipher | Include more ciphers with use_insecure_cipher for the proxy                              | false         |
 | script                    | Execute commands                                                                         |               |
+| script_file               | Execute commands from a file                                                             |               |
 | script_stop               | Stop script after first failure                                                          | false         |
 | envs                      | Pass environment variables to shell script                                               |               |
 | envs_format               | Flexible configuration of environment value transfer                                     |               |
@@ -221,6 +222,19 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 ```
 
 ![result](./images/output-result.png)
+
+#### Commands from a file
+
+```yaml
+- name: file commands
+  uses: appleboy/ssh-action@v1.1.0
+  with:
+    host: ${{ secrets.HOST }}
+    username: ${{ secrets.USERNAME }}
+    key: ${{ secrets.KEY }}
+    port: ${{ secrets.PORT }}
+    script_path: scripts/script.sh 
+```
 
 #### Multiple Hosts
 

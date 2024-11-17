@@ -24,6 +24,7 @@
 * `key_path` - SSH 私鑰的路徑
 * `fingerprint` - 主機公鑰的 SHA256 指紋，預設為略過驗證
 * `script` - 執行命令
+* `script_file` - 執行命令的文件
 * `script_stop` - 當出現第一個錯誤時停止執行命令
 * `envs` - 傳遞環境變數到 shell script
 * `debug` - 啟用偵錯模式
@@ -58,7 +59,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: executing remote ssh commands using password
-      uses: appleboy/ssh-action@v1.1.0
+      uses: appleboy/ssh-action@v1.2.0
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
@@ -157,7 +158,7 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 ```yaml
 - name: executing remote ssh commands using password
-  uses: appleboy/ssh-action@v1.1.0
+  uses: appleboy/ssh-action@v1.2.0
   with:
     host: ${{ secrets.HOST }}
     username: ${{ secrets.USERNAME }}
@@ -170,7 +171,7 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 ```yaml
 - name: executing remote ssh commands using ssh key
-  uses: appleboy/ssh-action@v1.1.0
+  uses: appleboy/ssh-action@v1.2.0
   with:
     host: ${{ secrets.HOST }}
     username: ${{ secrets.USERNAME }}
@@ -183,7 +184,7 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 ```yaml
 - name: multiple command
-  uses: appleboy/ssh-action@v1.1.0
+  uses: appleboy/ssh-action@v1.2.0
   with:
     host: ${{ secrets.HOST }}
     username: ${{ secrets.USERNAME }}
@@ -196,11 +197,24 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 ![result](./images/output-result.png)
 
+#### Commands from a file
+
+```yaml
+- name: file commands
+  uses: appleboy/ssh-action@v1.2.0
+  with:
+    host: ${{ secrets.HOST }}
+    username: ${{ secrets.USERNAME }}
+    key: ${{ secrets.KEY }}
+    port: ${{ secrets.PORT }}
+    script_path: scripts/script.sh 
+```
+
 #### 多台主機
 
 ```diff
   - name: multiple host
-    uses: appleboy/ssh-action@v1.1.0
+    uses: appleboy/ssh-action@v1.2.0
     with:
 -     host: "foo.com"
 +     host: "foo.com,bar.com"
@@ -216,7 +230,7 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 ```diff
   - name: multiple host
-    uses: appleboy/ssh-action@v1.1.0
+    uses: appleboy/ssh-action@v1.2.0
     with:
 -     host: "foo.com"
 +     host: "foo.com:1234,bar.com:5678"
@@ -231,7 +245,7 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 ```diff
   - name: multiple host
-    uses: appleboy/ssh-action@v1.1.0
+    uses: appleboy/ssh-action@v1.2.0
     with:
       host: "foo.com,bar.com"
 +     sync: true
@@ -247,7 +261,7 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 ```diff
   - name: pass environment
-    uses: appleboy/ssh-action@v1.1.0
+    uses: appleboy/ssh-action@v1.2.0
 +   env:
 +     FOO: "BAR"
 +     BAR: "FOO"
@@ -272,7 +286,7 @@ _在 `env` 對象中，您需要將每個環境變量作為字符串傳遞，傳
 
 ```diff
   - name: stop script if command error
-    uses: appleboy/ssh-action@v1.1.0
+    uses: appleboy/ssh-action@v1.2.0
     with:
       host: ${{ secrets.HOST }}
       username: ${{ secrets.USERNAME }}
@@ -325,7 +339,7 @@ Host FooServer
 
 ```diff
   - name: ssh proxy command
-    uses: appleboy/ssh-action@v1.1.0
+    uses: appleboy/ssh-action@v1.2.0
     with:
       host: ${{ secrets.HOST }}
       username: ${{ secrets.USERNAME }}
@@ -346,7 +360,7 @@ Host FooServer
 
 ```diff
   - name: ssh key passphrase
-    uses: appleboy/ssh-action@v1.1.0
+    uses: appleboy/ssh-action@v1.2.0
     with:
       host: ${{ secrets.HOST }}
       username: ${{ secrets.USERNAME }}
@@ -372,7 +386,7 @@ ssh example.com ssh-keygen -l -f /etc/ssh/ssh_host_ed25519_key.pub | cut -d ' ' 
 
 ```diff
   - name: ssh key passphrase
-    uses: appleboy/ssh-action@v1.1.0
+    uses: appleboy/ssh-action@v1.2.0
     with:
       host: ${{ secrets.HOST }}
       username: ${{ secrets.USERNAME }}

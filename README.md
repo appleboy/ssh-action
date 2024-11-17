@@ -3,13 +3,13 @@
 [繁體中文](./README.zh-tw.md)
 [简体中文](./README.zh-cn.md)
 
-[GitHub Action](https://github.com/features/actions) for executing remote ssh commands.
+[GitHub Action](https://github.com/features/actions) for executing remote SSH commands.
 
 ![ssh workflow](./images/ssh-workflow.png)
 
 [![testing main branch](https://github.com/appleboy/ssh-action/actions/workflows/main.yml/badge.svg)](https://github.com/appleboy/ssh-action/actions/workflows/main.yml)
 
-This thing is built using [Golang](https://go.dev) and [drone-ssh](https://github.com/appleboy/drone-ssh). 🚀
+This project is built using [Golang](https://go.dev) and [drone-ssh](https://github.com/appleboy/drone-ssh). 🚀
 
 ## Input variables
 
@@ -49,12 +49,12 @@ See [action.yml](./action.yml) for more detailed information.
 | envs                      | Pass environment variables to shell script                                               |               |
 | envs_format               | Flexible configuration of environment value transfer                                     |               |
 | debug                     | Enable debug mode                                                                        | false         |
-| allenvs                   | pass the environment variables with prefix value of `GITHUB_` and `INPUT_` to the script | false         |
+| allenvs                   | Pass the environment variables with prefix value of `GITHUB_` and `INPUT_` to the script | false         |
 | request_pty               | Request a pseudo-terminal from the server                                                | false         |
 
 ## Usage
 
-Executing remote ssh commands.
+Executing remote SSH commands.
 
 ```yaml
 name: remote ssh command

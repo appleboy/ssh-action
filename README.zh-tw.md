@@ -1,49 +1,58 @@
-# 🚀 用於 GitHub Actions 的 SSH
+# 🚀 GitHub Actions 的 SSH
 
-[GitHub Action](https://github.com/features/actions) for executing remote ssh commands.
+[English](./README.md)
+[简体中文](./README.zh-cn.md)
+
+[GitHub Action](https://github.com/features/actions) 用於執行遠端 SSH 命令。
 
 ![ssh workflow](./images/ssh-workflow.png)
 
 [![testing main branch](https://github.com/appleboy/ssh-action/actions/workflows/main.yml/badge.svg)](https://github.com/appleboy/ssh-action/actions/workflows/main.yml)
 
+此專案使用 [Golang](https://go.dev) 和 [drone-ssh](https://github.com/appleboy/drone-ssh) 建立。🚀
+
 ## 輸入變數
 
-更詳細的資訊，請參閱 [action.yml](./action.yml)。
+請參閱 [action.yml](./action.yml) 以獲取更詳細的信息。
 
-* `host` - SSH 主機
-* `port` - SSH 連接埠，預設為 `22`
-* `username` - SSH 使用者名稱
-* `password` - SSH 密碼
-* `passphrase` - 通常用於加密私鑰的 passphrase
-* `sync` - 同步執行多個主機上的命令，預設為 false
-* `timeout` - SSH 連接到遠端主機的超時時間，預設為 `30s`
-* `command_timeout` - SSH 命令超時時間，預設為 10m
-* `key` - SSH 私鑰的內容，例如 ~/.ssh/id_rsa 的原始內容，請記得包含 BEGIN 和 END 行
-* `key_path` - SSH 私鑰的路徑
-* `fingerprint` - 主機公鑰的 SHA256 指紋，預設為略過驗證
-* `script` - 執行命令
-* `script_file` - 執行命令的文件
-* `script_stop` - 當出現第一個錯誤時停止執行命令
-* `envs` - 傳遞環境變數到 shell script
-* `debug` - 啟用偵錯模式
-* `use_insecure_cipher` - 使用不安全的密碼（ciphers）進行加密，參見 [#56](https://github.com/appleboy/ssh-action/issues/56)
-* `cipher` - 允許使用的密碼（ciphers）演算法。如果未指定，則使用適當的演算法
+| 輸入參數                  | 描述                                                  | 預設值 |
+| ------------------------- | ----------------------------------------------------- | ------ |
+| host                      | SSH 主機地址                                          |        |
+| port                      | SSH 埠號                                              | 22     |
+| passphrase                | SSH 金鑰密碼                                          |        |
+| username                  | SSH 使用者名稱                                        |        |
+| password                  | SSH 密碼                                              |        |
+| protocol                  | SSH 協議版本 (tcp, tcp4, tcp6)                        | tcp    |
+| sync                      | 如果有多個主機，啟用同步執行                          | false  |
+| use_insecure_cipher       | 包含更多不安全的加密算法                              | false  |
+| cipher                    | 允許的加密算法。如果未指定，則使用合理的預設值        |        |
+| timeout                   | SSH 連接主機的超時時間                                | 30s    |
+| command_timeout           | SSH 命令的超時時間                                    | 10m    |
+| key                       | SSH 私鑰的內容。例如，~/.ssh/id_rsa 的原始內容        |        |
+| key_path                  | SSH 私鑰的路徑                                        |        |
+| fingerprint               | 主機公鑰的 SHA256 指紋                                |        |
+| proxy_host                | SSH 代理主機                                          |        |
+| proxy_port                | SSH 代理埠號                                          | 22     |
+| proxy_protocol            | SSH 代理協議版本 (tcp, tcp4, tcp6)                    | tcp    |
+| proxy_username            | SSH 代理使用者名稱                                    |        |
+| proxy_password            | SSH 代理密碼                                          |        |
+| proxy_passphrase          | SSH 代理金鑰密碼                                      |        |
+| proxy_timeout             | SSH 連接代理主機的超時時間                            | 30s    |
+| proxy_key                 | SSH 代理私鑰的內容                                    |        |
+| proxy_key_path            | SSH 代理私鑰的路徑                                    |        |
+| proxy_fingerprint         | 代理主機公鑰的 SHA256 指紋                            |        |
+| proxy_cipher              | 代理允許的加密算法                                    |        |
+| proxy_use_insecure_cipher | 包含更多不安全的加密算法                              | false  |
+| script                    | 執行命令                                              |        |
+| script_file               | 從文件中執行命令                                      |        |
+| script_stop               | 在第一次失敗後停止腳本                                | false  |
+| envs                      | 將環境變數傳遞給 shell 腳本                           |        |
+| envs_format               | 環境值傳遞的靈活配置                                  |        |
+| debug                     | 啟用調試模式                                          | false  |
+| allenvs                   | 將帶有 `GITHUB_` 和 `INPUT_` 前綴的環境變數傳遞給腳本 | false  |
+| request_pty               | 從伺服器請求偽終端                                    | false  |
 
-SSH 代理設置:
-
-* `proxy_host` - 代理主機
-* `proxy_port` - 代理端口，預設為 `22`
-* `proxy_username` - 代理使用者名稱
-* `proxy_password` - 代理密碼
-* `proxy_passphrase` - 密碼通常用於加密私有金鑰
-* `proxy_timeout` - SSH 連線至代理主機的逾時時間，預設為 `30s`
-* `proxy_key` - SSH 代理私有金鑰內容
-* `proxy_key_path` - SSH 代理私有金鑰路徑
-* `proxy_fingerprint` - 代理主機公鑰的 SHA256 指紋，預設為跳過驗證
-* `proxy_use_insecure_cipher` - 使用不安全的加密方式，請參閱 [#56](https://github.com/appleboy/ssh-action/issues/56)
-* `proxy_cipher` - 允許的加密算法。如果未指定，則使用合理的算法
-
-## 使用方式
+## 用法
 
 執行遠端 SSH 命令
 

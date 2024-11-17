@@ -71,7 +71,7 @@ jobs:
       uses: appleboy/ssh-action@v1.1.0
       with:
         host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
+        username: linuxserver.io
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
         script: whoami
@@ -83,7 +83,7 @@ output:
 ======CMD======
 whoami
 ======END======
-out: ***
+linuxserver.io
 ===============================================
 ✅ Successfully executed commands to all hosts.
 ===============================================

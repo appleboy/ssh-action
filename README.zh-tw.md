@@ -4,9 +4,7 @@
 
 ![ssh workflow](./images/ssh-workflow.png)
 
-[![Actions Status](https://github.com/appleboy/ssh-action/workflows/remote%20ssh%20command/badge.svg)](https://github.com/appleboy/ssh-action/actions)
-
-**注意**： 只支援在 **Linux** [docker](https://www.docker.com/) 容器上執行。
+[![testing main branch](https://github.com/appleboy/ssh-action/actions/workflows/main.yml/badge.svg)](https://github.com/appleboy/ssh-action/actions/workflows/main.yml)
 
 ## 輸入變數
 

@@ -77,6 +77,12 @@ inputs:
     description: "pass all environment variable to shell script."
   request_pty:
     description: "Request a pseudo-terminal from the server."
+  capture_stdout:
+    description: "Capture the stdout of the commands."
+    default: "false"
+  capture_stderr:
+    description: "Capture the stderr of the commands."
+    default: "false"
 
 outputs:
   stdout:

@@ -68,11 +68,28 @@ chmod +x ${TARGET}
 echo "======= CLI Version ======="
 sh -c "${TARGET} --version" # print version
 echo "==========================="
-{
-  sh -c "${TARGET} $*" # run the command
-} 2> /tmp/errFile | tee /tmp/outFile
+if [ ${{ inputs.capture_stdout }} == 'true' ] || [ "${{ inputs.capture_stderr }}" == 'true' ]; then
+  _stdout=/dev/stdout
+  _stderr=/dev/stderr
+  if [ "${{ inputs.capture_stdout }}" == 'true' ]; then
+    _stdout=/tmp/outFile
+  fi
+  if [ "${{ inputs.capture_stderr }}" == 'true' ]; then
+    _stderr=/tmp/errFile
+  fi
 
-stdout=$(cat /tmp/outFile)
-stderr=$(cat /tmp/errFile)
-echo "stdout=${stdout//$'\n'/\\n}" >> $GITHUB_OUTPUT
-echo "stderr=${stderr//$'\n'/\\n}" >> $GITHUB_OUTPUT
+  {
+    sh -c "${TARGET} $*" # run the command
+  } 2> $_stderr | tee $_stdout
+
+  if [ "${{ inputs.capture_stdout }}" == 'true' ]; then
+    stdout=$(cat $_stdout)
+    echo "stdout=${stdout//$'\n'/\\n}" >> $GITHUB_OUTPUT
+  fi
+  if [ "${{ inputs.capture_stderr }}" == 'true' ]; then
+    stderr=$(cat $_stderr)
+    echo "stderr=${stderr//$'\n'/\\n}" >> $GITHUB_OUTPUT
+  fi
+else
+  sh -c "${TARGET} $*" # run the command
+fi

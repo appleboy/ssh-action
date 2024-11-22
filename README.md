@@ -3,15 +3,13 @@
 [繁體中文](./README.zh-tw.md)
 [简体中文](./README.zh-cn.md)
 
-[GitHub Action](https://github.com/features/actions) for executing remote ssh commands.
+[GitHub Action](https://github.com/features/actions) for executing remote SSH commands.
 
 ![ssh workflow](./images/ssh-workflow.png)
 
-[![Actions Status](https://github.com/appleboy/ssh-action/workflows/remote%20ssh%20command/badge.svg)](https://github.com/appleboy/ssh-action/actions)
+[![testing main branch](https://github.com/appleboy/ssh-action/actions/workflows/main.yml/badge.svg)](https://github.com/appleboy/ssh-action/actions/workflows/main.yml)
 
-**Important**: Only support **Linux** [docker](https://www.docker.com/) container.
-
-This thing is built using [Golang](https://go.dev) and [drone-ssh](https://github.com/appleboy/drone-ssh). 🚀
+This project is built using [Golang](https://go.dev) and [drone-ssh](https://github.com/appleboy/drone-ssh). 🚀
 
 ## Input variables
 
@@ -35,6 +33,7 @@ See [action.yml](./action.yml) for more detailed information.
 | fingerprint               | SHA256 fingerprint of the host public key                                                |               |
 | proxy_host                | SSH proxy host                                                                           |               |
 | proxy_port                | SSH proxy port                                                                           | 22            |
+| proxy_protocol            | SSH proxy protocol version (tcp, tcp4, tcp6)                                             | tcp           |
 | proxy_username            | SSH proxy username                                                                       |               |
 | proxy_password            | SSH proxy password                                                                       |               |
 | proxy_passphrase          | SSH proxy key passphrase                                                                 |               |
@@ -45,16 +44,17 @@ See [action.yml](./action.yml) for more detailed information.
 | proxy_cipher              | Allowed cipher algorithms for the proxy                                                  |               |
 | proxy_use_insecure_cipher | Include more ciphers with use_insecure_cipher for the proxy                              | false         |
 | script                    | Execute commands                                                                         |               |
+| script_file               | Execute commands from a file                                                             |               |
 | script_stop               | Stop script after first failure                                                          | false         |
 | envs                      | Pass environment variables to shell script                                               |               |
 | envs_format               | Flexible configuration of environment value transfer                                     |               |
 | debug                     | Enable debug mode                                                                        | false         |
-| allenvs                   | pass the environment variables with prefix value of `GITHUB_` and `INPUT_` to the script | false         |
+| allenvs                   | Pass the environment variables with prefix value of `GITHUB_` and `INPUT_` to the script | false         |
 | request_pty               | Request a pseudo-terminal from the server                                                | false         |
 
 ## Usage
 
-Executing remote ssh commands.
+Executing remote SSH commands.
 
 ```yaml
 name: remote ssh command
@@ -66,10 +66,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: executing remote ssh commands using password
-      uses: appleboy/ssh-action@v1.1.0
+      uses: appleboy/ssh-action@v1.2.0
       with:
         host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
+        username: linuxserver.io
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
         script: whoami
@@ -81,7 +81,7 @@ output:
 ======CMD======
 whoami
 ======END======
-out: ***
+linuxserver.io
 ===============================================
 ✅ Successfully executed commands to all hosts.
 ===============================================
@@ -182,7 +182,7 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 ```yaml
 - name: executing remote ssh commands using password
-  uses: appleboy/ssh-action@v1.1.0
+  uses: appleboy/ssh-action@v1.2.0
   with:
     host: ${{ secrets.HOST }}
     username: ${{ secrets.USERNAME }}
@@ -195,7 +195,7 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 ```yaml
 - name: executing remote ssh commands using ssh key
-  uses: appleboy/ssh-action@v1.1.0
+  uses: appleboy/ssh-action@v1.2.0
   with:
     host: ${{ secrets.HOST }}
     username: ${{ secrets.USERNAME }}
@@ -208,7 +208,7 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 ```yaml
 - name: multiple command
-  uses: appleboy/ssh-action@v1.1.0
+  uses: appleboy/ssh-action@v1.2.0
   with:
     host: ${{ secrets.HOST }}
     username: ${{ secrets.USERNAME }}
@@ -221,11 +221,24 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 ![result](./images/output-result.png)
 
+#### Commands from a file
+
+```yaml
+- name: file commands
+  uses: appleboy/ssh-action@v1.2.0
+  with:
+    host: ${{ secrets.HOST }}
+    username: ${{ secrets.USERNAME }}
+    key: ${{ secrets.KEY }}
+    port: ${{ secrets.PORT }}
+    script_path: scripts/script.sh 
+```
+
 #### Multiple Hosts
 
 ```diff
   - name: multiple host
-    uses: appleboy/ssh-action@v1.1.0
+    uses: appleboy/ssh-action@v1.2.0
     with:
 -     host: "foo.com"
 +     host: "foo.com,bar.com"
@@ -243,7 +256,7 @@ The default value of `port` is `22`.
 
 ```diff
   - name: multiple host
-    uses: appleboy/ssh-action@v1.1.0
+    uses: appleboy/ssh-action@v1.2.0
     with:
 -     host: "foo.com"
 +     host: "foo.com:1234,bar.com:5678"
@@ -258,7 +271,7 @@ The default value of `port` is `22`.
 
 ```diff
   - name: multiple host
-    uses: appleboy/ssh-action@v1.1.0
+    uses: appleboy/ssh-action@v1.2.0
     with:
       host: "foo.com,bar.com"
 +     sync: true
@@ -274,7 +287,7 @@ The default value of `port` is `22`.
 
 ```diff
   - name: pass environment
-    uses: appleboy/ssh-action@v1.1.0
+    uses: appleboy/ssh-action@v1.2.0
 +   env:
 +     FOO: "BAR"
 +     BAR: "FOO"
@@ -299,7 +312,7 @@ _Inside `env` object, you need to pass every environment variable as a string, p
 
 ```diff
   - name: stop script if command error
-    uses: appleboy/ssh-action@v1.1.0
+    uses: appleboy/ssh-action@v1.2.0
     with:
       host: ${{ secrets.HOST }}
       username: ${{ secrets.USERNAME }}
@@ -352,7 +365,7 @@ Host FooServer
 
 ```diff
   - name: ssh proxy command
-    uses: appleboy/ssh-action@v1.1.0
+    uses: appleboy/ssh-action@v1.2.0
     with:
       host: ${{ secrets.HOST }}
       username: ${{ secrets.USERNAME }}
@@ -375,7 +388,7 @@ It is not uncommon for files to leak from backups or decommissioned hardware, an
 
 ```diff
   - name: ssh key passphrase
-    uses: appleboy/ssh-action@v1.1.0
+    uses: appleboy/ssh-action@v1.2.0
     with:
       host: ${{ secrets.HOST }}
       username: ${{ secrets.USERNAME }}
@@ -401,7 +414,7 @@ Now you can adjust you config:
 
 ```diff
   - name: ssh key passphrase
-    uses: appleboy/ssh-action@v1.1.0
+    uses: appleboy/ssh-action@v1.2.0
     with:
       host: ${{ secrets.HOST }}
       username: ${{ secrets.USERNAME }}

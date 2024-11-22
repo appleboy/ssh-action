@@ -8,7 +8,7 @@ export GITHUB="true"
 
 GITHUB_ACTION_PATH="${GITHUB_ACTION_PATH%/}"
 DRONE_SSH_RELEASE_URL="${DRONE_SSH_RELEASE_URL:-https://github.com/appleboy/drone-ssh/releases/download}"
-DRONE_SSH_VERSION="${DRONE_SSH_VERSION:-1.7.7}"
+DRONE_SSH_VERSION="${DRONE_SSH_VERSION:-1.8.0}"
 
 function detect_client_info() {
   if [ -n "${SSH_CLIENT_OS-}" ]; then
@@ -17,20 +17,21 @@ function detect_client_info() {
     local kernel
     kernel="$(uname -s)"
     case "${kernel}" in
-      Darwin)
-        CLIENT_PLATFORM="darwin"
-        ;;
-      Linux)
-        CLIENT_PLATFORM="linux"
-        ;;
-      Windows)
-        CLIENT_PLATFORM="windows"
-        ;;
-      *)
-        echo "Unknown, unsupported platform: ${kernel}." >&2
-        echo "Supported platforms: Linux, Darwin and Windows." >&2
-        echo "Bailing out." >&2
-        exit 2
+    Darwin)
+      CLIENT_PLATFORM="darwin"
+      ;;
+    Linux)
+      CLIENT_PLATFORM="linux"
+      ;;
+    Windows)
+      CLIENT_PLATFORM="windows"
+      ;;
+    *)
+      echo "Unknown, unsupported platform: ${kernel}." >&2
+      echo "Supported platforms: Linux, Darwin and Windows." >&2
+      echo "Bailing out." >&2
+      exit 2
+      ;;
     esac
   fi
 
@@ -40,18 +41,18 @@ function detect_client_info() {
     local machine
     machine="$(uname -m)"
     case "${machine}" in
-      x86_64*|i?86_64*|amd64*)
-        CLIENT_ARCH="amd64"
-        ;;
-      aarch64*|arm64*)
-        CLIENT_ARCH="arm64"
-        ;;
-      *)
-        echo "Unknown, unsupported architecture (${machine})." >&2
-        echo "Supported architectures x86_64, i686, arm64." >&2
-        echo "Bailing out." >&2
-        exit 3
-        ;;
+    x86_64* | i?86_64* | amd64*)
+      CLIENT_ARCH="amd64"
+      ;;
+    aarch64* | arm64*)
+      CLIENT_ARCH="arm64"
+      ;;
+    *)
+      echo "Unknown, unsupported architecture (${machine})." >&2
+      echo "Supported architectures x86_64, i686, arm64." >&2
+      echo "Bailing out." >&2
+      exit 3
+      ;;
     esac
   fi
 }

@@ -4,9 +4,7 @@
 
 ![ssh workflow](./images/ssh-workflow.png)
 
-[![Actions Status](https://github.com/appleboy/ssh-action/workflows/remote%20ssh%20command/badge.svg)](https://github.com/appleboy/ssh-action/actions)
-
-**注意**： 只支持在 **Linux** [docker](https://www.docker.com/) 容器上执行。
+[![testing main branch](https://github.com/appleboy/ssh-action/actions/workflows/main.yml/badge.svg)](https://github.com/appleboy/ssh-action/actions/workflows/main.yml)
 
 ## 输入变量
 
@@ -24,6 +22,7 @@
 * `key_path` - SSH 私钥的路径
 * `fingerprint` - 主机公钥的 SHA256 指纹，默认为跳过验证
 * `script` - 执行命令
+* `script_file` - 執行命令的文件
 * `script_stop` - 当出现第一个错误时停止执行命令
 * `envs` - 传递环境变量到 shell script
 * `debug` - 启用调试模式
@@ -58,7 +57,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: executing remote ssh commands using password
-      uses: appleboy/ssh-action@v1.1.0
+      uses: appleboy/ssh-action@v1.2.0
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
@@ -157,7 +156,7 @@ ssh-keygen -t ed25519 -a 200 -C ”your_email@example.com“
 
 ```yaml
 - name: executing remote ssh commands using password
-  uses: appleboy/ssh-action@v1.1.0
+  uses: appleboy/ssh-action@v1.2.0
   with:
     host: ${{ secrets.HOST }}
     username: ${{ secrets.USERNAME }}
@@ -170,7 +169,7 @@ ssh-keygen -t ed25519 -a 200 -C ”your_email@example.com“
 
 ```yaml
 - name: executing remote ssh commands using ssh key
-  uses: appleboy/ssh-action@v1.1.0
+  uses: appleboy/ssh-action@v1.2.0
   with:
     host: ${{ secrets.HOST }}
     username: ${{ secrets.USERNAME }}
@@ -183,7 +182,7 @@ ssh-keygen -t ed25519 -a 200 -C ”your_email@example.com“
 
 ```yaml
 - name: multiple command
-  uses: appleboy/ssh-action@v1.1.0
+  uses: appleboy/ssh-action@v1.2.0
   with:
     host: ${{ secrets.HOST }}
     username: ${{ secrets.USERNAME }}
@@ -200,7 +199,7 @@ ssh-keygen -t ed25519 -a 200 -C ”your_email@example.com“
 
 ```diff
   - name: multiple host
-    uses: appleboy/ssh-action@v1.1.0
+    uses: appleboy/ssh-action@v1.2.0
     with:
 -     host: ”foo.com“
 +     host: ”foo.com,bar.com“
@@ -212,11 +211,24 @@ ssh-keygen -t ed25519 -a 200 -C ”your_email@example.com“
         ls -al
 ```
 
+#### Commands from a file
+
+```yaml
+- name: file commands
+  uses: appleboy/ssh-action@v1.2.0
+  with:
+    host: ${{ secrets.HOST }}
+    username: ${{ secrets.USERNAME }}
+    key: ${{ secrets.KEY }}
+    port: ${{ secrets.PORT }}
+    script_path: scripts/script.sh 
+```
+
 #### 多个不同端口的主机
 
 ```diff
   - name: multiple host
-    uses: appleboy/ssh-action@v1.1.0
+    uses: appleboy/ssh-action@v1.2.0
     with:
 -     host: ”foo.com“
 +     host: ”foo.com:1234,bar.com:5678“
@@ -231,7 +243,7 @@ ssh-keygen -t ed25519 -a 200 -C ”your_email@example.com“
 
 ```diff
   - name: multiple host
-    uses: appleboy/ssh-action@v1.1.0
+    uses: appleboy/ssh-action@v1.2.0
     with:
       host: ”foo.com,bar.com“
 +     sync: true
@@ -247,7 +259,7 @@ ssh-keygen -t ed25519 -a 200 -C ”your_email@example.com“
 
 ```diff
   - name: pass environment
-    uses: appleboy/ssh-action@v1.1.0
+    uses: appleboy/ssh-action@v1.2.0
 +   env:
 +     FOO: ”BAR“
 +     BAR: ”FOO“
@@ -272,7 +284,7 @@ _在 `env` 对象中，您需要将每个环境变量作为字符串传递，传
 
 ```diff
   - name: stop script if command error
-    uses: appleboy/ssh-action@v1.1.0
+    uses: appleboy/ssh-action@v1.2.0
     with:
       host: ${{ secrets.HOST }}
       username: ${{ secrets.USERNAME }}
@@ -325,7 +337,7 @@ Host FooServer
 
 ```diff
   - name: ssh proxy command
-    uses: appleboy/ssh-action@v1.1.0
+    uses: appleboy/ssh-action@v1.2.0
     with:
       host: ${{ secrets.HOST }}
       username: ${{ secrets.USERNAME }}
@@ -346,7 +358,7 @@ Host FooServer
 
 ```diff
   - name: ssh key passphrase
-    uses: appleboy/ssh-action@v1.1.0
+    uses: appleboy/ssh-action@v1.2.0
     with:
       host: ${{ secrets.HOST }}
       username: ${{ secrets.USERNAME }}
@@ -372,7 +384,7 @@ ssh example.com ssh-keygen -l -f /etc/ssh/ssh_host_ed25519_key.pub | cut -d ’ 
 
 ```diff
   - name: ssh key passphrase
-    uses: appleboy/ssh-action@v1.1.0
+    uses: appleboy/ssh-action@v1.2.0
     with:
       host: ${{ secrets.HOST }}
       username: ${{ secrets.USERNAME }}

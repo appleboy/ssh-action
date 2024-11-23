@@ -6,42 +6,48 @@
 
 [![testing main branch](https://github.com/appleboy/ssh-action/actions/workflows/main.yml/badge.svg)](https://github.com/appleboy/ssh-action/actions/workflows/main.yml)
 
+该项目使用 [Golang](https://go.dev) 和 [drone-ssh](https://github.com/appleboy/drone-ssh) 构建。🚀
+
 ## 输入变量
 
 更详细的信息，请参考 [action.yml](./action.yml)。
 
-* `host` - SSH 主机
-* `port` - SSH 连接端口，默认为 `22`
-* `username` - SSH 用户名称
-* `password` - SSH 密码
-* `passphrase` - 通常用于加密私钥的 passphrase
-* `sync` - 同步执行多个主机上的命令，默认为 false
-* `timeout` - SSH 连接到远程主机的超时时间，默认为 `30s`
-* `command_timeout` - SSH 命令超时时间，默认为 10m
-* `key` - SSH 私钥的内容，例如 ~/.ssh/id_rsa 的原始内容，请记得包含 BEGIN 和 END 行
-* `key_path` - SSH 私钥的路径
-* `fingerprint` - 主机公钥的 SHA256 指纹，默认为跳过验证
-* `script` - 执行命令
-* `script_file` - 執行命令的文件
-* `script_stop` - 当出现第一个错误时停止执行命令
-* `envs` - 传递环境变量到 shell script
-* `debug` - 启用调试模式
-* `use_insecure_cipher` - 使用不安全的密码（ciphers）进行加密，详见 [#56](https://github.com/appleboy/ssh-action/issues/56)
-* `cipher` - 允许使用的密码（ciphers）算法。如果未指定，则使用适当的算法
-
-SSH 代理设置：
-
-* `proxy_host` - 代理主机
-* `proxy_port` - 代理端口，默认为 `22`
-* `proxy_username` - 代理用户名
-* `proxy_password` - 代理密码
-* `proxy_passphrase` - 密码通常用于加密私有密钥
-* `proxy_timeout` - SSH 连接至代理主机的超时时间，默认为 `30s`
-* `proxy_key` - SSH 代理私有密钥内容
-* `proxy_key_path` - SSH 代理私有密钥路径
-* `proxy_fingerprint` - 代理主机公钥的 SHA256 指纹，默认为跳过验证
-* `proxy_use_insecure_cipher` - 使用不安全的加密方式，详见 [#56](https://github.com/appleboy/ssh-action/issues/56)
-* `proxy_cipher` - 允许的加密算法。如果未指定，则使用合理的算法
+| 输入参数                  | 描述                                                  | 默认值 |
+| ------------------------- | ----------------------------------------------------- | ------ |
+| host                      | SSH 主机地址                                          |        |
+| port                      | SSH 端口号                                            | 22     |
+| passphrase                | SSH 密钥密码短语                                      |        |
+| username                  | SSH 用户名                                            |        |
+| password                  | SSH 密码                                              |        |
+| protocol                  | SSH 协议版本（tcp, tcp4, tcp6）                       | tcp    |
+| sync                      | 如果有多个主机，启用同步执行                          | false  |
+| use_insecure_cipher       | 使用不安全的密码算法                                  | false  |
+| cipher                    | 允许的密码算法。如果未指定，则使用适当的算法          |        |
+| timeout                   | SSH 连接到主机的超时时间                              | 30s    |
+| command_timeout           | SSH 命令的超时时间                                    | 10m    |
+| key                       | SSH 私钥的内容，例如 ~/.ssh/id_rsa 的原始内容         |        |
+| key_path                  | SSH 私钥的路径                                        |        |
+| fingerprint               | 主机公钥的 SHA256 指纹                                |        |
+| proxy_host                | SSH 代理主机                                          |        |
+| proxy_port                | SSH 代理端口                                          | 22     |
+| proxy_protocol            | SSH 代理协议版本（tcp, tcp4, tcp6）                   | tcp    |
+| proxy_username            | SSH 代理用户名                                        |        |
+| proxy_password            | SSH 代理密码                                          |        |
+| proxy_passphrase          | SSH 代理密钥密码短语                                  |        |
+| proxy_timeout             | SSH 连接到代理主机的超时时间                          | 30s    |
+| proxy_key                 | SSH 代理私钥的内容                                    |        |
+| proxy_key_path            | SSH 代理私钥的路径                                    |        |
+| proxy_fingerprint         | 代理主机公钥的 SHA256 指纹                            |        |
+| proxy_cipher              | 代理允许的密码算法                                    |        |
+| proxy_use_insecure_cipher | 使用不安全的密码算法                                  | false  |
+| script                    | 执行命令                                              |        |
+| script_file               | 从文件执行命令                                        |        |
+| script_stop               | 在第一次失败后停止脚本                                | false  |
+| envs                      | 传递环境变量到 shell 脚本                             |        |
+| envs_format               | 环境变量传递的灵活配置                                |        |
+| debug                     | 启用调试模式                                          | false  |
+| allenvs                   | 将带有 `GITHUB_` 和 `INPUT_` 前缀的环境变量传递给脚本 | false  |
+| request_pty               | 请求伪终端                                            | false  |
 
 ## 使用方法
 

@@ -68,11 +68,10 @@ chmod +x ${TARGET}
 echo "======= CLI Version ======="
 sh -c "${TARGET} --version" # print version
 echo "==========================="
-{
+if [[ "$INPUT_CAPTURE_STDOUT" == 'true' ]]; then
+  echo 'stdout<<EOF' >> $GITHUB_OUTPUT # use heredoc for multiline output
+  sh -c "${TARGET} $*" >> $GITHUB_OUTPUT # run the command
+  echo 'EOF' >> $GITHUB_OUTPUT
+else
   sh -c "${TARGET} $*" # run the command
-} 2> /tmp/errFile | tee /tmp/outFile
-
-stdout=$(cat /tmp/outFile)
-stderr=$(cat /tmp/errFile)
-echo "stdout=${stdout//$'\n'/\\n}" >> $GITHUB_OUTPUT
-echo "stderr=${stderr//$'\n'/\\n}" >> $GITHUB_OUTPUT
+fi

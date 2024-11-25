@@ -68,13 +68,13 @@ chmod +x ${TARGET}
 echo "======= CLI Version ======="
 sh -c "${TARGET} --version" # print version
 echo "==========================="
-if [ "${{ inputs.capture_stdout }}" == 'true' ] || [ "${{ inputs.capture_stderr }}" == 'true' ]; then
+if [ "$INPUT_CAPTURE_STDOUT" == 'true' ] || [ "$INPUT_CAPTURE_STDERR" == 'true' ]; then
   _stdout=/dev/stdout
   _stderr=/dev/stderr
-  if [ "${{ inputs.capture_stdout }}" == 'true' ]; then
+  if [ "$INPUT_CAPTURE_STDOUT" == 'true' ]; then
     _stdout=/tmp/outFile
   fi
-  if [ "${{ inputs.capture_stderr }}" == 'true' ]; then
+  if [ "$INPUT_CAPTURE_STDERR" == 'true' ]; then
     _stderr=/tmp/errFile
   fi
 
@@ -82,11 +82,11 @@ if [ "${{ inputs.capture_stdout }}" == 'true' ] || [ "${{ inputs.capture_stderr 
     sh -c "${TARGET} $*" # run the command
   } 2> $_stderr | tee $_stdout
 
-  if [ "${{ inputs.capture_stdout }}" == 'true' ]; then
+  if [ "$INPUT_CAPTURE_STDOUT" == 'true' ]; then
     stdout=$(cat $_stdout)
     echo "stdout=${stdout//$'\n'/\\n}" >> $GITHUB_OUTPUT
   fi
-  if [ "${{ inputs.capture_stderr }}" == 'true' ]; then
+  if [ "$INPUT_CAPTURE_STDERR" == 'true' ]; then
     stderr=$(cat $_stderr)
     echo "stderr=${stderr//$'\n'/\\n}" >> $GITHUB_OUTPUT
   fi

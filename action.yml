@@ -136,6 +136,8 @@ runs:
         INPUT_PROXY_USE_INSECURE_CIPHER: ${{ inputs.proxy_use_insecure_cipher }}
         INPUT_PROXY_CIPHER: ${{ inputs.proxy_cipher }}
         INPUT_SYNC: ${{ inputs.sync }}
+        INPUT_CAPTURE_STDOUT: ${{ inputs.capture_stdout }}
+        INPUT_CAPTURE_STDERR: ${{ inputs.capture_stderr }}
 
 branding:
   icon: "terminal"

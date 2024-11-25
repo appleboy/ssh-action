@@ -484,3 +484,65 @@ jobs:
           script: |
             whoami && echo 'hello world' && touch todo.txt
             sudo whoami
+
+  testing-with-stdouterr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: create new ssh server
+        run: |
+          docker run -d \
+          --name=openssh-server \
+          --hostname=openssh-server \
+          -p 2222:2222 \
+          -e SUDO_ACCESS=false \
+          -e PASSWORD_ACCESS=true  \
+          -e USER_PASSWORD=password  \
+          -e USER_NAME=linuxserver.io \
+          --restart unless-stopped \
+          lscr.io/linuxserver/openssh-server:latest
+          docker exec openssh-server sh -c "hostname -i" > ip.txt
+          echo "REMOTE_HOST<<EOF" >> $GITHUB_ENV
+          cat ip.txt >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "======= container ip address ========="
+          cat ip.txt
+          echo "======================================"
+          sleep 2
+
+      - name: ssh command with stdout
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ env.REMOTE_HOST }}
+          username: linuxserver.io
+          password: password
+          port: 2222
+          capture_stdout: 'true'
+          script: |
+            #!/usr/bin/env bash
+            set -e
+            whoami
+
+      - name: check stdout
+        run: |
+          echo "stdout: ${{ steps.ssh-command-with-stdout.outputs.stdout }}"
+
+      - name: ssh command with stderr
+        uses: appleboy/ssh-action@v1.2.0
+        continue-on-error: true
+        with:
+          host: ${{ env.REMOTE_HOST }}
+          username: linuxserver.io
+          password: password
+          port: 2222
+          capture_stderr: 'true'
+          script: |
+            #!/usr/bin/env bash
+            set -e
+            ls /root
+
+      - name: check stderr
+        run: |
+          echo "stderr: ${{ steps.ssh-command-with-stderr.outputs.stderr }}"

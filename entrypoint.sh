@@ -72,6 +72,8 @@ if [[ "$INPUT_CAPTURE_STDOUT" == 'true' ]]; then
   echo 'stdout<<EOF' >> $GITHUB_OUTPUT # use a heredoc for multiline output
   sh -c "${TARGET} $*" >> $GITHUB_OUTPUT # run the command
   echo 'EOF' >> $GITHUB_OUTPUT
+
+  echo 'stdout=foobar' >> $GITHUB_OUTPUT
 else
   sh -c "${TARGET} $*" # run the command
 fi

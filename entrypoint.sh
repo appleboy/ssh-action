@@ -70,7 +70,7 @@ sh -c "${TARGET} --version" # print version
 echo "==========================="
 if [[ "$INPUT_CAPTURE_STDOUT" == 'true' ]]; then
   echo 'stdout<<EOF' >> $GITHUB_OUTPUT # use heredoc for multiline output
-  sh -c "${TARGET} $*" >> $GITHUB_OUTPUT # run the command
+  sh -c "${TARGET} $*" | tee -a $GITHUB_OUTPUT # run the command
   echo 'EOF' >> $GITHUB_OUTPUT
 else
   sh -c "${TARGET} $*" # run the command

@@ -68,27 +68,20 @@ chmod +x ${TARGET}
 echo "======= CLI Version ======="
 sh -c "${TARGET} --version" # print version
 echo "==========================="
-if [ "$INPUT_CAPTURE_STDOUT" == 'true' ] || [ "$INPUT_CAPTURE_STDERR" == 'true' ]; then
+if [[ "$INPUT_CAPTURE_STDOUT" == 'true' ]]; then
   _stdout=/dev/stdout
-  _stderr=/dev/stderr
-  if [ "$INPUT_CAPTURE_STDOUT" == 'true' ]; then
-    _stdout=/tmp/outFile
-  fi
-  if [ "$INPUT_CAPTURE_STDERR" == 'true' ]; then
-    _stderr=/tmp/errFile
+  if [[ "$INPUT_CAPTURE_STDOUT" == 'true' ]]; then
+    _stdout=/tmp/_stdout
   fi
 
   {
     sh -c "${TARGET} $*" # run the command
-  } 2> $_stderr | tee $_stdout
+  } | tee $_stdout
 
-  if [ "$INPUT_CAPTURE_STDOUT" == 'true' ]; then
-    stdout=$(cat $_stdout)
-    echo "stdout=${stdout//$'\n'/\\n}" >> $GITHUB_OUTPUT
-  fi
-  if [ "$INPUT_CAPTURE_STDERR" == 'true' ]; then
-    stderr=$(cat $_stderr)
-    echo "stderr=${stderr//$'\n'/\\n}" >> $GITHUB_OUTPUT
+  if [[ "$INPUT_CAPTURE_STDOUT" == 'true' ]]; then
+    echo 'stdout<<EOF' >> $GITHUB_OUTPUT
+    cat $_stdout >> $GITHUB_OUTPUT
+    echo 'EOF' >> $GITHUB_OUTPUT
   fi
 else
   sh -c "${TARGET} $*" # run the command

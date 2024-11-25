@@ -68,7 +68,7 @@ chmod +x ${TARGET}
 echo "======= CLI Version ======="
 sh -c "${TARGET} --version" # print version
 echo "==========================="
-if [ ${{ inputs.capture_stdout }} == 'true' ] || [ "${{ inputs.capture_stderr }}" == 'true' ]; then
+if [ "${{ inputs.capture_stdout }}" == 'true' ] || [ "${{ inputs.capture_stderr }}" == 'true' ]; then
   _stdout=/dev/stdout
   _stderr=/dev/stderr
   if [ "${{ inputs.capture_stdout }}" == 'true' ]; then

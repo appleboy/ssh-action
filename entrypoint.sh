@@ -68,24 +68,10 @@ chmod +x ${TARGET}
 echo "======= CLI Version ======="
 sh -c "${TARGET} --version" # print version
 echo "==========================="
-echo "STDOUT: $INPUT_CAPTURE_STDOUT"
 if [[ "$INPUT_CAPTURE_STDOUT" == 'true' ]]; then
-  _stdout=/dev/stdout
-  if [[ "$INPUT_CAPTURE_STDOUT" == 'true' ]]; then
-    _stdout=/tmp/_stdout
-  fi
-
-  {
-    sh -c "${TARGET} $*" # run the command
-  } | tee $_stdout
-
-  if [[ "$INPUT_CAPTURE_STDOUT" == 'true' ]]; then
-    echo "CAPTURING STDOUT $_stdout"
-    cat $_stdout
-    echo 'stdout<<EOF' >> $GITHUB_OUTPUT
-    cat $_stdout >> $GITHUB_OUTPUT
-    echo 'EOF' >> $GITHUB_OUTPUT
-  fi
+  echo 'stdout<<EOF' >> $GITHUB_OUTPUT # use a heredoc for multiline output
+  sh -c "${TARGET} $*" >> $GITHUB_OUTPUT # run the command
+  echo 'EOF' >> $GITHUB_OUTPUT
 else
   sh -c "${TARGET} $*" # run the command
 fi

@@ -80,7 +80,8 @@ if [[ "$INPUT_CAPTURE_STDOUT" == 'true' ]]; then
   } | tee $_stdout
 
   if [[ "$INPUT_CAPTURE_STDOUT" == 'true' ]]; then
-    echo 'CAPTURING STDOUT'
+    echo "CAPTURING STDOUT $_stdout"
+    cat $_stdout
     echo 'stdout<<EOF' >> $GITHUB_OUTPUT
     cat $_stdout >> $GITHUB_OUTPUT
     echo 'EOF' >> $GITHUB_OUTPUT

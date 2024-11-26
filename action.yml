@@ -84,6 +84,7 @@ inputs:
 outputs:
   stdout:
     description: 'Standard output of the executed commands.'
+    value: ${{ steps.entrypoint.outputs.stdout }}
 
 runs:
   using: "composite"
@@ -93,7 +94,8 @@ runs:
       shell: bash
       env:
         GITHUB_ACTION_PATH: ${{ github.action_path }}
-    - name: Run entrypoint.sh
+    - id: entrypoint
+      name: Run entrypoint.sh
       run: entrypoint.sh
       shell: bash
       env:

@@ -1,5 +1,7 @@
 # 🚀 用于 GitHub Actions 的 SSH
 
+[English](./README.md) | [繁體中文](./README.zh-tw.md)
+
 [GitHub Action](https://github.com/features/actions) 用于执行远程 SSH 命令。
 
 ![ssh workflow](./images/ssh-workflow.png)

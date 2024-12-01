@@ -1,7 +1,6 @@
 # 🚀 GitHub Actions 的 SSH
 
-[English](./README.md)
-[简体中文](./README.zh-cn.md)
+[English](./README.md) | [简体中文](./README.zh-cn.md)
 
 [GitHub Action](https://github.com/features/actions) 用於執行遠端 SSH 命令。
 

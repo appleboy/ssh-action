@@ -60,19 +60,18 @@
 name: remote ssh command
 on: [push]
 jobs:
-
   build:
     name: Build
     runs-on: ubuntu-latest
     steps:
-    - name: executing remote ssh commands using password
-      uses: appleboy/ssh-action@v1.2.0
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
-        port: ${{ secrets.PORT }}
-        script: whoami
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: whoami
 ```
 
 畫面輸出
@@ -135,9 +134,9 @@ clip < ~/.ssh/id_ed25519
 
 **來自讀者的注意事項**： 根據您的 SSH 版本，您可能還需要進行以下更改：
 
-* 將公鑰放在 `.ssh/authorized_keys2` 中
-* 將 `.ssh` 的權限更改為700
-* 將 `.ssh/authorized_keys2` 的權限更改為640
+- 將公鑰放在 `.ssh/authorized_keys2` 中
+- 將 `.ssh` 的權限更改為 700
+- 將 `.ssh/authorized_keys2` 的權限更改為 640
 
 ### 如果你使用的是 OpenSSH
 
@@ -214,7 +213,7 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
     username: ${{ secrets.USERNAME }}
     key: ${{ secrets.KEY }}
     port: ${{ secrets.PORT }}
-    script_path: scripts/script.sh 
+    script_path: scripts/script.sh
 ```
 
 #### 多台主機
@@ -383,7 +382,7 @@ Host FooServer
 
 設置 SSH 主機指紋驗證可以幫助防止中間人攻擊。在設置之前，運行以下命令以獲取 SSH 主機指紋。請記得將 `ed25519` 替換為您的適當金鑰類型（`rsa`、 `dsa`等），而 `example.com` 則替換為您的主機。
 
-現代 OpenSSH 版本中，需要提取的_默認金鑰_類型是 `rsa`（從版本 5.1 開始）、`ecdsa`（從版本 6.0 開始）和 `ed25519`（從版本 6.7 開始）。
+現代 OpenSSH 版本中，需要提取的**默認金鑰**類型是 `rsa`（從版本 5.1 開始）、`ecdsa`（從版本 6.0 開始）和 `ed25519`（從版本 6.7 開始）。
 
 ```sh
 ssh example.com ssh-keygen -l -f /etc/ssh/ssh_host_ed25519_key.pub | cut -d ' ' -f2

@@ -504,3 +504,48 @@ jobs:
           command_timeout: 30s
           script: |
             whoami
+
+  testing07:
+    name: some special character
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: Set Environment Variables
+        run: |
+          PASS='3HUS$?8kLu)}'
+          printf "PASS=${PASS}" >> $GITHUB_ENV
+
+      - name: create new ssh server
+        run: |
+          docker run -d \
+          --name=openssh-server \
+          --hostname=openssh-server \
+          -p 2222:2222 \
+          -e SUDO_ACCESS=false \
+          -e PASSWORD_ACCESS=true  \
+          -e USER_PASSWORD='${{ env.PASS }}'  \
+          -e USER_NAME=linuxserver.io \
+          --restart unless-stopped \
+          lscr.io/linuxserver/openssh-server:latest
+          docker exec openssh-server sh -c "hostname -i" > ip.txt
+          echo "REMOTE_HOST<<EOF" >> $GITHUB_ENV
+          cat ip.txt >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "======= container ip address ========="
+          cat ip.txt
+          echo "======================================"
+          sleep 2
+
+      - name: ssh by username and password
+        uses: ./
+        with:
+          host: ${{ env.REMOTE_HOST }}
+          username: linuxserver.io
+          password: ${{ env.PASS }}
+          port: 2222
+          script: |
+            #!/usr/bin/env bash
+            set -e
+            whoami

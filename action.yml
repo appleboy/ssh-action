@@ -65,8 +65,6 @@ inputs:
     description: "Commands to be executed."
   script_path:
     description: "Path to the file containing commands to be executed."
-  script_stop:
-    description: "Stop the script after the first failure."
   envs:
     description: "Environment variables to be passed to the shell script."
   envs_format:
@@ -113,7 +111,6 @@ runs:
         INPUT_COMMAND_TIMEOUT: ${{ inputs.command_timeout }}
         INPUT_SCRIPT: ${{ inputs.script }}
         INPUT_SCRIPT_FILE: ${{ inputs.script_path }}
-        INPUT_SCRIPT_STOP: ${{ inputs.script_stop }}
         INPUT_ENVS: ${{ inputs.envs }}
         INPUT_ENVS_FORMAT: ${{ inputs.envs_format }}
         INPUT_DEBUG: ${{ inputs.debug }}

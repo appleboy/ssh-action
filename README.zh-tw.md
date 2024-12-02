@@ -44,7 +44,6 @@
 | proxy_use_insecure_cipher | 包含更多不安全的加密算法                              | false  |
 | script                    | 執行命令                                              |        |
 | script_file               | 從文件中執行命令                                      |        |
-| script_stop               | 在第一次失敗後停止腳本                                | false  |
 | envs                      | 將環境變數傳遞給 shell 腳本                           |        |
 | envs_format               | 環境值傳遞的靈活配置                                  |        |
 | debug                     | 啟用調試模式                                          | false  |
@@ -284,37 +283,6 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 ```
 
 _在 `env` 對象中，您需要將每個環境變量作為字符串傳遞，傳遞 `Integer` 數據類型或任何其他類型可能會產生意外結果。_
-
-#### 在第一次失敗後停止腳本
-
-> ex: missing `abc` folder
-
-```diff
-  - name: stop script if command error
-    uses: appleboy/ssh-action@v1.2.0
-    with:
-      host: ${{ secrets.HOST }}
-      username: ${{ secrets.USERNAME }}
-      key: ${{ secrets.KEY }}
-      port: ${{ secrets.PORT }}
-+     script_stop: true
-      script: |
-        mkdir abc/def
-        ls -al
-```
-
-畫面輸出:
-
-```sh
-======CMD======
-mkdir abc/def
-ls -al
-
-======END======
-2019/11/21 01:16:21 Process exited with status 1
-err: mkdir: cannot create directory ‘abc/def’: No such file or directory
-##[error]Docker run failed with exit code 1
-```
 
 #### 如何使用 `ProxyCommand` 連接遠程服務器？
 

@@ -44,7 +44,6 @@ See [action.yml](./action.yml) for more detailed information.
 | proxy_use_insecure_cipher | Include more ciphers with use_insecure_cipher for the proxy                              | false         |
 | script                    | Execute commands                                                                         |               |
 | script_file               | Execute commands from a file                                                             |               |
-| script_stop               | Stop script after first failure                                                          | false         |
 | envs                      | Pass environment variables to shell script                                               |               |
 | envs_format               | Flexible configuration of environment value transfer                                     |               |
 | debug                     | Enable debug mode                                                                        | false         |
@@ -303,37 +302,6 @@ The default value of `port` is `22`.
 ```
 
 _Inside `env` object, you need to pass every environment variable as a string, passing `Integer` data type or any other may output unexpected results._
-
-#### Stop script after first failure
-
-> ex: missing `abc` folder
-
-```diff
-  - name: stop script if command error
-    uses: appleboy/ssh-action@v1.2.0
-    with:
-      host: ${{ secrets.HOST }}
-      username: ${{ secrets.USERNAME }}
-      key: ${{ secrets.KEY }}
-      port: ${{ secrets.PORT }}
-+     script_stop: true
-      script: |
-        mkdir abc/def
-        ls -al
-```
-
-output:
-
-```sh
-======CMD======
-mkdir abc/def
-ls -al
-
-======END======
-2019/11/21 01:16:21 Process exited with status 1
-err: mkdir: cannot create directory ‘abc/def’: No such file or directory
-##[error]Docker run failed with exit code 1
-```
 
 #### How to connect remote server using `ProxyCommand`?
 

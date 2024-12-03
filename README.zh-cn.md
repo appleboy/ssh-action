@@ -1,47 +1,54 @@
 # 🚀 用于 GitHub Actions 的 SSH
 
+[English](./README.md) | [繁體中文](./README.zh-tw.md)
+
 [GitHub Action](https://github.com/features/actions) 用于执行远程 SSH 命令。
 
 ![ssh workflow](./images/ssh-workflow.png)
 
 [![testing main branch](https://github.com/appleboy/ssh-action/actions/workflows/main.yml/badge.svg)](https://github.com/appleboy/ssh-action/actions/workflows/main.yml)
 
+该项目使用 [Golang](https://go.dev) 和 [drone-ssh](https://github.com/appleboy/drone-ssh) 构建。🚀
+
 ## 输入变量
 
 更详细的信息，请参考 [action.yml](./action.yml)。
 
-* `host` - SSH 主机
-* `port` - SSH 连接端口，默认为 `22`
-* `username` - SSH 用户名称
-* `password` - SSH 密码
-* `passphrase` - 通常用于加密私钥的 passphrase
-* `sync` - 同步执行多个主机上的命令，默认为 false
-* `timeout` - SSH 连接到远程主机的超时时间，默认为 `30s`
-* `command_timeout` - SSH 命令超时时间，默认为 10m
-* `key` - SSH 私钥的内容，例如 ~/.ssh/id_rsa 的原始内容，请记得包含 BEGIN 和 END 行
-* `key_path` - SSH 私钥的路径
-* `fingerprint` - 主机公钥的 SHA256 指纹，默认为跳过验证
-* `script` - 执行命令
-* `script_file` - 執行命令的文件
-* `script_stop` - 当出现第一个错误时停止执行命令
-* `envs` - 传递环境变量到 shell script
-* `debug` - 启用调试模式
-* `use_insecure_cipher` - 使用不安全的密码（ciphers）进行加密，详见 [#56](https://github.com/appleboy/ssh-action/issues/56)
-* `cipher` - 允许使用的密码（ciphers）算法。如果未指定，则使用适当的算法
-
-SSH 代理设置：
-
-* `proxy_host` - 代理主机
-* `proxy_port` - 代理端口，默认为 `22`
-* `proxy_username` - 代理用户名
-* `proxy_password` - 代理密码
-* `proxy_passphrase` - 密码通常用于加密私有密钥
-* `proxy_timeout` - SSH 连接至代理主机的超时时间，默认为 `30s`
-* `proxy_key` - SSH 代理私有密钥内容
-* `proxy_key_path` - SSH 代理私有密钥路径
-* `proxy_fingerprint` - 代理主机公钥的 SHA256 指纹，默认为跳过验证
-* `proxy_use_insecure_cipher` - 使用不安全的加密方式，详见 [#56](https://github.com/appleboy/ssh-action/issues/56)
-* `proxy_cipher` - 允许的加密算法。如果未指定，则使用合理的算法
+| 输入参数                  | 描述                                                  | 默认值 |
+| ------------------------- | ----------------------------------------------------- | ------ |
+| host                      | SSH 主机地址                                          |        |
+| port                      | SSH 端口号                                            | 22     |
+| passphrase                | SSH 密钥密码短语                                      |        |
+| username                  | SSH 用户名                                            |        |
+| password                  | SSH 密码                                              |        |
+| protocol                  | SSH 协议版本（tcp, tcp4, tcp6）                       | tcp    |
+| sync                      | 如果有多个主机，启用同步执行                          | false  |
+| use_insecure_cipher       | 使用不安全的密码算法                                  | false  |
+| cipher                    | 允许的密码算法。如果未指定，则使用适当的算法          |        |
+| timeout                   | SSH 连接到主机的超时时间                              | 30s    |
+| command_timeout           | SSH 命令的超时时间                                    | 10m    |
+| key                       | SSH 私钥的内容，例如 ~/.ssh/id_rsa 的原始内容         |        |
+| key_path                  | SSH 私钥的路径                                        |        |
+| fingerprint               | 主机公钥的 SHA256 指纹                                |        |
+| proxy_host                | SSH 代理主机                                          |        |
+| proxy_port                | SSH 代理端口                                          | 22     |
+| proxy_protocol            | SSH 代理协议版本（tcp, tcp4, tcp6）                   | tcp    |
+| proxy_username            | SSH 代理用户名                                        |        |
+| proxy_password            | SSH 代理密码                                          |        |
+| proxy_passphrase          | SSH 代理密钥密码短语                                  |        |
+| proxy_timeout             | SSH 连接到代理主机的超时时间                          | 30s    |
+| proxy_key                 | SSH 代理私钥的内容                                    |        |
+| proxy_key_path            | SSH 代理私钥的路径                                    |        |
+| proxy_fingerprint         | 代理主机公钥的 SHA256 指纹                            |        |
+| proxy_cipher              | 代理允许的密码算法                                    |        |
+| proxy_use_insecure_cipher | 使用不安全的密码算法                                  | false  |
+| script                    | 执行命令                                              |        |
+| script_file               | 从文件执行命令                                        |        |
+| envs                      | 传递环境变量到 shell 脚本                             |        |
+| envs_format               | 环境变量传递的灵活配置                                |        |
+| debug                     | 启用调试模式                                          | false  |
+| allenvs                   | 将带有 `GITHUB_` 和 `INPUT_` 前缀的环境变量传递给脚本 | false  |
+| request_pty               | 请求伪终端                                            | false  |
 
 ## 使用方法
 
@@ -51,19 +58,18 @@ SSH 代理设置：
 name: remote ssh command
 on: [push]
 jobs:
-
   build:
     name: Build
     runs-on: ubuntu-latest
     steps:
-    - name: executing remote ssh commands using password
-      uses: appleboy/ssh-action@v1.2.0
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
-        port: ${{ secrets.PORT }}
-        script: whoami
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: whoami
 ```
 
 画面输出
@@ -126,9 +132,9 @@ clip < ~/.ssh/id_ed25519
 
 **来自读者的注意事项**： 根据您的 SSH 版本，您可能还需要进行以下更改：
 
-* 将公钥放在 `.ssh/authorized_keys2` 中
-* 将 `.ssh` 的权限更改为700
-* 将 `.ssh/authorized_keys2` 的权限更改为640
+- 将公钥放在 `.ssh/authorized_keys2` 中
+- 将 `.ssh` 的权限更改为 700
+- 将 `.ssh/authorized_keys2` 的权限更改为 640
 
 ### 如果你使用的是 OpenSSH
 
@@ -221,7 +227,7 @@ ssh-keygen -t ed25519 -a 200 -C ”your_email@example.com“
     username: ${{ secrets.USERNAME }}
     key: ${{ secrets.KEY }}
     port: ${{ secrets.PORT }}
-    script_path: scripts/script.sh 
+    script_path: scripts/script.sh
 ```
 
 #### 多个不同端口的主机
@@ -277,37 +283,6 @@ ssh-keygen -t ed25519 -a 200 -C ”your_email@example.com“
 ```
 
 _在 `env` 对象中，您需要将每个环境变量作为字符串传递，传递 `Integer` 数据类型或任何其他类型可能会产生意外结果。_
-
-#### 在第一次失败后停止脚本
-
-> ex: missing `abc` folder
-
-```diff
-  - name: stop script if command error
-    uses: appleboy/ssh-action@v1.2.0
-    with:
-      host: ${{ secrets.HOST }}
-      username: ${{ secrets.USERNAME }}
-      key: ${{ secrets.KEY }}
-      port: ${{ secrets.PORT }}
-+     script_stop: true
-      script: |
-        mkdir abc/def
-        ls -al
-```
-
-画面输出：
-
-```sh
-======CMD======
-mkdir abc/def
-ls -al
-
-======END======
-2019/11/21 01:16:21 Process exited with status 1
-err: mkdir: cannot create directory ‘abc/def’: No such file or directory
-##[error]Docker run failed with exit code 1
-```
 
 #### 如何使用 `ProxyCommand` 连接远程服务器？
 
@@ -374,7 +349,7 @@ Host FooServer
 
 设置 SSH 主机指纹验证可以帮助防止中间人攻击。在设置之前，运行以下命令以获取 SSH 主机指纹。请记得将 `ed25519` 替换为您适当的密钥类型（`rsa`、 `dsa`等），而 `example.com` 则替换为您的主机。
 
-现代 OpenSSH 版本中，需要提取的_默认密钥_类型是 `rsa`（从版本 5.1 开始）、`ecdsa`（从版本 6.0 开始）和 `ed25519`（从版本 6.7 开始）。
+现代 OpenSSH 版本中，需要提取的**默认密钥**类型是 `rsa`（从版本 5.1 开始）、`ecdsa`（从版本 6.0 开始）和 `ed25519`（从版本 6.7 开始）。
 
 ```sh
 ssh example.com ssh-keygen -l -f /etc/ssh/ssh_host_ed25519_key.pub | cut -d ’ ‘ -f2

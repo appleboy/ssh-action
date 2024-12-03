@@ -1,7 +1,6 @@
 # 🚀 GitHub Actions 的 SSH
 
-[English](./README.md)
-[简体中文](./README.zh-cn.md)
+[English](./README.md) | [简体中文](./README.zh-cn.md)
 
 [GitHub Action](https://github.com/features/actions) 用於執行遠端 SSH 命令。
 
@@ -45,7 +44,6 @@
 | proxy_use_insecure_cipher | 包含更多不安全的加密算法                              | false  |
 | script                    | 執行命令                                              |        |
 | script_file               | 從文件中執行命令                                      |        |
-| script_stop               | 在第一次失敗後停止腳本                                | false  |
 | envs                      | 將環境變數傳遞給 shell 腳本                           |        |
 | envs_format               | 環境值傳遞的靈活配置                                  |        |
 | debug                     | 啟用調試模式                                          | false  |
@@ -60,19 +58,18 @@
 name: remote ssh command
 on: [push]
 jobs:
-
   build:
     name: Build
     runs-on: ubuntu-latest
     steps:
-    - name: executing remote ssh commands using password
-      uses: appleboy/ssh-action@v1.2.0
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
-        port: ${{ secrets.PORT }}
-        script: whoami
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: whoami
 ```
 
 畫面輸出
@@ -135,9 +132,9 @@ clip < ~/.ssh/id_ed25519
 
 **來自讀者的注意事項**： 根據您的 SSH 版本，您可能還需要進行以下更改：
 
-* 將公鑰放在 `.ssh/authorized_keys2` 中
-* 將 `.ssh` 的權限更改為700
-* 將 `.ssh/authorized_keys2` 的權限更改為640
+- 將公鑰放在 `.ssh/authorized_keys2` 中
+- 將 `.ssh` 的權限更改為 700
+- 將 `.ssh/authorized_keys2` 的權限更改為 640
 
 ### 如果你使用的是 OpenSSH
 
@@ -214,7 +211,7 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
     username: ${{ secrets.USERNAME }}
     key: ${{ secrets.KEY }}
     port: ${{ secrets.PORT }}
-    script_path: scripts/script.sh 
+    script_path: scripts/script.sh
 ```
 
 #### 多台主機
@@ -287,37 +284,6 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 _在 `env` 對象中，您需要將每個環境變量作為字符串傳遞，傳遞 `Integer` 數據類型或任何其他類型可能會產生意外結果。_
 
-#### 在第一次失敗後停止腳本
-
-> ex: missing `abc` folder
-
-```diff
-  - name: stop script if command error
-    uses: appleboy/ssh-action@v1.2.0
-    with:
-      host: ${{ secrets.HOST }}
-      username: ${{ secrets.USERNAME }}
-      key: ${{ secrets.KEY }}
-      port: ${{ secrets.PORT }}
-+     script_stop: true
-      script: |
-        mkdir abc/def
-        ls -al
-```
-
-畫面輸出:
-
-```sh
-======CMD======
-mkdir abc/def
-ls -al
-
-======END======
-2019/11/21 01:16:21 Process exited with status 1
-err: mkdir: cannot create directory ‘abc/def’: No such file or directory
-##[error]Docker run failed with exit code 1
-```
-
 #### 如何使用 `ProxyCommand` 連接遠程服務器？
 
 ```bash
@@ -383,7 +349,7 @@ Host FooServer
 
 設置 SSH 主機指紋驗證可以幫助防止中間人攻擊。在設置之前，運行以下命令以獲取 SSH 主機指紋。請記得將 `ed25519` 替換為您的適當金鑰類型（`rsa`、 `dsa`等），而 `example.com` 則替換為您的主機。
 
-現代 OpenSSH 版本中，需要提取的_默認金鑰_類型是 `rsa`（從版本 5.1 開始）、`ecdsa`（從版本 6.0 開始）和 `ed25519`（從版本 6.7 開始）。
+現代 OpenSSH 版本中，需要提取的**默認金鑰**類型是 `rsa`（從版本 5.1 開始）、`ecdsa`（從版本 6.0 開始）和 `ed25519`（從版本 6.7 開始）。
 
 ```sh
 ssh example.com ssh-keygen -l -f /etc/ssh/ssh_host_ed25519_key.pub | cut -d ' ' -f2

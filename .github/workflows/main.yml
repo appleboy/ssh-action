@@ -123,22 +123,6 @@ jobs:
           port: 2222
           script: whoami
 
-      - name: stop script if command error
-        uses: ./
-        continue-on-error: true
-        with:
-          host: ${{ env.REMOTE_HOST }}
-          username: linuxserver.io
-          password: password
-          key: password
-          port: 2222
-          script_stop: true
-          sync: true
-          debug: true
-          script: |
-            mkdir abc/def
-            ls -al
-
   support-key-passphrase:
     runs-on: ubuntu-latest
     steps:
@@ -215,7 +199,6 @@ jobs:
           key: ${{ env.PRIVATE_KEY }}
           port: 2222
           passphrase: 1234
-          script_stop: true
           script: |
             ls \
               -lah
@@ -292,7 +275,6 @@ jobs:
           username: linuxserver.io
           key: ${{ env.PRIVATE_KEY }}
           passphrase: 1234
-          script_stop: true
           script: |
             whoami
 
@@ -488,7 +470,6 @@ jobs:
           username: linuxserver.io
           key: ${{ env.PRIVATE_KEY }}
           port: 2222
-          script_stop: true
           request_pty: true
           command_timeout: 30s
           script: |
@@ -522,6 +503,51 @@ jobs:
           port: 22
           command_timeout: 30s
           script: |
+            whoami
+
+  testing07:
+    name: some special character
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: Set Environment Variables
+        run: |
+          PASS='3HUS$?8kLu)}'
+          printf "PASS=${PASS}" >> $GITHUB_ENV
+
+      - name: create new ssh server
+        run: |
+          docker run -d \
+          --name=openssh-server \
+          --hostname=openssh-server \
+          -p 2222:2222 \
+          -e SUDO_ACCESS=false \
+          -e PASSWORD_ACCESS=true  \
+          -e USER_PASSWORD='${{ env.PASS }}'  \
+          -e USER_NAME=linuxserver.io \
+          --restart unless-stopped \
+          lscr.io/linuxserver/openssh-server:latest
+          docker exec openssh-server sh -c "hostname -i" > ip.txt
+          echo "REMOTE_HOST<<EOF" >> $GITHUB_ENV
+          cat ip.txt >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "======= container ip address ========="
+          cat ip.txt
+          echo "======================================"
+          sleep 2
+
+      - name: ssh by username and password
+        uses: ./
+        with:
+          host: ${{ env.REMOTE_HOST }}
+          username: linuxserver.io
+          password: ${{ env.PASS }}
+          port: 2222
+          script: |
+            #!/usr/bin/env bash
+            set -e
             whoami
 
   testing-capturing-output:

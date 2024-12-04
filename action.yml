@@ -75,6 +75,14 @@ inputs:
     description: "pass all environment variable to shell script."
   request_pty:
     description: "Request a pseudo-terminal from the server."
+  capture_stdout:
+    description: "Capture the stdout of the commands."
+    default: "false"
+
+outputs:
+  stdout:
+    description: 'Standard output of the executed commands.'
+    value: ${{ steps.entrypoint.outputs.stdout }}
 
 runs:
   using: "composite"
@@ -84,7 +92,8 @@ runs:
       shell: bash
       env:
         GITHUB_ACTION_PATH: ${{ github.action_path }}
-    - name: Run entrypoint.sh
+    - id: entrypoint
+      name: Run entrypoint.sh
       run: entrypoint.sh
       shell: bash
       env:
@@ -121,6 +130,7 @@ runs:
         INPUT_PROXY_USE_INSECURE_CIPHER: ${{ inputs.proxy_use_insecure_cipher }}
         INPUT_PROXY_CIPHER: ${{ inputs.proxy_cipher }}
         INPUT_SYNC: ${{ inputs.sync }}
+        INPUT_CAPTURE_STDOUT: ${{ inputs.capture_stdout }}
 
 branding:
   icon: "terminal"

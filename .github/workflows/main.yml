@@ -644,3 +644,10 @@ jobs:
       - name: check stdout
         run: |
           echo "stdout: ${{ steps.stdout.outputs.stdout }}"
+          if echo "${{ steps.stdout.outputs.stdout }}" | grep -q "True"; then
+            echo "Output contains 'True'"
+            exit 1
+          fi
+          if echo "${{ steps.stdout.outputs.stdout }}" | grep -q "False"; then
+            echo "Output contains 'False'"
+          fi

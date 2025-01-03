@@ -43,7 +43,7 @@
 | proxy_cipher              | 代理允许的密码算法                                    |        |
 | proxy_use_insecure_cipher | 使用不安全的密码算法                                  | false  |
 | script                    | 执行命令                                              |        |
-| script_file               | 从文件执行命令                                        |        |
+| script_path               | 从文件执行命令                                        |        |
 | envs                      | 传递环境变量到 shell 脚本                             |        |
 | envs_format               | 环境变量传递的灵活配置                                |        |
 | debug                     | 启用调试模式                                          | false  |

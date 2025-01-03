@@ -43,7 +43,7 @@ See [action.yml](./action.yml) for more detailed information.
 | proxy_cipher              | Allowed cipher algorithms for the proxy                                                  |               |
 | proxy_use_insecure_cipher | Include more ciphers with use_insecure_cipher for the proxy                              | false         |
 | script                    | Execute commands                                                                         |               |
-| script_file               | Execute commands from a file                                                             |               |
+| script_path               | Execute commands from a file                                                             |               |
 | envs                      | Pass environment variables to shell script                                               |               |
 | envs_format               | Flexible configuration of environment value transfer                                     |               |
 | debug                     | Enable debug mode                                                                        | false         |

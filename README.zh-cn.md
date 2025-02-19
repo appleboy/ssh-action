@@ -63,7 +63,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: executing remote ssh commands using password
-        uses: appleboy/ssh-action@v1.2.0
+        uses: appleboy/ssh-action@v1.2.1
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
@@ -162,7 +162,7 @@ ssh-keygen -t ed25519 -a 200 -C ”your_email@example.com“
 
 ```yaml
 - name: executing remote ssh commands using password
-  uses: appleboy/ssh-action@v1.2.0
+  uses: appleboy/ssh-action@v1.2.1
   with:
     host: ${{ secrets.HOST }}
     username: ${{ secrets.USERNAME }}
@@ -175,7 +175,7 @@ ssh-keygen -t ed25519 -a 200 -C ”your_email@example.com“
 
 ```yaml
 - name: executing remote ssh commands using ssh key
-  uses: appleboy/ssh-action@v1.2.0
+  uses: appleboy/ssh-action@v1.2.1
   with:
     host: ${{ secrets.HOST }}
     username: ${{ secrets.USERNAME }}
@@ -188,7 +188,7 @@ ssh-keygen -t ed25519 -a 200 -C ”your_email@example.com“
 
 ```yaml
 - name: multiple command
-  uses: appleboy/ssh-action@v1.2.0
+  uses: appleboy/ssh-action@v1.2.1
   with:
     host: ${{ secrets.HOST }}
     username: ${{ secrets.USERNAME }}
@@ -205,7 +205,7 @@ ssh-keygen -t ed25519 -a 200 -C ”your_email@example.com“
 
 ```diff
   - name: multiple host
-    uses: appleboy/ssh-action@v1.2.0
+    uses: appleboy/ssh-action@v1.2.1
     with:
 -     host: ”foo.com“
 +     host: ”foo.com,bar.com“
@@ -221,7 +221,7 @@ ssh-keygen -t ed25519 -a 200 -C ”your_email@example.com“
 
 ```yaml
 - name: file commands
-  uses: appleboy/ssh-action@v1.2.0
+  uses: appleboy/ssh-action@v1.2.1
   with:
     host: ${{ secrets.HOST }}
     username: ${{ secrets.USERNAME }}
@@ -234,7 +234,7 @@ ssh-keygen -t ed25519 -a 200 -C ”your_email@example.com“
 
 ```diff
   - name: multiple host
-    uses: appleboy/ssh-action@v1.2.0
+    uses: appleboy/ssh-action@v1.2.1
     with:
 -     host: ”foo.com“
 +     host: ”foo.com:1234,bar.com:5678“
@@ -249,7 +249,7 @@ ssh-keygen -t ed25519 -a 200 -C ”your_email@example.com“
 
 ```diff
   - name: multiple host
-    uses: appleboy/ssh-action@v1.2.0
+    uses: appleboy/ssh-action@v1.2.1
     with:
       host: ”foo.com,bar.com“
 +     sync: true
@@ -265,7 +265,7 @@ ssh-keygen -t ed25519 -a 200 -C ”your_email@example.com“
 
 ```diff
   - name: pass environment
-    uses: appleboy/ssh-action@v1.2.0
+    uses: appleboy/ssh-action@v1.2.1
 +   env:
 +     FOO: ”BAR“
 +     BAR: ”FOO“
@@ -312,7 +312,7 @@ Host FooServer
 
 ```diff
   - name: ssh proxy command
-    uses: appleboy/ssh-action@v1.2.0
+    uses: appleboy/ssh-action@v1.2.1
     with:
       host: ${{ secrets.HOST }}
       username: ${{ secrets.USERNAME }}
@@ -333,7 +333,7 @@ Host FooServer
 
 ```diff
   - name: ssh key passphrase
-    uses: appleboy/ssh-action@v1.2.0
+    uses: appleboy/ssh-action@v1.2.1
     with:
       host: ${{ secrets.HOST }}
       username: ${{ secrets.USERNAME }}
@@ -359,7 +359,7 @@ ssh example.com ssh-keygen -l -f /etc/ssh/ssh_host_ed25519_key.pub | cut -d ’ 
 
 ```diff
   - name: ssh key passphrase
-    uses: appleboy/ssh-action@v1.2.0
+    uses: appleboy/ssh-action@v1.2.1
     with:
       host: ${{ secrets.HOST }}
       username: ${{ secrets.USERNAME }}

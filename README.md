@@ -50,6 +50,8 @@ See [action.yml](./action.yml) for more detailed information.
 | allenvs                   | Pass the environment variables with prefix value of `GITHUB_` and `INPUT_` to the script | false         |
 | request_pty               | Request a pseudo-terminal from the server                                                | false         |
 
+**Note:** Users can add `set -e` in their shell script to achieve similar functionality to the removed `script_stop` option.
+
 ## Usage
 
 Executing remote SSH commands.

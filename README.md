@@ -22,9 +22,9 @@ See [action.yml](./action.yml) for more detailed information.
 | username                  | SSH username                                                                             |               |
 | password                  | SSH password                                                                             |               |
 | protocol                  | SSH protocol version (tcp, tcp4, tcp6)                                                   | tcp           |
-| sync                      | Enable synchronous execution if multiple hosts                                           | false         |
+| sync                      | Enable synchronous execution if multiple hosts are specified                             | false         |
 | use_insecure_cipher       | Include more ciphers with use_insecure_cipher                                            | false         |
-| cipher                    | Allowed cipher algorithms. If unspecified, a sensible default                            |               |
+| cipher                    | Allowed cipher algorithms. If unspecified, sensible defaults are used                    |               |
 | timeout                   | Timeout duration for SSH to host                                                         | 30s           |
 | command_timeout           | Timeout duration for SSH command                                                         | 10m           |
 | key                       | Content of SSH private key. e.g., raw content of ~/.ssh/id_rsa                           |               |
@@ -44,7 +44,7 @@ See [action.yml](./action.yml) for more detailed information.
 | proxy_use_insecure_cipher | Include more ciphers with use_insecure_cipher for the proxy                              | false         |
 | script                    | Execute commands                                                                         |               |
 | script_path               | Execute commands from a file                                                             |               |
-| envs                      | Pass environment variables to shell script                                               |               |
+| envs                      | Pass environment variables to the shell script                                           |               |
 | envs_format               | Flexible configuration of environment value transfer                                     |               |
 | debug                     | Enable debug mode                                                                        | false         |
 | allenvs                   | Pass the environment variables with prefix value of `GITHUB_` and `INPUT_` to the script | false         |

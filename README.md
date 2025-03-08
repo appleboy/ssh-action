@@ -2,17 +2,17 @@
 
 [繁體中文](./README.zh-tw.md) | [简体中文](./README.zh-cn.md)
 
-[GitHub Action](https://github.com/features/actions) for executing remote SSH commands.
+A [GitHub Action](https://github.com/features/actions) for executing remote SSH commands.
 
 ![ssh workflow](./images/ssh-workflow.png)
 
 [![testing main branch](https://github.com/appleboy/ssh-action/actions/workflows/main.yml/badge.svg)](https://github.com/appleboy/ssh-action/actions/workflows/main.yml)
 
-This project is built using [Golang](https://go.dev) and [drone-ssh](https://github.com/appleboy/drone-ssh). 🚀
+This project is built with [Golang](https://go.dev) and [drone-ssh](https://github.com/appleboy/drone-ssh). 🚀
 
 ## Input variables
 
-See [action.yml](./action.yml) for more detailed information.
+Refer to [action.yml](./action.yml) for more detailed information.
 
 | Input Parameter           | Description                                                                              | Default Value |
 | ------------------------- | ---------------------------------------------------------------------------------------- | ------------- |
@@ -88,9 +88,9 @@ linuxserver.io
 
 ### Setting up a SSH Key
 
-Make sure to follow the below steps while creating SSH Keys and using them.
-The best practice is create the SSH Keys on local machine not remote machine.
-Login with username specified in Github Secrets. Generate a RSA Key-Pair:
+Follow the steps below to create and use SSH Keys.
+It is best practice to create SSH Keys on your local machine, not on a remote machine.
+Log in with the username specified in GitHub Secrets and generate an RSA Key-Pair:
 
 ### Generate rsa key
 
@@ -104,7 +104,7 @@ ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
 ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 ```
 
-Add newly generated key into Authorized keys. Read more about authorized keys [here](https://www.ssh.com/ssh/authorized_keys/).
+Add the newly generated key to the Authorized keys. Read more about authorized keys [here](https://www.ssh.com/ssh/authorized_keys/).
 
 ### Add rsa key into Authorized keys
 
@@ -118,18 +118,18 @@ cat .ssh/id_rsa.pub | ssh b@B 'cat >> .ssh/authorized_keys'
 cat .ssh/id_ed25519.pub | ssh b@B 'cat >> .ssh/authorized_keys'
 ```
 
-Copy Private Key content and paste in Github Secrets.
+Copy the Private Key content and paste it into GitHub Secrets.
 
 ### Copy rsa Private key
 
-Before copying the private key, install `clip` command as shown below:
+Before copying the private key, install the `clip` command as shown below:
 
 ```bash
 # Ubuntu
 sudo apt-get install xclip
 ```
 
-copy the private key:
+Copy the private key:
 
 ```bash
 # macOS
@@ -147,9 +147,9 @@ pbcopy < ~/.ssh/id_ed25519
 xclip < ~/.ssh/id_ed25519
 ```
 
-See the detail information about [SSH login without password](http://www.linuxproblem.org/art_9.html).
+See detailed information about [SSH login without a password](http://www.linuxproblem.org/art_9.html).
 
-**A note** from one of our readers: Depending on your version of SSH you might also have to do the following changes:
+**Note**: Depending on your version of SSH, you might also need to make the following changes:
 
 - Put the public key in `.ssh/authorized_keys2`
 - Change the permissions of `.ssh` to 700
@@ -163,13 +163,13 @@ If you are currently using OpenSSH and are getting the following error:
 ssh: handshake failed: ssh: unable to authenticate, attempted methods [none publickey]
 ```
 
-Make sure that your key algorithm of choice is supported. On Ubuntu 20.04 or later you must explicitly allow the use of the ssh-rsa algorithm. Add the following line to your OpenSSH daemon file (which is either `/etc/ssh/sshd_config` or a drop-in file under `/etc/ssh/sshd_config.d/`):
+Ensure that your chosen key algorithm is supported. On Ubuntu 20.04 or later, you must explicitly allow the use of the ssh-rsa algorithm. Add the following line to your OpenSSH daemon file (either `/etc/ssh/sshd_config` or a drop-in file under `/etc/ssh/sshd_config.d/`):
 
 ```bash
 CASignatureAlgorithms +ssh-rsa
 ```
 
-Alternatively, `ed25519` keys are accepted by default in OpenSSH. You could use this instead of rsa if needed:
+Alternatively, `ed25519` keys are accepted by default in OpenSSH. You can use this instead of rsa if needed:
 
 ```bash
 ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
@@ -400,7 +400,7 @@ Now you can adjust you config:
 
 See the [issue comment](https://github.com/appleboy/ssh-action/issues/31#issuecomment-1006565847) about interactive vs non interactive shell. Thanks @kocyigityunus for the solution.
 
-Basically, if you are running a command in a non interactive shell, like ssh-action, on many linux distros,
+If you are running a command in a non-interactive shell, like ssh-action, on many Linux distros,
 
 `/etc/bash.bashrc` file has a specific command that returns only, so some of the files didn't run and some specific commands doesn't add to path,
 
@@ -415,7 +415,7 @@ Basically, if you are running a command in a non interactive shell, like ssh-act
 [ -z "$PS1" ] && return`
 ```
 
-just comment out the line that returns early and everything should work fine, or you can use the real paths of the commands that you would like to use.
+comment out the line that returns early, and everything should work fine. Alternatively, you can use the real paths of the commands you want to use.
 
 ## Contributing
 

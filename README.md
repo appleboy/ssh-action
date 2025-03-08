@@ -138,6 +138,8 @@ pbcopy < ~/.ssh/id_rsa
 xclip < ~/.ssh/id_rsa
 ```
 
+Starting from and including the comment section `-----BEGIN OPENSSH PRIVATE KEY-----` and ending at and including the comment section `-----END OPENSSH PRIVATE KEY-----`, copy the private key and paste it into GitHub Secrets.
+
 ### Copy ed25519 Private key
 
 ```bash

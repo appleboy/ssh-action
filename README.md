@@ -1,6 +1,6 @@
 # 🚀 SSH for GitHub Actions
 
-[繁體中文](./README.zh-tw.md) | [简体中文](./README.zh-cn.md)
+English | [繁體中文](./README.zh-tw.md) | [简体中文](./README.zh-cn.md)
 
 A [GitHub Action](https://github.com/features/actions) for executing remote SSH commands.
 

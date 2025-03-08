@@ -1,8 +1,8 @@
 # 🚀 用于 GitHub Actions 的 SSH
 
-[English](./README.md) | [繁體中文](./README.zh-tw.md)
+[English](./README.md) | [繁體中文](./README.zh-tw.md) | 简体中文
 
-[GitHub Action](https://github.com/features/actions) 用于执行远程 SSH 命令。
+一个用于执行远程 SSH 命令的 [GitHub Action](https://github.com/features/actions)。
 
 ![ssh workflow](./images/ssh-workflow.png)
 
@@ -12,7 +12,7 @@
 
 ## 输入变量
 
-更详细的信息，请参考 [action.yml](./action.yml)。
+有关更详细的信息，请参阅 [action.yml](./action.yml)。
 
 | 输入参数                  | 描述                                                  | 默认值 |
 | ------------------------- | ----------------------------------------------------- | ------ |
@@ -22,9 +22,9 @@
 | username                  | SSH 用户名                                            |        |
 | password                  | SSH 密码                                              |        |
 | protocol                  | SSH 协议版本（tcp, tcp4, tcp6）                       | tcp    |
-| sync                      | 如果有多个主机，启用同步执行                          | false  |
+| sync                      | 如果指定了多个主机，则启用同步执行                    | false  |
 | use_insecure_cipher       | 使用不安全的密码算法                                  | false  |
-| cipher                    | 允许的密码算法。如果未指定，则使用适当的算法          |        |
+| cipher                    | 允许的密码算法。如果未指定，则使用适当的默认值        |        |
 | timeout                   | SSH 连接到主机的超时时间                              | 30s    |
 | command_timeout           | SSH 命令的超时时间                                    | 10m    |
 | key                       | SSH 私钥的内容，例如 ~/.ssh/id_rsa 的原始内容         |        |
@@ -54,7 +54,7 @@
 
 ## 使用方法
 
-执行远程 SSH 命令
+执行远程 SSH 命令。
 
 ```yaml
 name: remote ssh command
@@ -68,19 +68,19 @@ jobs:
         uses: appleboy/ssh-action@v1.2.1
         with:
           host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
+          username: linuxserver.io
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: whoami
 ```
 
-画面输出
+输出：
 
 ```sh
 ======CMD======
 whoami
 ======END======
-out: ***
+linuxserver.io
 ===============================================
 ✅ Successfully executed commands to all hosts.
 ===============================================
@@ -88,18 +88,20 @@ out: ***
 
 ### 设置 SSH 密钥
 
-请在创建 SSH 密钥并使用 SSH 密钥时遵循以下步骤。最佳做法是在本地机器上创建 SSH 密钥而不是远程机器上。请使用 Github Secrets 中指定的用户名登录。生成 RSA 密钥：
+请按照以下步骤创建和使用 SSH 密钥。
+最佳做法是在本地机器上创建 SSH 密钥，而不是在远程机器上。
+使用 GitHub Secrets 中指定的用户名登录并生成 RSA 密钥对：
 
 ### 生成 RSA 密钥
 
 ```bash
-ssh-keygen -t rsa -b 4096 -C ”your_email@example.com“
+ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
 ```
 
 ### 生成 ed25519 密钥
 
 ```bash
-ssh-keygen -t ed25519 -a 200 -C ”your_email@example.com“
+ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 ```
 
 将新生成的密钥添加到已授权的密钥中。详细了解已授权的密钥请点[此处](https://www.ssh.com/ssh/authorized_keys/)。
@@ -107,32 +109,47 @@ ssh-keygen -t ed25519 -a 200 -C ”your_email@example.com“
 ### 将 RSA 密钥添加到已授权密钥中
 
 ```bash
-cat .ssh/id_rsa.pub | ssh b@B ’cat >> .ssh/authorized_keys‘
+cat .ssh/id_rsa.pub | ssh b@B 'cat >> .ssh/authorized_keys'
 ```
 
 ### 将 ed25519 密钥添加到已授权密钥中
 
 ```bash
-cat .ssh/id_ed25519.pub | ssh b@B ’cat >> .ssh/authorized_keys‘
+cat .ssh/id_ed25519.pub | ssh b@B 'cat >> .ssh/authorized_keys'
 ```
 
-复制私钥内容，然后将其粘贴到 Github Secrets 中。
+复制私钥内容，然后将其粘贴到 GitHub Secrets 中。
 
-### 复制 rsa 私钥内容
+### 复制 RSA 私钥内容
+
+在复制私钥之前，按照以下步骤安装 `clip` 命令：
 
 ```bash
-clip < ~/.ssh/id_rsa
+# Ubuntu
+sudo apt-get install xclip
+```
+
+复制私钥：
+
+```bash
+# macOS
+pbcopy < ~/.ssh/id_rsa
+# Ubuntu
+xclip < ~/.ssh/id_rsa
 ```
 
 ### 复制 ed25519 私钥内容
 
 ```bash
-clip < ~/.ssh/id_ed25519
+# macOS
+pbcopy < ~/.ssh/id_ed25519
+# Ubuntu
+xclip < ~/.ssh/id_ed25519
 ```
 
 有关无需密码登录 SSH 的详细信息，请[见该网站](http://www.linuxproblem.org/art_9.html)。
 
-**来自读者的注意事项**： 根据您的 SSH 版本，您可能还需要进行以下更改：
+**注意**：根据您的 SSH 版本，您可能还需要进行以下更改：
 
 - 将公钥放在 `.ssh/authorized_keys2` 中
 - 将 `.ssh` 的权限更改为 700
@@ -146,19 +163,19 @@ clip < ~/.ssh/id_ed25519
 ssh: handshake failed: ssh: unable to authenticate, attempted methods [none publickey]
 ```
 
-请确保您所选择的密钥算法得到支持。在 Ubuntu 20.04 或更高版本上，您必须明确允许使用 SSH-RSA 算法。请在 OpenSSH 守护进程文件中添加以下行（它可以是 `/etc/ssh/sshd_config` 或 `/etc/ssh/sshd_config.d/` 中的一个附加文件）：
+请确保您所选择的密钥算法得到支持。在 Ubuntu 20.04 或更高版本上，您必须明确允许使用 ssh-rsa 算法。请在 OpenSSH 守护进程文件中添加以下行（它可以是 `/etc/ssh/sshd_config` 或 `/etc/ssh/sshd_config.d/` 中的一个附加文件）：
 
 ```bash
 CASignatureAlgorithms +ssh-rsa
 ```
 
-或者，`Ed25519` 密钥在 OpenSSH 中默认被接受。如果需要，您可以使用它来替代 RSA。
+或者，`ed25519` 密钥在 OpenSSH 中默认被接受。如果需要，您可以使用它来替代 RSA：
 
 ```bash
-ssh-keygen -t ed25519 -a 200 -C ”your_email@example.com“
+ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 ```
 
-### Example
+### 示例
 
 #### 使用密码执行远程 SSH 命令
 
@@ -203,23 +220,7 @@ ssh-keygen -t ed25519 -a 200 -C ”your_email@example.com“
 
 ![result](./images/output-result.png)
 
-#### 多台主机
-
-```diff
-  - name: multiple host
-    uses: appleboy/ssh-action@v1.2.1
-    with:
--     host: ”foo.com“
-+     host: ”foo.com,bar.com“
-      username: ${{ secrets.USERNAME }}
-      key: ${{ secrets.KEY }}
-      port: ${{ secrets.PORT }}
-      script: |
-        whoami
-        ls -al
-```
-
-#### Commands from a file
+#### 从文件执行命令
 
 ```yaml
 - name: file commands
@@ -232,14 +233,32 @@ ssh-keygen -t ed25519 -a 200 -C ”your_email@example.com“
     script_path: scripts/script.sh
 ```
 
+#### 多台主机
+
+```diff
+  - name: multiple host
+    uses: appleboy/ssh-action@v1.2.1
+    with:
+-     host: "foo.com"
++     host: "foo.com,bar.com"
+      username: ${{ secrets.USERNAME }}
+      key: ${{ secrets.KEY }}
+      port: ${{ secrets.PORT }}
+      script: |
+        whoami
+        ls -al
+```
+
+默认的 `port` 值是 `22`。
+
 #### 多个不同端口的主机
 
 ```diff
   - name: multiple host
     uses: appleboy/ssh-action@v1.2.1
     with:
--     host: ”foo.com“
-+     host: ”foo.com:1234,bar.com:5678“
+-     host: "foo.com"
++     host: "foo.com:1234,bar.com:5678"
       username: ${{ secrets.USERNAME }}
       key: ${{ secrets.KEY }}
       script: |
@@ -253,7 +272,7 @@ ssh-keygen -t ed25519 -a 200 -C ”your_email@example.com“
   - name: multiple host
     uses: appleboy/ssh-action@v1.2.1
     with:
-      host: ”foo.com,bar.com“
+      host: "foo.com,bar.com"
 +     sync: true
       username: ${{ secrets.USERNAME }}
       key: ${{ secrets.KEY }}
@@ -263,14 +282,14 @@ ssh-keygen -t ed25519 -a 200 -C ”your_email@example.com“
         ls -al
 ```
 
-#### 将环境变量传递到 Shell 脚本
+#### 将环境变量传递到 shell 脚本
 
 ```diff
   - name: pass environment
     uses: appleboy/ssh-action@v1.2.1
 +   env:
-+     FOO: ”BAR“
-+     BAR: ”FOO“
++     FOO: "BAR"
++     BAR: "FOO"
 +     SHA: ${{ github.sha }}
     with:
       host: ${{ secrets.HOST }}
@@ -279,9 +298,9 @@ ssh-keygen -t ed25519 -a 200 -C ”your_email@example.com“
       port: ${{ secrets.PORT }}
 +     envs: FOO,BAR,SHA
       script: |
-        echo ”I am $FOO“
-        echo ”I am $BAR“
-        echo ”sha: $SHA“
+        echo "I am $FOO"
+        echo "I am $BAR"
+        echo "sha: $SHA"
 ```
 
 _在 `env` 对象中，您需要将每个环境变量作为字符串传递，传递 `Integer` 数据类型或任何其他类型可能会产生意外结果。_
@@ -289,9 +308,9 @@ _在 `env` 对象中，您需要将每个环境变量作为字符串传递，传
 #### 如何使用 `ProxyCommand` 连接远程服务器？
 
 ```bash
-+———+       +-———+      +————+
-| Laptop | <—>  | Jumphost | <—> | FooServer |
-+———+       +-———+      +————+
++--------+       +----------+      +-----------+
+| Laptop | <-->  | Jumphost | <--> | FooServer |
++--------+       +----------+      +-----------+
 ```
 
 在您的 `~/.ssh/config` 文件中，您会看到以下内容。
@@ -329,9 +348,9 @@ Host FooServer
         ls -al
 ```
 
-#### 如何保护私钥？
+#### 保护私钥
 
-密码短语通常用于加密私钥。这使得攻击者无法单独使用密钥文件。文件泄露可能来自备份或停用的硬件，黑客通常可以从受攻击系统中泄露文件。因此，保护私钥非常重要。
+密码短语通常用于加密私钥。这使得密钥文件本身对攻击者无用。文件泄露可能来自备份或停用的硬件，黑客通常可以从受攻击系统中泄露文件。
 
 ```diff
   - name: ssh key passphrase
@@ -351,10 +370,10 @@ Host FooServer
 
 设置 SSH 主机指纹验证可以帮助防止中间人攻击。在设置之前，运行以下命令以获取 SSH 主机指纹。请记得将 `ed25519` 替换为您适当的密钥类型（`rsa`、 `dsa`等），而 `example.com` 则替换为您的主机。
 
-现代 OpenSSH 版本中，需要提取的**默认密钥**类型是 `rsa`（从版本 5.1 开始）、`ecdsa`（从版本 6.0 开始）和 `ed25519`（从版本 6.7 开始）。
+在现代 OpenSSH 版本中，默认提取的密钥类型是 `rsa`（从版本 5.1 开始）、`ecdsa`（从版本 6.0 开始）和 `ed25519`（从版本 6.7 开始）。
 
 ```sh
-ssh example.com ssh-keygen -l -f /etc/ssh/ssh_host_ed25519_key.pub | cut -d ’ ‘ -f2
+ssh example.com ssh-keygen -l -f /etc/ssh/ssh_host_ed25519_key.pub | cut -d ' ' -f2
 ```
 
 现在您可以调整您的配置：
@@ -379,4 +398,4 @@ ssh example.com ssh-keygen -l -f /etc/ssh/ssh_host_ed25519_key.pub | cut -d ’ 
 
 ## 授权方式
 
-本项目中的脚本和文档采用 [MIT](LICENSE) 许可证 发布。
+本项目中的脚本和文档采用 [MIT 许可证](LICENSE) 发布。

@@ -1,6 +1,6 @@
 # 🚀 GitHub Actions 的 SSH
 
-[English](./README.md) | [简体中文](./README.zh-cn.md)
+[English](./README.md) | 繁體中文 | [简体中文](./README.zh-cn.md)
 
 [GitHub Action](https://github.com/features/actions) 用於執行遠端 SSH 命令。
 
@@ -68,7 +68,7 @@ jobs:
         uses: appleboy/ssh-action@v1.2.1
         with:
           host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
+          username: linuxserver.io
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: whoami
@@ -80,7 +80,7 @@ jobs:
 ======CMD======
 whoami
 ======END======
-out: ***
+linuxserver.io
 ===============================================
 ✅ Successfully executed commands to all hosts.
 ===============================================
@@ -120,19 +120,34 @@ cat .ssh/id_ed25519.pub | ssh b@B 'cat >> .ssh/authorized_keys'
 
 ### 複製 rsa 私鑰內容
 
+在複製私鑰之前，請按照以下說明安裝 `clip` 命令：
+
 ```bash
-clip < ~/.ssh/id_rsa
+# Ubuntu
+sudo apt-get install xclip
+```
+
+複製私鑰：
+
+```bash
+# macOS
+pbcopy < ~/.ssh/id_rsa
+# Ubuntu
+xclip < ~/.ssh/id_rsa
 ```
 
 ### 複製 ed25519 私鑰內容
 
 ```bash
-clip < ~/.ssh/id_ed25519
+# macOS
+pbcopy < ~/.ssh/id_ed25519
+# Ubuntu
+xclip < ~/.ssh/id_ed25519
 ```
 
 有關無需密碼登錄 SSH 的詳細信息，請[參見該網站](http://www.linuxproblem.org/art_9.html)。
 
-**來自讀者的注意事項**： 根據您的 SSH 版本，您可能還需要進行以下更改：
+**注意**：根據您的 SSH 版本，您可能還需要進行以下更改：
 
 - 將公鑰放在 `.ssh/authorized_keys2` 中
 - 將 `.ssh` 的權限更改為 700
@@ -203,7 +218,7 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 ![result](./images/output-result.png)
 
-#### Commands from a file
+#### 從文件中執行命令
 
 ```yaml
 - name: file commands

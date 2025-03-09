@@ -8,7 +8,7 @@ export GITHUB="true"
 
 GITHUB_ACTION_PATH="${GITHUB_ACTION_PATH%/}"
 DRONE_SSH_RELEASE_URL="${DRONE_SSH_RELEASE_URL:-https://github.com/appleboy/drone-ssh/releases/download}"
-DRONE_SSH_VERSION="${DRONE_SSH_VERSION:-1.8.0}"
+DRONE_SSH_VERSION="${DRONE_SSH_VERSION:-1.8.1}"
 
 function detect_client_info() {
   if [ -n "${SSH_CLIENT_OS-}" ]; then
@@ -69,9 +69,9 @@ echo "======= CLI Version ======="
 sh -c "${TARGET} --version" # print version
 echo "==========================="
 if [[ "$INPUT_CAPTURE_STDOUT" == 'true' ]]; then
-  echo 'stdout<<EOF' >> $GITHUB_OUTPUT # use heredoc for multiline output
+  echo 'stdout<<EOF' >>$GITHUB_OUTPUT          # use heredoc for multiline output
   sh -c "${TARGET} $*" | tee -a $GITHUB_OUTPUT # run the command
-  echo 'EOF' >> $GITHUB_OUTPUT
+  echo 'EOF' >>$GITHUB_OUTPUT
 else
   sh -c "${TARGET} $*" # run the command
 fi

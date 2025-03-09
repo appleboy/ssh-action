@@ -31,7 +31,7 @@ jobs:
           sleep 2
 
       - name: ssh by username and password
-        uses: appleboy/ssh-action@v1.2.1
+        uses: appleboy/ssh-action@v1.2.2
         with:
           host: ${{ env.REMOTE_HOST }}
           username: linuxserver.io
@@ -43,7 +43,7 @@ jobs:
             whoami
 
       - name: ssh commands from a file
-        uses: appleboy/ssh-action@v1.2.1
+        uses: appleboy/ssh-action@v1.2.2
         with:
           host: ${{ env.REMOTE_HOST }}
           username: linuxserver.io
@@ -95,7 +95,7 @@ jobs:
           sleep 2
 
       - name: ssh by private key
-        uses: appleboy/ssh-action@v1.2.1
+        uses: appleboy/ssh-action@v1.2.2
         with:
           host: ${{ env.REMOTE_HOST }}
           username: linuxserver.io
@@ -104,7 +104,7 @@ jobs:
           script: whoami
 
       - name: wrong password but correct key
-        uses: appleboy/ssh-action@v1.2.1
+        uses: appleboy/ssh-action@v1.2.2
         with:
           host: ${{ env.REMOTE_HOST }}
           username: linuxserver.io
@@ -114,7 +114,7 @@ jobs:
           script: whoami
 
       - name: correct password but wrong key
-        uses: appleboy/ssh-action@v1.2.1
+        uses: appleboy/ssh-action@v1.2.2
         with:
           host: ${{ env.REMOTE_HOST }}
           username: linuxserver.io
@@ -167,7 +167,7 @@ jobs:
           sleep 2
 
       - name: ssh key passphrase
-        uses: appleboy/ssh-action@v1.2.1
+        uses: appleboy/ssh-action@v1.2.2
         with:
           host: ${{ env.REMOTE_HOST }}
           username: linuxserver.io
@@ -179,7 +179,7 @@ jobs:
             ls -al
 
       - name: missing ssh key passphrase
-        uses: appleboy/ssh-action@v1.2.1
+        uses: appleboy/ssh-action@v1.2.2
         continue-on-error: true
         with:
           host: ${{ env.REMOTE_HOST }}
@@ -192,7 +192,7 @@ jobs:
 
       # https://github.com/appleboy/ssh-action/issues/75#issuecomment-668314271
       - name: Multiline SSH commands interpreted as single lines
-        uses: appleboy/ssh-action@v1.2.1
+        uses: appleboy/ssh-action@v1.2.2
         with:
           host: ${{ env.REMOTE_HOST }}
           username: linuxserver.io
@@ -269,7 +269,7 @@ jobs:
 
       # https://github.com/appleboy/ssh-action/issues/85
       - name: Deployment to multiple hosts with different ports
-        uses: appleboy/ssh-action@v1.2.1
+        uses: appleboy/ssh-action@v1.2.2
         with:
           host: "${{ env.REMOTE_HOST_01 }}:2222,${{ env.REMOTE_HOST_02 }}:2222"
           username: linuxserver.io
@@ -322,7 +322,7 @@ jobs:
           sleep 2
 
       - name: testing id_ed25519 key
-        uses: appleboy/ssh-action@v1.2.1
+        uses: appleboy/ssh-action@v1.2.2
         with:
           host: ${{ env.REMOTE_HOST }}
           username: linuxserver.io
@@ -375,7 +375,7 @@ jobs:
           sleep 2
 
       - name: testing id_ed25519 key
-        uses: appleboy/ssh-action@v1.2.1
+        uses: appleboy/ssh-action@v1.2.2
         with:
           host: ${{ env.REMOTE_HOST }}
           username: linuxserver.io
@@ -386,7 +386,7 @@ jobs:
             ls -al
 
       - name: pass environment
-        uses: appleboy/ssh-action@v1.2.1
+        uses: appleboy/ssh-action@v1.2.2
         env:
           FOO: "BAR"
         with:
@@ -400,7 +400,7 @@ jobs:
             echo "I am $BAR, thanks"
 
       - name: pass multiple environment
-        uses: appleboy/ssh-action@v1.2.1
+        uses: appleboy/ssh-action@v1.2.2
         env:
           FOO: "BAR"
           BAR: "FOO"
@@ -419,7 +419,7 @@ jobs:
             echo "port: $PORT"
 
       - name: custom envs format
-        uses: appleboy/ssh-action@v1.2.1
+        uses: appleboy/ssh-action@v1.2.2
         env:
           FOO: "BAR"
           AAA: "BBB"
@@ -437,7 +437,7 @@ jobs:
             echo "I am $TEST_AAA, thanks"
 
       - name: pass all ENV variables to script
-        uses: appleboy/ssh-action@v1.2.1
+        uses: appleboy/ssh-action@v1.2.2
         env:
           INPUT_FOO: "BAR"
           INPUT_AAA: "BBB"
@@ -454,7 +454,7 @@ jobs:
             echo "$GITHUB_REF"
 
       - name: switch to root user
-        uses: appleboy/ssh-action@v1.2.1
+        uses: appleboy/ssh-action@v1.2.2
         with:
           host: ${{ env.REMOTE_HOST }}
           username: linuxserver.io

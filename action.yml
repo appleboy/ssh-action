@@ -3,85 +3,85 @@ description: "Executing remote ssh commands"
 author: "Bo-Yi Wu"
 inputs:
   host:
-    description: "SSH host address."
+    description: "SSH host address or IP to connect to."
   port:
-    description: "SSH port number."
+    description: "SSH port number for the connection."
     default: "22"
   passphrase:
-    description: "Passphrase for the SSH key."
+    description: "Passphrase to decrypt the SSH private key if protected."
   username:
-    description: "SSH username."
+    description: "SSH username for authentication on the remote server."
   password:
-    description: "SSH password."
+    description: "SSH password for authentication (use secrets for sensitive data)."
   protocol:
-    description: 'The IP protocol to use. Valid values are "tcp". "tcp4" or "tcp6". Default to tcp.'
+    description: 'IP protocol version to use. Options: "tcp" (default), "tcp4" (IPv4 only), or "tcp6" (IPv6 only).'
     default: "tcp"
   sync:
-    description: "Enable synchronous execution if multiple hosts are involved."
+    description: "When true, executes commands synchronously across multiple hosts (one after another)."
   use_insecure_cipher:
-    description: "Include more ciphers by using insecure ciphers."
+    description: "Enable additional legacy ciphers that might be less secure but more compatible with older systems."
   cipher:
-    description: "Allowed cipher algorithms. If unspecified, a sensible default is used."
+    description: "Specify custom cipher algorithms for encryption. Leave empty to use secure defaults."
   timeout:
-    description: "Timeout duration for establishing SSH connection to the host."
+    description: "Maximum time to wait when establishing the SSH connection, e.g., '30s', '1m'."
     default: "30s"
   command_timeout:
-    description: "Timeout duration for SSH commands execution."
+    description: "Maximum execution time for the remote commands before terminating, e.g., '10m', '1h'."
     default: "10m"
   key:
-    description: "Content of the SSH private key. For example, the raw content of ~/.ssh/id_rsa."
+    description: "Raw content of the SSH private key for authentication (use secrets for sensitive data)."
   key_path:
-    description: "Path to the SSH private key file."
+    description: "Path to the SSH private key file on the runner."
   fingerprint:
-    description: "SHA256 fingerprint of the host public key."
+    description: "SHA256 fingerprint of the host public key for verification to prevent MITM attacks."
   proxy_host:
-    description: "SSH proxy host address."
+    description: "Proxy server hostname or IP if connecting through an SSH jump host."
   proxy_port:
-    description: "SSH proxy port number."
+    description: "SSH port number for the proxy connection."
     default: "22"
   proxy_username:
-    description: "SSH proxy username."
+    description: "Username for authentication on the proxy server."
   proxy_password:
-    description: "SSH proxy password."
+    description: "Password for authentication on the proxy server (use secrets for sensitive data)."
   proxy_protocol:
-    description: 'The IP protocol to use. Valid values are "tcp". "tcp4" or "tcp6". Default to tcp.'
+    description: 'IP protocol version for proxy. Options: "tcp" (default), "tcp4" (IPv4 only), or "tcp6" (IPv6 only).'
     default: "tcp"
   proxy_passphrase:
-    description: "SSH proxy key passphrase."
+    description: "Passphrase to decrypt the proxy SSH private key if protected."
   proxy_timeout:
-    description: "Timeout duration for establishing SSH connection to the proxy host."
+    description: "Maximum time to wait when establishing the proxy SSH connection, e.g., '30s', '1m'."
     default: "30s"
   proxy_key:
-    description: "Content of the SSH proxy private key. For example, the raw content of ~/.ssh/id_rsa."
+    description: "Raw content of the SSH proxy private key for authentication (use secrets for sensitive data)."
   proxy_key_path:
-    description: "Path to the SSH proxy private key file."
+    description: "Path to the SSH proxy private key file on the runner."
   proxy_fingerprint:
-    description: "SHA256 fingerprint of the proxy host public key."
+    description: "SHA256 fingerprint of the proxy host public key for verification."
   proxy_cipher:
-    description: "Allowed cipher algorithms for the proxy. If unspecified, a sensible default is used."
+    description: "Specify custom cipher algorithms for proxy connection encryption."
   proxy_use_insecure_cipher:
-    description: "Include more ciphers for the proxy by using insecure ciphers."
+    description: "Enable additional legacy ciphers for proxy connections (less secure but more compatible)."
   script:
-    description: "Commands to be executed."
+    description: "Commands to execute on the remote server (inline script string)."
   script_path:
-    description: "Path to the file containing commands to be executed."
+    description: "Path to a local file containing commands to execute on the remote server."
   envs:
-    description: "Environment variables to be passed to the shell script."
+    description: "Environment variables to expose to the remote script, format: key=value,key2=value2."
   envs_format:
-    description: "Flexible configuration for environment value transfer."
+    description: "Format specification for environment variable transfer (for advanced usage)."
   debug:
-    description: "Enable debug mode."
+    description: "Set to true to enable verbose logging for troubleshooting connection issues."
   allenvs:
-    description: "pass all environment variable to shell script."
+    description: "When true, passes all GitHub Actions environment variables to the remote script."
   request_pty:
-    description: "Request a pseudo-terminal from the server."
+    description: "Request a pseudo-terminal from the server (required for interactive commands or sudo)."
   capture_stdout:
-    description: "Capture the stdout of the commands."
+    description: "When true, captures and returns standard output from the commands as action output."
     default: "false"
 
 outputs:
   stdout:
-    description: 'Standard output of the executed commands.'
+    description: "Standard output of the executed commands when capture_stdout is enabled."
     value: ${{ steps.entrypoint.outputs.stdout }}
 
 runs:

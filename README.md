@@ -65,7 +65,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: executing remote ssh commands using password
-        uses: appleboy/ssh-action@v1.2.2
+        uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.HOST }}
           username: linuxserver.io
@@ -183,7 +183,7 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 ```yaml
 - name: executing remote ssh commands using password
-  uses: appleboy/ssh-action@v1.2.2
+  uses: appleboy/ssh-action@v1
   with:
     host: ${{ secrets.HOST }}
     username: ${{ secrets.USERNAME }}
@@ -196,7 +196,7 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 ```yaml
 - name: executing remote ssh commands using ssh key
-  uses: appleboy/ssh-action@v1.2.2
+  uses: appleboy/ssh-action@v1
   with:
     host: ${{ secrets.HOST }}
     username: ${{ secrets.USERNAME }}
@@ -209,7 +209,7 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 ```yaml
 - name: multiple command
-  uses: appleboy/ssh-action@v1.2.2
+  uses: appleboy/ssh-action@v1
   with:
     host: ${{ secrets.HOST }}
     username: ${{ secrets.USERNAME }}
@@ -226,7 +226,7 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 ```yaml
 - name: file commands
-  uses: appleboy/ssh-action@v1.2.2
+  uses: appleboy/ssh-action@v1
   with:
     host: ${{ secrets.HOST }}
     username: ${{ secrets.USERNAME }}
@@ -239,7 +239,7 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 ```diff
   - name: multiple host
-    uses: appleboy/ssh-action@v1.2.2
+    uses: appleboy/ssh-action@v1
     with:
 -     host: "foo.com"
 +     host: "foo.com,bar.com"
@@ -257,7 +257,7 @@ The default value of `port` is `22`.
 
 ```diff
   - name: multiple host
-    uses: appleboy/ssh-action@v1.2.2
+    uses: appleboy/ssh-action@v1
     with:
 -     host: "foo.com"
 +     host: "foo.com:1234,bar.com:5678"
@@ -272,7 +272,7 @@ The default value of `port` is `22`.
 
 ```diff
   - name: multiple host
-    uses: appleboy/ssh-action@v1.2.2
+    uses: appleboy/ssh-action@v1
     with:
       host: "foo.com,bar.com"
 +     sync: true
@@ -288,7 +288,7 @@ The default value of `port` is `22`.
 
 ```diff
   - name: pass environment
-    uses: appleboy/ssh-action@v1.2.2
+    uses: appleboy/ssh-action@v1
 +   env:
 +     FOO: "BAR"
 +     BAR: "FOO"
@@ -335,7 +335,7 @@ Host FooServer
 
 ```diff
   - name: ssh proxy command
-    uses: appleboy/ssh-action@v1.2.2
+    uses: appleboy/ssh-action@v1
     with:
       host: ${{ secrets.HOST }}
       username: ${{ secrets.USERNAME }}
@@ -358,7 +358,7 @@ It is not uncommon for files to leak from backups or decommissioned hardware, an
 
 ```diff
   - name: ssh key passphrase
-    uses: appleboy/ssh-action@v1.2.2
+    uses: appleboy/ssh-action@v1
     with:
       host: ${{ secrets.HOST }}
       username: ${{ secrets.USERNAME }}
@@ -384,7 +384,7 @@ Now you can adjust you config:
 
 ```diff
   - name: ssh key passphrase
-    uses: appleboy/ssh-action@v1.2.2
+    uses: appleboy/ssh-action@v1
     with:
       host: ${{ secrets.HOST }}
       username: ${{ secrets.USERNAME }}

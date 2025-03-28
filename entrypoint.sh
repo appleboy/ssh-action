@@ -21,13 +21,13 @@ function detect_client_info() {
 
   case "${CLIENT_PLATFORM}" in
   darwin | linux | windows) ;;
-  *) log_error "Unknown, unsupported platform: ${CLIENT_PLATFORM}. Supported platforms: Linux, Darwin, and Windows." 2 ;;
+  *) log_error "Unknown or unsupported platform: ${CLIENT_PLATFORM}. Supported platforms are Linux, Darwin, and Windows." 2 ;;
   esac
 
   case "${CLIENT_ARCH}" in
   x86_64* | i?86_64* | amd64*) CLIENT_ARCH="amd64" ;;
   aarch64* | arm64*) CLIENT_ARCH="arm64" ;;
-  *) log_error "Unknown, unsupported architecture: ${CLIENT_ARCH}. Supported architectures: x86_64, i686, arm64." 3 ;;
+  *) log_error "Unknown or unsupported architecture: ${CLIENT_ARCH}. Supported architectures are x86_64, i686, and arm64." 3 ;;
   esac
 }
 
@@ -35,13 +35,13 @@ detect_client_info
 DOWNLOAD_URL_PREFIX="${DRONE_SSH_RELEASE_URL}/v${DRONE_SSH_VERSION}"
 CLIENT_BINARY="drone-ssh-${DRONE_SSH_VERSION}-${CLIENT_PLATFORM}-${CLIENT_ARCH}"
 TARGET="${GITHUB_ACTION_PATH}/${CLIENT_BINARY}"
-echo "Will download ${CLIENT_BINARY} from ${DOWNLOAD_URL_PREFIX}"
+echo "Downloading ${CLIENT_BINARY} from ${DOWNLOAD_URL_PREFIX}"
 curl -fsSL --retry 5 --keepalive-time 2 "${DOWNLOAD_URL_PREFIX}/${CLIENT_BINARY}" -o "${TARGET}"
 chmod +x "${TARGET}"
 
-echo "======= CLI Version ======="
+echo "======= CLI Version Information ======="
 "${TARGET}" --version
-echo "==========================="
+echo "======================================="
 if [[ "${INPUT_CAPTURE_STDOUT}" == 'true' ]]; then
   {
     echo 'stdout<<EOF'

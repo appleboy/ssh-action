@@ -75,6 +75,9 @@ inputs:
     description: "When true, passes all GitHub Actions environment variables to the remote script."
   request_pty:
     description: "Request a pseudo-terminal from the server (required for interactive commands or sudo)."
+  curl_insecure:
+    description: "When true, uses the --insecure option with curl for insecure downloads."
+    default: "false"
   capture_stdout:
     description: "When true, captures and returns standard output from the commands as action output."
     default: "false"
@@ -131,6 +134,7 @@ runs:
         INPUT_PROXY_CIPHER: ${{ inputs.proxy_cipher }}
         INPUT_SYNC: ${{ inputs.sync }}
         INPUT_CAPTURE_STDOUT: ${{ inputs.capture_stdout }}
+        INPUT_CURL_INSECURE: ${{ inputs.curl_insecure }}
 
 branding:
   icon: "terminal"

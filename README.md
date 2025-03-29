@@ -49,6 +49,7 @@ Refer to [action.yml](./action.yml) for more detailed information.
 | debug                     | Enable debug mode                                                                        | false         |
 | allenvs                   | Pass the environment variables with prefix value of `GITHUB_` and `INPUT_` to the script | false         |
 | request_pty               | Request a pseudo-terminal from the server                                                | false         |
+| curl_insecure             | Allow curl to connect to SSL sites without certificates                                  | false         |
 
 **Note:** Users can add `set -e` in their shell script to achieve similar functionality to the removed `script_stop` option.
 

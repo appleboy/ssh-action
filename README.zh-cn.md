@@ -49,6 +49,7 @@
 | debug                     | 启用调试模式                                          | false  |
 | allenvs                   | 将带有 `GITHUB_` 和 `INPUT_` 前缀的环境变量传递给脚本 | false  |
 | request_pty               | 请求伪终端                                            | false  |
+| curl_insecure             | 在 curl 中使用不安全的证书验证                        | false  |
 
 **注意：** 用户可以在他们的 shell 脚本中添加 `set -e` 以实现类似于已删除的 `script_stop` 选项的功能。
 

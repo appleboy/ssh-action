@@ -81,6 +81,9 @@ inputs:
   capture_stdout:
     description: "When true, captures and returns standard output from the commands as action output."
     default: "false"
+  version:
+    description: |
+      The version of drone-ssh to use.
 
 outputs:
   stdout:
@@ -135,6 +138,7 @@ runs:
         INPUT_SYNC: ${{ inputs.sync }}
         INPUT_CAPTURE_STDOUT: ${{ inputs.capture_stdout }}
         INPUT_CURL_INSECURE: ${{ inputs.curl_insecure }}
+        DRONE_SSH_VERSION: ${{ inputs.version }}
 
 branding:
   icon: "terminal"

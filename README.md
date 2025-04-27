@@ -2,6 +2,33 @@
 
 English | [繁體中文](./README.zh-tw.md) | [简体中文](./README.zh-cn.md)
 
+## Table of Contents
+
+- [🚀 SSH for GitHub Actions](#-ssh-for-github-actions)
+  - [Table of Contents](#table-of-contents)
+  - [📥 Input Parameters](#-input-parameters)
+  - [🚦 Usage Example](#-usage-example)
+  - [🔑 Setting Up SSH Keys](#-setting-up-ssh-keys)
+    - [Generate RSA key](#generate-rsa-key)
+    - [Generate ED25519 key](#generate-ed25519-key)
+  - [🛡️ OpenSSH Compatibility](#️-openssh-compatibility)
+  - [🧑‍💻 More Usage Examples](#-more-usage-examples)
+    - [Using password authentication](#using-password-authentication)
+    - [Using private key authentication](#using-private-key-authentication)
+    - [Multiple commands](#multiple-commands)
+    - [Run commands from a file](#run-commands-from-a-file)
+    - [Multiple hosts](#multiple-hosts)
+    - [Multiple hosts with different ports](#multiple-hosts-with-different-ports)
+    - [Synchronous execution on multiple hosts](#synchronous-execution-on-multiple-hosts)
+    - [Pass environment variables to shell script](#pass-environment-variables-to-shell-script)
+  - [🌐 Using ProxyCommand (Jump Host)](#-using-proxycommand-jump-host)
+  - [🔒 Protecting Your Private Key](#-protecting-your-private-key)
+  - [🖐️ Host Fingerprint Verification](#️-host-fingerprint-verification)
+  - [❓ Q\&A](#-qa)
+    - [Command not found (npm or other command)](#command-not-found-npm-or-other-command)
+  - [🤝 Contributing](#-contributing)
+  - [📝 License](#-license)
+
 A [GitHub Action](https://github.com/features/actions) for executing remote SSH commands easily and securely.
 
 ![ssh workflow](./images/ssh-workflow.png)

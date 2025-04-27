@@ -8,6 +8,9 @@ English | [繁體中文](./README.zh-tw.md) | [简体中文](./README.zh-cn.md)
   - [Table of Contents](#table-of-contents)
   - [📖 Introduction](#-introduction)
   - [🧩 Core Concepts \& Input Parameters](#-core-concepts--input-parameters)
+    - [🔌 Connection Settings](#-connection-settings)
+    - [🛠️ SSH Command Settings](#️-ssh-command-settings)
+    - [🌐 Proxy Settings](#-proxy-settings)
   - [⚡ Quick Start](#-quick-start)
   - [🔑 SSH Key Setup \& OpenSSH Compatibility](#-ssh-key-setup--openssh-compatibility)
     - [Setting Up SSH Keys](#setting-up-ssh-keys)
@@ -52,43 +55,65 @@ This action provides flexible SSH command execution with a rich set of configura
 
 For full details, see [action.yml](./action.yml).
 
-| Parameter                 | Description                                                                       | Default |
-| ------------------------- | --------------------------------------------------------------------------------- | ------- |
-| host                      | SSH host address                                                                  |         |
-| port                      | SSH port number                                                                   | 22      |
-| passphrase                | Passphrase for the SSH private key                                                |         |
-| username                  | SSH username                                                                      |         |
-| password                  | SSH password                                                                      |         |
-| protocol                  | SSH protocol version (`tcp`, `tcp4`, `tcp6`)                                      | tcp     |
-| sync                      | Run synchronously if multiple hosts are specified                                 | false   |
-| use_insecure_cipher       | Allow additional (less secure) ciphers                                            | false   |
-| cipher                    | Allowed cipher algorithms. Uses sensible defaults if unspecified                  |         |
-| timeout                   | Timeout for SSH connection to host                                                | 30s     |
-| command_timeout           | Timeout for SSH command execution                                                 | 10m     |
-| key                       | Content of SSH private key (e.g., raw content of `~/.ssh/id_rsa`)                 |         |
-| key_path                  | Path to SSH private key                                                           |         |
-| fingerprint               | SHA256 fingerprint of the host public key                                         |         |
-| proxy_host                | SSH proxy host                                                                    |         |
-| proxy_port                | SSH proxy port                                                                    | 22      |
-| proxy_protocol            | SSH proxy protocol version (`tcp`, `tcp4`, `tcp6`)                                | tcp     |
-| proxy_username            | SSH proxy username                                                                |         |
-| proxy_password            | SSH proxy password                                                                |         |
-| proxy_passphrase          | SSH proxy key passphrase                                                          |         |
-| proxy_timeout             | Timeout for SSH connection to proxy host                                          | 30s     |
-| proxy_key                 | Content of SSH proxy private key                                                  |         |
-| proxy_key_path            | Path to SSH proxy private key                                                     |         |
-| proxy_fingerprint         | SHA256 fingerprint of the proxy host public key                                   |         |
-| proxy_cipher              | Allowed cipher algorithms for the proxy                                           |         |
-| proxy_use_insecure_cipher | Allow additional (less secure) ciphers for the proxy                              | false   |
-| script                    | Commands to execute remotely                                                      |         |
-| script_path               | Path to a file containing commands to execute                                     |         |
-| envs                      | Environment variables to pass to the shell script                                 |         |
-| envs_format               | Flexible configuration for environment variable transfer                          |         |
-| debug                     | Enable debug mode                                                                 | false   |
-| allenvs                   | Pass all environment variables with `GITHUB_` and `INPUT_` prefixes to the script | false   |
-| request_pty               | Request a pseudo-terminal from the server                                         | false   |
-| curl_insecure             | Allow curl to connect to SSL sites without certificates                           | false   |
-| version                   | drone-ssh binary version. If not specified, the latest version will be used.      |         |
+### 🔌 Connection Settings
+
+These parameters control how the action connects to your remote host.
+
+| Parameter           | Description                                                       | Default |
+| ------------------- | ----------------------------------------------------------------- | ------- |
+| host                | SSH host address                                                  |         |
+| port                | SSH port number                                                   | 22      |
+| username            | SSH username                                                      |         |
+| password            | SSH password                                                      |         |
+| protocol            | SSH protocol version (`tcp`, `tcp4`, `tcp6`)                      | tcp     |
+| sync                | Run synchronously if multiple hosts are specified                 | false   |
+| timeout             | Timeout for SSH connection to host                                | 30s     |
+| key                 | Content of SSH private key (e.g., raw content of `~/.ssh/id_rsa`) |         |
+| key_path            | Path to SSH private key                                           |         |
+| passphrase          | Passphrase for the SSH private key                                |         |
+| fingerprint         | SHA256 fingerprint of the host public key                         |         |
+| use_insecure_cipher | Allow additional (less secure) ciphers                            | false   |
+| cipher              | Allowed cipher algorithms. Uses sensible defaults if unspecified  |         |
+
+---
+
+### 🛠️ SSH Command Settings
+
+These parameters control the commands executed on the remote host and related behaviors.
+
+| Parameter       | Description                                                                       | Default |
+| --------------- | --------------------------------------------------------------------------------- | ------- |
+| script          | Commands to execute remotely                                                      |         |
+| script_path     | Path to a file containing commands to execute                                     |         |
+| envs            | Environment variables to pass to the shell script                                 |         |
+| envs_format     | Flexible configuration for environment variable transfer                          |         |
+| allenvs         | Pass all environment variables with `GITHUB_` and `INPUT_` prefixes to the script | false   |
+| command_timeout | Timeout for SSH command execution                                                 | 10m     |
+| debug           | Enable debug mode                                                                 | false   |
+| request_pty     | Request a pseudo-terminal from the server                                         | false   |
+| curl_insecure   | Allow curl to connect to SSL sites without certificates                           | false   |
+| version         | drone-ssh binary version. If not specified, the latest version will be used.      |         |
+
+---
+
+### 🌐 Proxy Settings
+
+These parameters control the use of a proxy (jump host) for connecting to your target host.
+
+| Parameter                 | Description                                     | Default |
+| ------------------------- | ----------------------------------------------- | ------- |
+| proxy_host                | SSH proxy host                                  |         |
+| proxy_port                | SSH proxy port                                  | 22      |
+| proxy_username            | SSH proxy username                              |         |
+| proxy_password            | SSH proxy password                              |         |
+| proxy_passphrase          | SSH proxy key passphrase                        |         |
+| proxy_protocol            | SSH proxy protocol version                      | tcp     |
+| proxy_timeout             | Timeout for SSH connection to proxy host        | 30s     |
+| proxy_key                 | Content of SSH proxy private key                |         |
+| proxy_key_path            | Path to SSH proxy private key                   |         |
+| proxy_fingerprint         | SHA256 fingerprint of the proxy host public key |         |
+| proxy_cipher              | Allowed cipher algorithms for the proxy         |         |
+| proxy_use_insecure_cipher | Allow insecure ciphers for the proxy            | false   |
 
 > **Note:** To mimic the removed `script_stop` option, add `set -e` at the top of your shell script.
 

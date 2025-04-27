@@ -8,6 +8,9 @@
   - [目录](#目录)
   - [📖 简介](#-简介)
   - [🧩 核心概念与输入参数](#-核心概念与输入参数)
+    - [🔌 连接设置](#-连接设置)
+    - [🛠️ 指令设置](#️-指令设置)
+    - [🌐 代理设置](#-代理设置)
   - [⚡ 快速开始](#-快速开始)
   - [🔑 SSH 密钥配置与 OpenSSH 兼容性](#-ssh-密钥配置与-openssh-兼容性)
     - [配置 SSH 密钥](#配置-ssh-密钥)
@@ -52,43 +55,65 @@
 
 详细参数请参阅 [action.yml](./action.yml)。
 
-| 参数                      | 描述                                                  | 默认值 |
-| ------------------------- | ----------------------------------------------------- | ------ |
-| host                      | SSH 主机地址                                          |        |
-| port                      | SSH 端口号                                            | 22     |
-| passphrase                | SSH 私钥密码短语                                      |        |
-| username                  | SSH 用户名                                            |        |
-| password                  | SSH 密码                                              |        |
-| protocol                  | SSH 协议版本（`tcp`、`tcp4`、`tcp6`）                 | tcp    |
-| sync                      | 指定多个主机时同步执行                                | false  |
-| use_insecure_cipher       | 允许额外（不安全）的加密算法                          | false  |
-| cipher                    | 允许的加密算法，未指定时使用默认值                    |        |
-| timeout                   | SSH 连接主机的超时时间                                | 30s    |
-| command_timeout           | SSH 命令执行超时时间                                  | 10m    |
-| key                       | SSH 私钥内容（如 `~/.ssh/id_rsa` 的原始内容）         |        |
-| key_path                  | SSH 私钥路径                                          |        |
-| fingerprint               | 主机公钥的 SHA256 指纹                                |        |
-| proxy_host                | SSH 代理主机                                          |        |
-| proxy_port                | SSH 代理端口                                          | 22     |
-| proxy_protocol            | SSH 代理协议版本（`tcp`、`tcp4`、`tcp6`）             | tcp    |
-| proxy_username            | SSH 代理用户名                                        |        |
-| proxy_password            | SSH 代理密码                                          |        |
-| proxy_passphrase          | SSH 代理私钥密码短语                                  |        |
-| proxy_timeout             | SSH 连接代理主机的超时时间                            | 30s    |
-| proxy_key                 | SSH 代理私钥内容                                      |        |
-| proxy_key_path            | SSH 代理私钥路径                                      |        |
-| proxy_fingerprint         | 代理主机公钥的 SHA256 指纹                            |        |
-| proxy_cipher              | 代理允许的加密算法                                    |        |
-| proxy_use_insecure_cipher | 代理允许额外（不安全）的加密算法                      | false  |
-| script                    | 远程执行的命令                                        |        |
-| script_path               | 包含要执行命令的文件路径                              |        |
-| envs                      | 传递给 shell 脚本的环境变量                           |        |
-| envs_format               | 环境变量传递的灵活配置                                |        |
-| debug                     | 启用调试模式                                          | false  |
-| allenvs                   | 传递所有带 `GITHUB_` 和 `INPUT_` 前缀的环境变量到脚本 | false  |
-| request_pty               | 向服务器请求伪终端                                    | false  |
-| curl_insecure             | 允许 curl 连接无证书的 SSL 站点                       | false  |
-| version                   | drone-ssh 二进制版本，未指定时使用最新版本            |        |
+### 🔌 连接设置
+
+这些参数用于控制如何连接到远程主机。
+
+| 参数                | 描述                                          | 默认值 |
+| ------------------- | --------------------------------------------- | ------ |
+| host                | SSH 主机地址                                  |        |
+| port                | SSH 端口号                                    | 22     |
+| username            | SSH 用户名                                    |        |
+| password            | SSH 密码                                      |        |
+| protocol            | SSH 协议版本（`tcp`、`tcp4`、`tcp6`）         | tcp    |
+| sync                | 指定多个主机时同步执行                        | false  |
+| timeout             | SSH 连接主机的超时时间                        | 30s    |
+| key                 | SSH 私钥内容（如 `~/.ssh/id_rsa` 的原始内容） |        |
+| key_path            | SSH 私钥路径                                  |        |
+| passphrase          | SSH 私钥密码短语                              |        |
+| fingerprint         | 主机公钥的 SHA256 指纹                        |        |
+| use_insecure_cipher | 允许额外（不安全）的加密算法                  | false  |
+| cipher              | 允许的加密算法，未指定时使用默认值            |        |
+
+---
+
+### 🛠️ 指令设置
+
+这些参数用于控制在远程主机上执行的命令及相关行为。
+
+| 参数            | 描述                                                  | 默认值 |
+| --------------- | ----------------------------------------------------- | ------ |
+| script          | 远程执行的命令                                        |        |
+| script_path     | 包含要执行命令的文件路径                              |        |
+| envs            | 传递给 shell 脚本的环境变量                           |        |
+| envs_format     | 环境变量传递的灵活配置                                |        |
+| allenvs         | 传递所有带 `GITHUB_` 和 `INPUT_` 前缀的环境变量到脚本 | false  |
+| command_timeout | SSH 命令执行超时时间                                  | 10m    |
+| debug           | 启用调试模式                                          | false  |
+| request_pty     | 向服务器请求伪终端                                    | false  |
+| curl_insecure   | 允许 curl 连接无证书的 SSL 站点                       | false  |
+| version         | drone-ssh 二进制版本，未指定时使用最新版本            |        |
+
+---
+
+### 🌐 代理设置
+
+这些参数用于通过代理（跳板机）连接到目标主机。
+
+| 参数                      | 描述                                      | 默认值 |
+| ------------------------- | ----------------------------------------- | ------ |
+| proxy_host                | SSH 代理主机                              |        |
+| proxy_port                | SSH 代理端口                              | 22     |
+| proxy_username            | SSH 代理用户名                            |        |
+| proxy_password            | SSH 代理密码                              |        |
+| proxy_passphrase          | SSH 代理私钥密码短语                      |        |
+| proxy_protocol            | SSH 代理协议版本（`tcp`、`tcp4`、`tcp6`） | tcp    |
+| proxy_timeout             | SSH 连接代理主机的超时时间                | 30s    |
+| proxy_key                 | SSH 代理私钥内容                          |        |
+| proxy_key_path            | SSH 代理私钥路径                          |        |
+| proxy_fingerprint         | 代理主机公钥的 SHA256 指纹                |        |
+| proxy_cipher              | 代理允许的加密算法                        |        |
+| proxy_use_insecure_cipher | 代理允许额外（不安全）的加密算法          | false  |
 
 > **注意：** 如需实现已移除的 `script_stop` 功能，请在 shell 脚本顶部添加 `set -e`。
 

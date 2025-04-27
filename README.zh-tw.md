@@ -8,6 +8,9 @@
   - [目錄](#目錄)
   - [📖 簡介](#-簡介)
   - [🧩 核心概念與輸入參數](#-核心概念與輸入參數)
+    - [🔌 連線設定](#-連線設定)
+    - [🛠️ 指令設定](#️-指令設定)
+    - [🌐 代理設定](#-代理設定)
   - [⚡ 快速開始](#-快速開始)
   - [🔑 SSH 金鑰設定與 OpenSSH 相容性](#-ssh-金鑰設定與-openssh-相容性)
     - [設定 SSH 金鑰](#設定-ssh-金鑰)
@@ -52,43 +55,65 @@
 
 完整參數請參閱 [action.yml](./action.yml)。
 
-| 參數                      | 說明                                                  | 預設值 |
-| ------------------------- | ----------------------------------------------------- | ------ |
-| host                      | SSH 主機位址                                          |        |
-| port                      | SSH 埠號                                              | 22     |
-| passphrase                | SSH 私鑰密碼                                          |        |
-| username                  | SSH 使用者名稱                                        |        |
-| password                  | SSH 密碼                                              |        |
-| protocol                  | SSH 協議版本（`tcp`、`tcp4`、`tcp6`）                 | tcp    |
-| sync                      | 指定多個主機時同步執行                                | false  |
-| use_insecure_cipher       | 允許額外（不安全）的加密演算法                        | false  |
-| cipher                    | 允許的加密演算法，未指定時使用預設值                  |        |
-| timeout                   | SSH 連線主機的逾時時間                                | 30s    |
-| command_timeout           | SSH 指令執行逾時時間                                  | 10m    |
-| key                       | SSH 私鑰內容（如 `~/.ssh/id_rsa` 的原始內容）         |        |
-| key_path                  | SSH 私鑰路徑                                          |        |
-| fingerprint               | 主機公鑰的 SHA256 指紋                                |        |
-| proxy_host                | SSH 代理主機                                          |        |
-| proxy_port                | SSH 代理埠號                                          | 22     |
-| proxy_protocol            | SSH 代理協議版本（`tcp`、`tcp4`、`tcp6`）             | tcp    |
-| proxy_username            | SSH 代理使用者名稱                                    |        |
-| proxy_password            | SSH 代理密碼                                          |        |
-| proxy_passphrase          | SSH 代理私鑰密碼                                      |        |
-| proxy_timeout             | SSH 連線代理主機的逾時時間                            | 30s    |
-| proxy_key                 | SSH 代理私鑰內容                                      |        |
-| proxy_key_path            | SSH 代理私鑰路徑                                      |        |
-| proxy_fingerprint         | 代理主機公鑰的 SHA256 指紋                            |        |
-| proxy_cipher              | 代理允許的加密演算法                                  |        |
-| proxy_use_insecure_cipher | 代理允許額外（不安全）的加密演算法                    | false  |
-| script                    | 遠端執行的指令                                        |        |
-| script_path               | 包含要執行指令的檔案路徑                              |        |
-| envs                      | 傳遞給 shell 腳本的環境變數                           |        |
-| envs_format               | 環境變數傳遞的彈性設定                                |        |
-| debug                     | 啟用除錯模式                                          | false  |
-| allenvs                   | 傳遞所有帶 `GITHUB_` 和 `INPUT_` 前綴的環境變數到腳本 | false  |
-| request_pty               | 向伺服器請求偽終端                                    | false  |
-| curl_insecure             | 允許 curl 連線無憑證的 SSL 網站                       | false  |
-| version                   | drone-ssh 執行檔版本，未指定時使用最新版本            |        |
+### 🔌 連線設定
+
+這些參數用於控制如何連線到遠端主機。
+
+| 參數                | 說明                                          | 預設值 |
+| ------------------- | --------------------------------------------- | ------ |
+| host                | SSH 主機位址                                  |        |
+| port                | SSH 埠號                                      | 22     |
+| username            | SSH 使用者名稱                                |        |
+| password            | SSH 密碼                                      |        |
+| protocol            | SSH 協議版本（`tcp`、`tcp4`、`tcp6`）         | tcp    |
+| sync                | 指定多個主機時同步執行                        | false  |
+| timeout             | SSH 連線主機的逾時時間                        | 30s    |
+| key                 | SSH 私鑰內容（如 `~/.ssh/id_rsa` 的原始內容） |        |
+| key_path            | SSH 私鑰路徑                                  |        |
+| passphrase          | SSH 私鑰密碼                                  |        |
+| fingerprint         | 主機公鑰的 SHA256 指紋                        |        |
+| use_insecure_cipher | 允許額外（不安全）的加密演算法                | false  |
+| cipher              | 允許的加密演算法，未指定時使用預設值          |        |
+
+---
+
+### 🛠️ 指令設定
+
+這些參數用於控制在遠端主機上執行的指令及相關行為。
+
+| 參數            | 說明                                                  | 預設值 |
+| --------------- | ----------------------------------------------------- | ------ |
+| script          | 遠端執行的指令                                        |        |
+| script_path     | 包含要執行指令的檔案路徑                              |        |
+| envs            | 傳遞給 shell 腳本的環境變數                           |        |
+| envs_format     | 環境變數傳遞的彈性設定                                |        |
+| allenvs         | 傳遞所有帶 `GITHUB_` 和 `INPUT_` 前綴的環境變數到腳本 | false  |
+| command_timeout | SSH 指令執行逾時時間                                  | 10m    |
+| debug           | 啟用除錯模式                                          | false  |
+| request_pty     | 向伺服器請求偽終端                                    | false  |
+| curl_insecure   | 允許 curl 連線無憑證的 SSL 網站                       | false  |
+| version         | drone-ssh 執行檔版本，未指定時使用最新版本            |        |
+
+---
+
+### 🌐 代理設定
+
+這些參數用於透過代理（跳板機）連線到目標主機。
+
+| 參數                      | 說明                                      | 預設值 |
+| ------------------------- | ----------------------------------------- | ------ |
+| proxy_host                | SSH 代理主機                              |        |
+| proxy_port                | SSH 代理埠號                              | 22     |
+| proxy_username            | SSH 代理使用者名稱                        |        |
+| proxy_password            | SSH 代理密碼                              |        |
+| proxy_passphrase          | SSH 代理私鑰密碼                          |        |
+| proxy_protocol            | SSH 代理協議版本（`tcp`、`tcp4`、`tcp6`） | tcp    |
+| proxy_timeout             | SSH 連線代理主機的逾時時間                | 30s    |
+| proxy_key                 | SSH 代理私鑰內容                          |        |
+| proxy_key_path            | SSH 代理私鑰路徑                          |        |
+| proxy_fingerprint         | 代理主機公鑰的 SHA256 指紋                |        |
+| proxy_cipher              | 代理允許的加密演算法                      |        |
+| proxy_use_insecure_cipher | 代理允許額外（不安全）的加密演算法        | false  |
 
 > **注意：** 如需實現已移除的 `script_stop` 功能，請在 shell 腳本最上方加上 `set -e`。
 

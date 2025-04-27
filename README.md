@@ -2,44 +2,22 @@
 
 English | [繁體中文](./README.zh-tw.md) | [简体中文](./README.zh-cn.md)
 
-## Table of Contents
+---
 
-- [🚀 SSH for GitHub Actions](#-ssh-for-github-actions)
-  - [Table of Contents](#table-of-contents)
-  - [📥 Input Parameters](#-input-parameters)
-  - [🚦 Usage Example](#-usage-example)
-  - [🔑 Setting Up SSH Keys](#-setting-up-ssh-keys)
-    - [Generate RSA key](#generate-rsa-key)
-    - [Generate ED25519 key](#generate-ed25519-key)
-  - [🛡️ OpenSSH Compatibility](#️-openssh-compatibility)
-  - [🧑‍💻 More Usage Examples](#-more-usage-examples)
-    - [Using password authentication](#using-password-authentication)
-    - [Using private key authentication](#using-private-key-authentication)
-    - [Multiple commands](#multiple-commands)
-    - [Run commands from a file](#run-commands-from-a-file)
-    - [Multiple hosts](#multiple-hosts)
-    - [Multiple hosts with different ports](#multiple-hosts-with-different-ports)
-    - [Synchronous execution on multiple hosts](#synchronous-execution-on-multiple-hosts)
-    - [Pass environment variables to shell script](#pass-environment-variables-to-shell-script)
-  - [🌐 Using ProxyCommand (Jump Host)](#-using-proxycommand-jump-host)
-  - [🔒 Protecting Your Private Key](#-protecting-your-private-key)
-  - [🖐️ Host Fingerprint Verification](#️-host-fingerprint-verification)
-  - [❓ Q\&A](#-qa)
-    - [Command not found (npm or other command)](#command-not-found-npm-or-other-command)
-  - [🤝 Contributing](#-contributing)
-  - [📝 License](#-license)
+## 📖 Introduction
 
-A [GitHub Action](https://github.com/features/actions) for executing remote SSH commands easily and securely.
+**SSH for GitHub Actions** is a powerful [GitHub Action](https://github.com/features/actions) for executing remote SSH commands easily and securely in your CI/CD workflows.  
+Built with [Golang](https://go.dev) and [drone-ssh](https://github.com/appleboy/drone-ssh), it supports a wide range of SSH scenarios, including multi-host, proxy, and advanced authentication.
 
 ![ssh workflow](./images/ssh-workflow.png)
 
 [![testing main branch](https://github.com/appleboy/ssh-action/actions/workflows/main.yml/badge.svg)](https://github.com/appleboy/ssh-action/actions/workflows/main.yml)
 
-This project is built with [Golang](https://go.dev) and [drone-ssh](https://github.com/appleboy/drone-ssh).
-
 ---
 
-## 📥 Input Parameters
+## 🧩 Core Concepts & Input Parameters
+
+This action provides flexible SSH command execution with a rich set of configuration options.
 
 For full details, see [action.yml](./action.yml).
 
@@ -85,9 +63,9 @@ For full details, see [action.yml](./action.yml).
 
 ---
 
-## 🚦 Usage Example
+## ⚡ Quick Start
 
-Run remote SSH commands in your workflow:
+Run remote SSH commands in your workflow with minimal configuration:
 
 ```yaml
 name: Remote SSH Command
@@ -121,17 +99,19 @@ linuxserver.io
 
 ---
 
-## 🔑 Setting Up SSH Keys
+## 🔑 SSH Key Setup & OpenSSH Compatibility
+
+### Setting Up SSH Keys
 
 It is best practice to create SSH keys on your local machine (not on a remote server). Log in with the username specified in GitHub Secrets and generate a key pair:
 
-### Generate RSA key
+#### Generate RSA key
 
 ```bash
 ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
 ```
 
-### Generate ED25519 key
+#### Generate ED25519 key
 
 ```bash
 ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
@@ -175,9 +155,7 @@ See more: [SSH login without a password](http://www.linuxproblem.org/art_9.html)
 > - Set `.ssh` permissions to 700
 > - Set `.ssh/authorized_keys2` permissions to 640
 
----
-
-## 🛡️ OpenSSH Compatibility
+### OpenSSH Compatibility
 
 If you see this error:
 
@@ -199,7 +177,9 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 ---
 
-## 🧑‍💻 More Usage Examples
+## 🛠️ Usage Scenarios & Advanced Examples
+
+This section covers common and advanced usage patterns, including multi-host, proxy, and environment variable passing.
 
 ### Using password authentication
 
@@ -331,7 +311,9 @@ Default `port` is `22`.
 
 ---
 
-## 🌐 Using ProxyCommand (Jump Host)
+## 🌐 Proxy & Jump Host Usage
+
+You can connect to remote hosts via a proxy (jump host) for advanced network topologies.
 
 ```bash
 +--------+       +----------+      +-----------+
@@ -376,7 +358,9 @@ Host FooServer
 
 ---
 
-## 🔒 Protecting Your Private Key
+## 🛡️ Security Best Practices
+
+### Protecting Your Private Key
 
 A passphrase encrypts your private key, making it useless to attackers if leaked. Always store your private key securely.
 
@@ -394,9 +378,7 @@ A passphrase encrypts your private key, making it useless to attackers if leaked
         ls -al
 ```
 
----
-
-## 🖐️ Host Fingerprint Verification
+### Host Fingerprint Verification
 
 Verifying the SSH host fingerprint helps prevent man-in-the-middle attacks. To get your host's fingerprint (replace `ed25519` with your key type and `example.com` with your host):
 
@@ -422,9 +404,11 @@ Update your config:
 
 ---
 
-## ❓ Q&A
+## 🚨 Error Handling & Troubleshooting
 
-### Command not found (npm or other command)
+### Q&A
+
+#### Command not found (npm or other command)
 
 If you encounter "command not found" errors, see [this issue comment](https://github.com/appleboy/ssh-action/issues/31#issuecomment-1006565847) about interactive vs non-interactive shells.
 

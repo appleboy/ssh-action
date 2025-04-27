@@ -2,44 +2,22 @@
 
 [English](./README.md) | [繁體中文](./README.zh-tw.md) | 简体中文
 
-## 目录
+---
 
-- [🚀 用于 GitHub Actions 的 SSH](#-用于-github-actions-的-ssh)
-  - [目录](#目录)
-  - [📥 输入参数](#-输入参数)
-  - [🚦 使用示例](#-使用示例)
-  - [🔑 配置 SSH 密钥](#-配置-ssh-密钥)
-    - [生成 RSA 密钥](#生成-rsa-密钥)
-    - [生成 ED25519 密钥](#生成-ed25519-密钥)
-  - [🛡️ OpenSSH 兼容性](#️-openssh-兼容性)
-  - [🧑‍💻 更多用法示例](#-更多用法示例)
-    - [使用密码认证](#使用密码认证)
-    - [使用私钥认证](#使用私钥认证)
-    - [多条命令](#多条命令)
-    - [从文件执行命令](#从文件执行命令)
-    - [多主机](#多主机)
-    - [多主机不同端口](#多主机不同端口)
-    - [多主机同步执行](#多主机同步执行)
-    - [传递环境变量到 shell 脚本](#传递环境变量到-shell-脚本)
-  - [🌐 使用 ProxyCommand（跳板机）](#-使用-proxycommand跳板机)
-  - [🔒 保护你的私钥](#-保护你的私钥)
-  - [🖐️ 主机指纹验证](#️-主机指纹验证)
-  - [❓ 常见问题](#-常见问题)
-    - [命令未找到（npm 或其他命令）](#命令未找到npm-或其他命令)
-  - [🤝 贡献](#-贡献)
-  - [📝 许可证](#-许可证)
+## 📖 简介
 
-一个让你轻松安全地执行远程 SSH 命令的 [GitHub Action](https://github.com/features/actions)。
+**SSH for GitHub Actions** 是一个强大的 [GitHub Action](https://github.com/features/actions)，可让你在 CI/CD 工作流中轻松且安全地执行远程 SSH 命令。  
+本项目基于 [Golang](https://go.dev) 和 [drone-ssh](https://github.com/appleboy/drone-ssh) 构建，支持多主机、代理、高级认证等多种 SSH 场景。
 
 ![ssh workflow](./images/ssh-workflow.png)
 
 [![testing main branch](https://github.com/appleboy/ssh-action/actions/workflows/main.yml/badge.svg)](https://github.com/appleboy/ssh-action/actions/workflows/main.yml)
 
-本项目基于 [Golang](https://go.dev) 和 [drone-ssh](https://github.com/appleboy/drone-ssh) 构建。
-
 ---
 
-## 📥 输入参数
+## 🧩 核心概念与输入参数
+
+本 Action 提供灵活的 SSH 命令执行能力，并具备丰富的配置选项。
 
 详细参数请参阅 [action.yml](./action.yml)。
 
@@ -85,9 +63,9 @@
 
 ---
 
-## 🚦 使用示例
+## ⚡ 快速开始
 
-在工作流中执行远程 SSH 命令：
+只需简单配置，即可在工作流中执行远程 SSH 命令：
 
 ```yaml
 name: Remote SSH Command
@@ -121,17 +99,19 @@ linuxserver.io
 
 ---
 
-## 🔑 配置 SSH 密钥
+## 🔑 SSH 密钥配置与 OpenSSH 兼容性
+
+### 配置 SSH 密钥
 
 建议在本地机器（而非远程服务器）上创建 SSH 密钥。请使用 GitHub Secrets 中指定的用户名登录并生成密钥对：
 
-### 生成 RSA 密钥
+#### 生成 RSA 密钥
 
 ```bash
 ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
 ```
 
-### 生成 ED25519 密钥
+#### 生成 ED25519 密钥
 
 ```bash
 ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
@@ -175,9 +155,7 @@ xclip < ~/.ssh/id_ed25519
 > - 设置 `.ssh` 权限为 700
 > - 设置 `.ssh/authorized_keys2` 权限为 640
 
----
-
-## 🛡️ OpenSSH 兼容性
+### OpenSSH 兼容性
 
 如果出现如下错误：
 
@@ -199,7 +177,9 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 ---
 
-## 🧑‍💻 更多用法示例
+## 🛠️ 用法场景与进阶示例
+
+本节涵盖常见与进阶用法，包括多主机、代理、环境变量传递等。
 
 ### 使用密码认证
 
@@ -331,7 +311,9 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 ---
 
-## 🌐 使用 ProxyCommand（跳板机）
+## 🌐 代理与跳板机用法
+
+你可以通过代理（跳板机）连接到远程主机，适用于进阶网络拓扑。
 
 ```bash
 +--------+       +----------+      +-----------+
@@ -376,7 +358,9 @@ Host FooServer
 
 ---
 
-## 🔒 保护你的私钥
+## 🛡️ 安全最佳实践
+
+### 保护你的私钥
 
 密码短语会加密你的私钥，即使泄露也无法被攻击者直接利用。请务必妥善保管私钥。
 
@@ -394,9 +378,7 @@ Host FooServer
         ls -al
 ```
 
----
-
-## 🖐️ 主机指纹验证
+### 主机指纹验证
 
 验证 SSH 主机指纹有助于防止中间人攻击。获取主机指纹（将 `ed25519` 替换为你的密钥类型，`example.com` 替换为你的主机）：
 
@@ -422,9 +404,11 @@ ssh example.com ssh-keygen -l -f /etc/ssh/ssh_host_ed25519_key.pub | cut -d ' ' 
 
 ---
 
-## ❓ 常见问题
+## 🚨 错误处理与疑难解答
 
-### 命令未找到（npm 或其他命令）
+### 常见问题
+
+#### 命令未找到（npm 或其他命令）
 
 如果遇到 "command not found" 错误，请参考 [此评论](https://github.com/appleboy/ssh-action/issues/31#issuecomment-1006565847) 了解交互式与非交互式 shell 的区别。
 

@@ -1,50 +1,59 @@
-# 🚀 用於 GitHub Actions 的 SSH
+# 🚀 GitHub Actions 的 SSH
 
-[GitHub Action](https://github.com/features/actions) for executing remote ssh commands.
+[English](./README.md) | 繁體中文 | [简体中文](./README.zh-cn.md)
+
+[GitHub Action](https://github.com/features/actions) 用於執行遠端 SSH 命令。
 
 ![ssh workflow](./images/ssh-workflow.png)
 
-[![Actions Status](https://github.com/appleboy/ssh-action/workflows/remote%20ssh%20command/badge.svg)](https://github.com/appleboy/ssh-action/actions)
+[![testing main branch](https://github.com/appleboy/ssh-action/actions/workflows/main.yml/badge.svg)](https://github.com/appleboy/ssh-action/actions/workflows/main.yml)
 
-**注意**： 只支援在 **Linux** [docker](https://www.docker.com/) 容器上執行。
+此專案使用 [Golang](https://go.dev) 和 [drone-ssh](https://github.com/appleboy/drone-ssh) 建立。🚀
 
 ## 輸入變數
 
-更詳細的資訊，請參閱 [action.yml](./action.yml)。
+請參閱 [action.yml](./action.yml) 以獲取更詳細的信息。
 
-* `host` - SSH 主機
-* `port` - SSH 連接埠，預設為 `22`
-* `username` - SSH 使用者名稱
-* `password` - SSH 密碼
-* `passphrase` - 通常用於加密私鑰的 passphrase
-* `sync` - 同步執行多個主機上的命令，預設為 false
-* `timeout` - SSH 連接到遠端主機的超時時間，預設為 `30s`
-* `command_timeout` - SSH 命令超時時間，預設為 10m
-* `key` - SSH 私鑰的內容，例如 ~/.ssh/id_rsa 的原始內容，請記得包含 BEGIN 和 END 行
-* `key_path` - SSH 私鑰的路徑
-* `fingerprint` - 主機公鑰的 SHA256 指紋，預設為略過驗證
-* `script` - 執行命令
-* `script_stop` - 當出現第一個錯誤時停止執行命令
-* `envs` - 傳遞環境變數到 shell script
-* `debug` - 啟用偵錯模式
-* `use_insecure_cipher` - 使用不安全的密碼（ciphers）進行加密，參見 [#56](https://github.com/appleboy/ssh-action/issues/56)
-* `cipher` - 允許使用的密碼（ciphers）演算法。如果未指定，則使用適當的演算法
+| 輸入參數                  | 描述                                                  | 預設值 |
+| ------------------------- | ----------------------------------------------------- | ------ |
+| host                      | SSH 主機地址                                          |        |
+| port                      | SSH 埠號                                              | 22     |
+| passphrase                | SSH 金鑰密碼                                          |        |
+| username                  | SSH 使用者名稱                                        |        |
+| password                  | SSH 密碼                                              |        |
+| protocol                  | SSH 協議版本 (tcp, tcp4, tcp6)                        | tcp    |
+| sync                      | 如果有多個主機，啟用同步執行                          | false  |
+| use_insecure_cipher       | 包含更多不安全的加密算法                              | false  |
+| cipher                    | 允許的加密算法。如果未指定，則使用合理的預設值        |        |
+| timeout                   | SSH 連接主機的超時時間                                | 30s    |
+| command_timeout           | SSH 命令的超時時間                                    | 10m    |
+| key                       | SSH 私鑰的內容。例如，~/.ssh/id_rsa 的原始內容        |        |
+| key_path                  | SSH 私鑰的路徑                                        |        |
+| fingerprint               | 主機公鑰的 SHA256 指紋                                |        |
+| proxy_host                | SSH 代理主機                                          |        |
+| proxy_port                | SSH 代理埠號                                          | 22     |
+| proxy_protocol            | SSH 代理協議版本 (tcp, tcp4, tcp6)                    | tcp    |
+| proxy_username            | SSH 代理使用者名稱                                    |        |
+| proxy_password            | SSH 代理密碼                                          |        |
+| proxy_passphrase          | SSH 代理金鑰密碼                                      |        |
+| proxy_timeout             | SSH 連接代理主機的超時時間                            | 30s    |
+| proxy_key                 | SSH 代理私鑰的內容                                    |        |
+| proxy_key_path            | SSH 代理私鑰的路徑                                    |        |
+| proxy_fingerprint         | 代理主機公鑰的 SHA256 指紋                            |        |
+| proxy_cipher              | 代理允許的加密算法                                    |        |
+| proxy_use_insecure_cipher | 包含更多不安全的加密算法                              | false  |
+| script                    | 執行命令                                              |        |
+| script_path               | 從文件中執行命令                                      |        |
+| envs                      | 將環境變數傳遞給 shell 腳本                           |        |
+| envs_format               | 環境值傳遞的靈活配置                                  |        |
+| debug                     | 啟用調試模式                                          | false  |
+| allenvs                   | 將帶有 `GITHUB_` 和 `INPUT_` 前綴的環境變數傳遞給腳本 | false  |
+| request_pty               | 從伺服器請求偽終端                                    | false  |
+| curl_insecure             | 在 curl 命令中使用不安全的 SSL 證書驗證               | false  |
 
-SSH 代理設置:
+**注意：** 用戶可以在他們的 shell 腳本中添加 `set -e` 以實現類似於已刪除的 `script_stop` 選項的功能。
 
-* `proxy_host` - 代理主機
-* `proxy_port` - 代理端口，預設為 `22`
-* `proxy_username` - 代理使用者名稱
-* `proxy_password` - 代理密碼
-* `proxy_passphrase` - 密碼通常用於加密私有金鑰
-* `proxy_timeout` - SSH 連線至代理主機的逾時時間，預設為 `30s`
-* `proxy_key` - SSH 代理私有金鑰內容
-* `proxy_key_path` - SSH 代理私有金鑰路徑
-* `proxy_fingerprint` - 代理主機公鑰的 SHA256 指紋，預設為跳過驗證
-* `proxy_use_insecure_cipher` - 使用不安全的加密方式，請參閱 [#56](https://github.com/appleboy/ssh-action/issues/56)
-* `proxy_cipher` - 允許的加密算法。如果未指定，則使用合理的算法
-
-## 使用方式
+## 用法
 
 執行遠端 SSH 命令
 
@@ -52,19 +61,18 @@ SSH 代理設置:
 name: remote ssh command
 on: [push]
 jobs:
-
   build:
     name: Build
     runs-on: ubuntu-latest
     steps:
-    - name: executing remote ssh commands using password
-      uses: appleboy/ssh-action@v1.0.3
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
-        port: ${{ secrets.PORT }}
-        script: whoami
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.HOST }}
+          username: linuxserver.io
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: whoami
 ```
 
 畫面輸出
@@ -73,10 +81,10 @@ jobs:
 ======CMD======
 whoami
 ======END======
-out: ***
-==============================================
-✅ Successfully executed commands to all host.
-==============================================
+linuxserver.io
+===============================================
+✅ Successfully executed commands to all hosts.
+===============================================
 ```
 
 ### 設置 SSH 金鑰
@@ -113,23 +121,40 @@ cat .ssh/id_ed25519.pub | ssh b@B 'cat >> .ssh/authorized_keys'
 
 ### 複製 rsa 私鑰內容
 
+在複製私鑰之前，請按照以下說明安裝 `clip` 命令：
+
 ```bash
-clip < ~/.ssh/id_rsa
+# Ubuntu
+sudo apt-get install xclip
 ```
+
+複製私鑰：
+
+```bash
+# macOS
+pbcopy < ~/.ssh/id_rsa
+# Ubuntu
+xclip < ~/.ssh/id_rsa
+```
+
+從包含註釋部分 `-----BEGIN OPENSSH PRIVATE KEY-----` 開始，到包含註釋部分 `-----END OPENSSH PRIVATE KEY-----` 結束，複製私鑰並將其粘貼到 GitHub Secrets 中。
 
 ### 複製 ed25519 私鑰內容
 
 ```bash
-clip < ~/.ssh/id_ed25519
+# macOS
+pbcopy < ~/.ssh/id_ed25519
+# Ubuntu
+xclip < ~/.ssh/id_ed25519
 ```
 
 有關無需密碼登錄 SSH 的詳細信息，請[參見該網站](http://www.linuxproblem.org/art_9.html)。
 
-**來自讀者的注意事項**： 根據您的 SSH 版本，您可能還需要進行以下更改：
+**注意**：根據您的 SSH 版本，您可能還需要進行以下更改：
 
-* 將公鑰放在 `.ssh/authorized_keys2` 中
-* 將 `.ssh` 的權限更改為700
-* 將 `.ssh/authorized_keys2` 的權限更改為640
+- 將公鑰放在 `.ssh/authorized_keys2` 中
+- 將 `.ssh` 的權限更改為 700
+- 將 `.ssh/authorized_keys2` 的權限更改為 640
 
 ### 如果你使用的是 OpenSSH
 
@@ -157,7 +182,7 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 ```yaml
 - name: executing remote ssh commands using password
-  uses: appleboy/ssh-action@v1.0.3
+  uses: appleboy/ssh-action@v1
   with:
     host: ${{ secrets.HOST }}
     username: ${{ secrets.USERNAME }}
@@ -170,7 +195,7 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 ```yaml
 - name: executing remote ssh commands using ssh key
-  uses: appleboy/ssh-action@v1.0.3
+  uses: appleboy/ssh-action@v1
   with:
     host: ${{ secrets.HOST }}
     username: ${{ secrets.USERNAME }}
@@ -183,7 +208,7 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 ```yaml
 - name: multiple command
-  uses: appleboy/ssh-action@v1.0.3
+  uses: appleboy/ssh-action@v1
   with:
     host: ${{ secrets.HOST }}
     username: ${{ secrets.USERNAME }}
@@ -196,11 +221,24 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 ![result](./images/output-result.png)
 
+#### 從文件中執行命令
+
+```yaml
+- name: file commands
+  uses: appleboy/ssh-action@v1
+  with:
+    host: ${{ secrets.HOST }}
+    username: ${{ secrets.USERNAME }}
+    key: ${{ secrets.KEY }}
+    port: ${{ secrets.PORT }}
+    script_path: scripts/script.sh
+```
+
 #### 多台主機
 
 ```diff
   - name: multiple host
-    uses: appleboy/ssh-action@v1.0.3
+    uses: appleboy/ssh-action@v1
     with:
 -     host: "foo.com"
 +     host: "foo.com,bar.com"
@@ -216,7 +254,7 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 ```diff
   - name: multiple host
-    uses: appleboy/ssh-action@v1.0.3
+    uses: appleboy/ssh-action@v1
     with:
 -     host: "foo.com"
 +     host: "foo.com:1234,bar.com:5678"
@@ -231,7 +269,7 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 ```diff
   - name: multiple host
-    uses: appleboy/ssh-action@v1.0.3
+    uses: appleboy/ssh-action@v1
     with:
       host: "foo.com,bar.com"
 +     sync: true
@@ -247,7 +285,7 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 ```diff
   - name: pass environment
-    uses: appleboy/ssh-action@v1.0.3
+    uses: appleboy/ssh-action@v1
 +   env:
 +     FOO: "BAR"
 +     BAR: "FOO"
@@ -265,37 +303,6 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 ```
 
 _在 `env` 對象中，您需要將每個環境變量作為字符串傳遞，傳遞 `Integer` 數據類型或任何其他類型可能會產生意外結果。_
-
-#### 在第一次失敗後停止腳本
-
-> ex: missing `abc` folder
-
-```diff
-  - name: stop script if command error
-    uses: appleboy/ssh-action@v1.0.3
-    with:
-      host: ${{ secrets.HOST }}
-      username: ${{ secrets.USERNAME }}
-      key: ${{ secrets.KEY }}
-      port: ${{ secrets.PORT }}
-+     script_stop: true
-      script: |
-        mkdir abc/def
-        ls -al
-```
-
-畫面輸出:
-
-```sh
-======CMD======
-mkdir abc/def
-ls -al
-
-======END======
-2019/11/21 01:16:21 Process exited with status 1
-err: mkdir: cannot create directory ‘abc/def’: No such file or directory
-##[error]Docker run failed with exit code 1
-```
 
 #### 如何使用 `ProxyCommand` 連接遠程服務器？
 
@@ -325,7 +332,7 @@ Host FooServer
 
 ```diff
   - name: ssh proxy command
-    uses: appleboy/ssh-action@v1.0.3
+    uses: appleboy/ssh-action@v1
     with:
       host: ${{ secrets.HOST }}
       username: ${{ secrets.USERNAME }}
@@ -346,7 +353,7 @@ Host FooServer
 
 ```diff
   - name: ssh key passphrase
-    uses: appleboy/ssh-action@v1.0.3
+    uses: appleboy/ssh-action@v1
     with:
       host: ${{ secrets.HOST }}
       username: ${{ secrets.USERNAME }}
@@ -362,7 +369,7 @@ Host FooServer
 
 設置 SSH 主機指紋驗證可以幫助防止中間人攻擊。在設置之前，運行以下命令以獲取 SSH 主機指紋。請記得將 `ed25519` 替換為您的適當金鑰類型（`rsa`、 `dsa`等），而 `example.com` 則替換為您的主機。
 
-現代 OpenSSH 版本中，需要提取的_默認金鑰_類型是 `rsa`（從版本 5.1 開始）、`ecdsa`（從版本 6.0 開始）和 `ed25519`（從版本 6.7 開始）。
+現代 OpenSSH 版本中，需要提取的**默認金鑰**類型是 `rsa`（從版本 5.1 開始）、`ecdsa`（從版本 6.0 開始）和 `ed25519`（從版本 6.7 開始）。
 
 ```sh
 ssh example.com ssh-keygen -l -f /etc/ssh/ssh_host_ed25519_key.pub | cut -d ' ' -f2
@@ -372,7 +379,7 @@ ssh example.com ssh-keygen -l -f /etc/ssh/ssh_host_ed25519_key.pub | cut -d ' ' 
 
 ```diff
   - name: ssh key passphrase
-    uses: appleboy/ssh-action@v1.0.3
+    uses: appleboy/ssh-action@v1
     with:
       host: ${{ secrets.HOST }}
       username: ${{ secrets.USERNAME }}

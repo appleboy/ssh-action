@@ -1,0 +1,467 @@
+name: testing stable version
+
+on: [push]
+
+jobs:
+  default-user-name-password:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: create new ssh server
+        run: |
+          docker run -d \
+          --name=openssh-server \
+          --hostname=openssh-server \
+          -p 2222:2222 \
+          -e SUDO_ACCESS=false \
+          -e PASSWORD_ACCESS=true  \
+          -e USER_PASSWORD=password  \
+          -e USER_NAME=linuxserver.io \
+          --restart unless-stopped \
+          lscr.io/linuxserver/openssh-server:latest
+          docker exec openssh-server sh -c "hostname -i" > ip.txt
+          echo "REMOTE_HOST<<EOF" >> $GITHUB_ENV
+          cat ip.txt >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "======= container ip address ========="
+          cat ip.txt
+          echo "======================================"
+          sleep 2
+
+      - name: ssh by username and password
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ env.REMOTE_HOST }}
+          username: linuxserver.io
+          password: password
+          port: 2222
+          script: |
+            #!/usr/bin/env bash
+            set -e
+            whoami
+
+      - name: ssh commands from a file
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ env.REMOTE_HOST }}
+          username: linuxserver.io
+          password: password
+          port: 2222
+          script_path: testdata/test.sh
+
+  check-ssh-key:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: add public key to env
+        run: |
+          echo "PUBLIC_KEY<<EOF" >> $GITHUB_ENV
+          cat testdata/.ssh/id_rsa.pub >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "======= public key ========="
+          cat testdata/.ssh/id_rsa.pub
+          echo "============================"
+          echo "PRIVATE_KEY<<EOF" >> $GITHUB_ENV
+          cat testdata/.ssh/id_rsa >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "======= private key ========="
+          cat testdata/.ssh/id_rsa
+          echo "============================"
+
+      - name: create new ssh server
+        run: |
+          docker run -d \
+          --name=openssh-server \
+          --hostname=openssh-server \
+          -p 2222:2222 \
+          -e PUBLIC_KEY="${{ env.PUBLIC_KEY }}" \
+          -e SUDO_ACCESS=false \
+          -e PASSWORD_ACCESS=true  \
+          -e USER_PASSWORD=password  \
+          -e USER_NAME=linuxserver.io \
+          --restart unless-stopped \
+          lscr.io/linuxserver/openssh-server:latest
+          docker exec openssh-server sh -c "hostname -i" > ip.txt
+          echo "REMOTE_HOST<<EOF" >> $GITHUB_ENV
+          cat ip.txt >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "======= container ip address ========="
+          cat ip.txt
+          echo "======================================"
+          sleep 2
+
+      - name: ssh by private key
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ env.REMOTE_HOST }}
+          username: linuxserver.io
+          key: ${{ env.PRIVATE_KEY }}
+          port: 2222
+          script: whoami
+
+      - name: wrong password but correct key
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ env.REMOTE_HOST }}
+          username: linuxserver.io
+          password: "abcdef"
+          key: ${{ env.PRIVATE_KEY }}
+          port: 2222
+          script: whoami
+
+      - name: correct password but wrong key
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ env.REMOTE_HOST }}
+          username: linuxserver.io
+          password: password
+          key: password
+          port: 2222
+          script: whoami
+
+  support-key-passphrase:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: add public key to env
+        run: |
+          echo "PUBLIC_KEY<<EOF" >> $GITHUB_ENV
+          cat testdata/.ssh/id_passphrase.pub >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "======= public key ========="
+          cat testdata/.ssh/id_passphrase.pub
+          echo "============================"
+          echo "PRIVATE_KEY<<EOF" >> $GITHUB_ENV
+          cat testdata/.ssh/id_passphrase >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "======= private key ========="
+          cat testdata/.ssh/id_passphrase
+          echo "============================"
+
+      - name: create new ssh server
+        run: |
+          docker run -d \
+          --name=openssh-server \
+          --hostname=openssh-server \
+          -p 2222:2222 \
+          -e PUBLIC_KEY="${{ env.PUBLIC_KEY }}" \
+          -e SUDO_ACCESS=false \
+          -e PASSWORD_ACCESS=true  \
+          -e USER_PASSWORD=password  \
+          -e USER_NAME=linuxserver.io \
+          --restart unless-stopped \
+          lscr.io/linuxserver/openssh-server:latest
+          docker exec openssh-server sh -c "hostname -i" > ip.txt
+          echo "REMOTE_HOST<<EOF" >> $GITHUB_ENV
+          cat ip.txt >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "======= container ip address ========="
+          cat ip.txt
+          echo "======================================"
+          sleep 2
+
+      - name: ssh key passphrase
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ env.REMOTE_HOST }}
+          username: linuxserver.io
+          key: ${{ env.PRIVATE_KEY }}
+          port: 2222
+          passphrase: 1234
+          script: |
+            whoami
+            ls -al
+
+      - name: missing ssh key passphrase
+        uses: appleboy/ssh-action@v1
+        continue-on-error: true
+        with:
+          host: ${{ env.REMOTE_HOST }}
+          username: linuxserver.io
+          key: ${{ env.PRIVATE_KEY }}
+          port: 2222
+          script: |
+            whoami
+            ls -al
+
+      # https://github.com/appleboy/ssh-action/issues/75#issuecomment-668314271
+      - name: Multiline SSH commands interpreted as single lines
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ env.REMOTE_HOST }}
+          username: linuxserver.io
+          key: ${{ env.PRIVATE_KEY }}
+          port: 2222
+          passphrase: 1234
+          script: |
+            ls \
+              -lah
+          use_insecure_cipher: true
+
+  multiple-server:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: add public key to env
+        run: |
+          echo "PUBLIC_KEY<<EOF" >> $GITHUB_ENV
+          cat testdata/.ssh/id_passphrase.pub >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "======= public key ========="
+          cat testdata/.ssh/id_passphrase.pub
+          echo "============================"
+          echo "PRIVATE_KEY<<EOF" >> $GITHUB_ENV
+          cat testdata/.ssh/id_passphrase >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "======= private key ========="
+          cat testdata/.ssh/id_passphrase
+          echo "============================"
+
+      - name: create new ssh server
+        run: |
+          docker run -d \
+          --name=openssh-server-01 \
+          --hostname=openssh-server-01 \
+          -p 2222:2222 \
+          -e PUBLIC_KEY="${{ env.PUBLIC_KEY }}" \
+          -e SUDO_ACCESS=false \
+          -e PASSWORD_ACCESS=true  \
+          -e USER_PASSWORD=password  \
+          -e USER_NAME=linuxserver.io \
+          --restart unless-stopped \
+          lscr.io/linuxserver/openssh-server:latest
+          docker exec openssh-server-01 sh -c "hostname -i" > ip01.txt
+          echo "REMOTE_HOST_01<<EOF" >> $GITHUB_ENV
+          cat ip01.txt >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "======= container ip address ========="
+          cat ip01.txt
+          echo "======================================"
+
+          docker run -d \
+          --name=openssh-server-02 \
+          --hostname=openssh-server-02 \
+          -p 2223:2222 \
+          -e PUBLIC_KEY="${{ env.PUBLIC_KEY }}" \
+          -e SUDO_ACCESS=false \
+          -e PASSWORD_ACCESS=true  \
+          -e USER_PASSWORD=password  \
+          -e USER_NAME=linuxserver.io \
+          --restart unless-stopped \
+          lscr.io/linuxserver/openssh-server:latest
+          docker exec openssh-server-02 sh -c "hostname -i" > ip02.txt
+          echo "REMOTE_HOST_02<<EOF" >> $GITHUB_ENV
+          cat ip02.txt >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "======= container ip address ========="
+          cat ip02.txt
+          echo "======================================"
+
+          sleep 2
+
+      # https://github.com/appleboy/ssh-action/issues/85
+      - name: Deployment to multiple hosts with different ports
+        uses: appleboy/ssh-action@v1
+        with:
+          host: "${{ env.REMOTE_HOST_01 }}:2222,${{ env.REMOTE_HOST_02 }}:2222"
+          username: linuxserver.io
+          key: ${{ env.PRIVATE_KEY }}
+          passphrase: 1234
+          script: |
+            whoami
+
+  support-ed25519-key:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: add public key to env
+        run: |
+          echo "PUBLIC_KEY<<EOF" >> $GITHUB_ENV
+          cat testdata/.ssh/id_ed25519.pub >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "======= public key ========="
+          cat testdata/.ssh/id_ed25519.pub
+          echo "============================"
+          echo "PRIVATE_KEY<<EOF" >> $GITHUB_ENV
+          cat testdata/.ssh/id_ed25519 >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "======= private key ========="
+          cat testdata/.ssh/id_ed25519
+          echo "============================"
+
+      - name: create new ssh server
+        run: |
+          docker run -d \
+          --name=openssh-server \
+          --hostname=openssh-server \
+          -p 2222:2222 \
+          -e PUBLIC_KEY="${{ env.PUBLIC_KEY }}" \
+          -e SUDO_ACCESS=false \
+          -e PASSWORD_ACCESS=true  \
+          -e USER_PASSWORD=password  \
+          -e USER_NAME=linuxserver.io \
+          --restart unless-stopped \
+          lscr.io/linuxserver/openssh-server:latest
+          docker exec openssh-server sh -c "hostname -i" > ip.txt
+          echo "REMOTE_HOST<<EOF" >> $GITHUB_ENV
+          cat ip.txt >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "======= container ip address ========="
+          cat ip.txt
+          echo "======================================"
+          sleep 2
+
+      - name: testing id_ed25519 key
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ env.REMOTE_HOST }}
+          username: linuxserver.io
+          key: ${{ env.PRIVATE_KEY }}
+          port: 2222
+          script: |
+            whoami
+            ls -al
+
+  testing-with-env:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: add public key to env
+        run: |
+          echo "PUBLIC_KEY<<EOF" >> $GITHUB_ENV
+          cat testdata/.ssh/id_ed25519.pub >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "======= public key ========="
+          cat testdata/.ssh/id_ed25519.pub
+          echo "============================"
+          echo "PRIVATE_KEY<<EOF" >> $GITHUB_ENV
+          cat testdata/.ssh/id_ed25519 >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "======= private key ========="
+          cat testdata/.ssh/id_ed25519
+          echo "============================"
+
+      - name: create new ssh server
+        run: |
+          docker run -d \
+          --name=openssh-server \
+          --hostname=openssh-server \
+          -p 2222:2222 \
+          -e PUBLIC_KEY="${{ env.PUBLIC_KEY }}" \
+          -e SUDO_ACCESS=true \
+          -e PASSWORD_ACCESS=true  \
+          -e USER_NAME=linuxserver.io \
+          --restart unless-stopped \
+          lscr.io/linuxserver/openssh-server:latest
+          docker exec openssh-server sh -c "hostname -i" > ip.txt
+          echo "REMOTE_HOST<<EOF" >> $GITHUB_ENV
+          cat ip.txt >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "======= container ip address ========="
+          cat ip.txt
+          echo "======================================"
+          sleep 2
+
+      - name: testing id_ed25519 key
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ env.REMOTE_HOST }}
+          username: linuxserver.io
+          key: ${{ env.PRIVATE_KEY }}
+          port: 2222
+          script: |
+            whoami
+            ls -al
+
+      - name: pass environment
+        uses: appleboy/ssh-action@v1
+        env:
+          FOO: "BAR"
+        with:
+          host: ${{ env.REMOTE_HOST }}
+          username: linuxserver.io
+          key: ${{ env.PRIVATE_KEY }}
+          port: 2222
+          envs: FOO
+          script: |
+            echo "I am $FOO, thanks"
+            echo "I am $BAR, thanks"
+
+      - name: pass multiple environment
+        uses: appleboy/ssh-action@v1
+        env:
+          FOO: "BAR"
+          BAR: "FOO"
+          SHA: ${{ github.sha }}
+          PORT: ${{ secrets.PORT }}
+        with:
+          host: ${{ env.REMOTE_HOST }}
+          username: linuxserver.io
+          key: ${{ env.PRIVATE_KEY }}
+          port: 2222
+          envs: FOO,BAR,SHA,PORT
+          script: |
+            echo "I am $FOO, thanks"
+            echo "I am $BAR, thanks"
+            echo "sha: $SHA"
+            echo "port: $PORT"
+
+      - name: custom envs format
+        uses: appleboy/ssh-action@v1
+        env:
+          FOO: "BAR"
+          AAA: "BBB"
+        with:
+          host: ${{ env.REMOTE_HOST }}
+          username: linuxserver.io
+          key: ${{ env.PRIVATE_KEY }}
+          port: 2222
+          envs: FOO,BAR,AAA
+          envs_format: export TEST_{NAME}={VALUE}
+          script: |
+            echo "I am $TEST_FOO, thanks"
+            echo "I am $TEST_BAR, thanks"
+            echo "I am $BAR, thanks"
+            echo "I am $TEST_AAA, thanks"
+
+      - name: pass all ENV variables to script
+        uses: appleboy/ssh-action@v1
+        env:
+          INPUT_FOO: "BAR"
+          INPUT_AAA: "BBB"
+        with:
+          host: ${{ env.REMOTE_HOST }}
+          username: linuxserver.io
+          key: ${{ env.PRIVATE_KEY }}
+          port: 2222
+          allenvs: true
+          script: |
+            echo "I am $INPUT_FOO, thanks"
+            echo "I am $INPUT_AAA, thanks"
+            echo "$GITHUB_BASE_REF"
+            echo "$GITHUB_REF"
+
+      - name: switch to root user
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ env.REMOTE_HOST }}
+          username: linuxserver.io
+          key: ${{ env.PRIVATE_KEY }}
+          port: 2222
+          request_pty: true
+          command_timeout: 30s
+          script: |
+            whoami && echo 'hello world' && touch todo.txt
+            sudo whoami

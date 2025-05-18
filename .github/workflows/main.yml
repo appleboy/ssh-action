@@ -51,6 +51,21 @@ jobs:
           port: 2222
           script_path: testdata/test.sh
 
+      # https://github.com/appleboy/ssh-action/issues/377
+      - name: multiple commands
+        uses: ./
+        with:
+          host: ${{ env.REMOTE_HOST }}
+          username: linuxserver.io
+          password: password
+          port: 2222
+          script: |
+            mkdir -p /tmp/test
+            echo "hello world" > /tmp/test/hello.txt
+            cd /tmp/test
+            ls -al
+            cat /tmp/test/hello.txt
+
   check-ssh-key:
     runs-on: ubuntu-latest
     steps:

@@ -84,7 +84,7 @@ These parameters control the commands executed on the remote host and related be
 | Parameter       | Description                                                                       | Default |
 | --------------- | --------------------------------------------------------------------------------- | ------- |
 | script          | Commands to execute remotely                                                      |         |
-| script_path     | Path to a file containing commands to execute                                     |         |
+| script_path     | Path to a file in the repository containing commands to execute remotely          |         |
 | envs            | Environment variables to pass to the shell script                                 |         |
 | envs_format     | Flexible configuration for environment variable transfer                          |         |
 | allenvs         | Pass all environment variables with `GITHUB_` and `INPUT_` prefixes to the script | false   |

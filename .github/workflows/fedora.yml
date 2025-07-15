@@ -3,10 +3,10 @@ on: [push]
 jobs:
   build:
     name: Build
-    runs-on: self-hosted
+    runs-on: selft-hosted
     steps:
       - name: Execute remote SSH commands using password
-        uses: addminbpk/ssh-action@v1
+        uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.HOST }}
           username: linuxserver.io

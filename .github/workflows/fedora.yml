@@ -6,7 +6,7 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Execute remote SSH commands using password
-        uses: appleboy/ssh-action@v1
+        uses: addminbpk/ssh-action@v1
         with:
           host: ${{ secrets.HOST }}
           username: linuxserver.io

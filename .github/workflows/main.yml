@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   default-user-name-password:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -67,7 +67,7 @@ jobs:
             cat /tmp/test/hello.txt
 
   check-ssh-key:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

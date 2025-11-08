@@ -46,6 +46,7 @@ Built with [Golang](https://go.dev) and [drone-ssh](https://github.com/appleboy/
 ![ssh workflow](./images/ssh-workflow.png)
 
 [![testing main branch](https://github.com/appleboy/ssh-action/actions/workflows/main.yml/badge.svg)](https://github.com/appleboy/ssh-action/actions/workflows/main.yml)
+[![Trivy Security Scan](https://github.com/appleboy/ssh-action/actions/workflows/trivy-scan.yml/badge.svg)](https://github.com/appleboy/ssh-action/actions/workflows/trivy-scan.yml)
 
 ---
 

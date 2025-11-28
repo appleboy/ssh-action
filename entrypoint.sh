@@ -6,7 +6,7 @@ export GITHUB="true"
 
 GITHUB_ACTION_PATH="${GITHUB_ACTION_PATH%/}"
 DRONE_SSH_RELEASE_URL="${DRONE_SSH_RELEASE_URL:-https://github.com/appleboy/drone-ssh/releases/download}"
-DRONE_SSH_VERSION="${DRONE_SSH_VERSION:-1.8.1}"
+DRONE_SSH_VERSION="${DRONE_SSH_VERSION:-1.8.2}"
 
 # Error codes
 readonly ERR_UNKNOWN_PLATFORM=2

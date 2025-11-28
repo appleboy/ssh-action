@@ -37,7 +37,9 @@ This is a GitHub Action for executing remote SSH commands. Built using a composi
 - `action.yml` - Action metadata and input/output definitions
 - `entrypoint.sh` - Platform detection, binary download, and execution
 - `testdata/` - Test scripts and SSH keys for CI workflows
-- `.github/workflows/main.yml` - Comprehensive test suite using Docker containers
+- `.github/workflows/main.yml` - Comprehensive test suite using Docker containers (tests `./` local action)
+- `.github/workflows/stable.yml` - Tests against published `appleboy/ssh-action@v1` tag
+- `.github/workflows/trivy-scan.yml` - Automated security scanning for vulnerabilities and misconfigurations
 
 ## Testing
 
@@ -92,7 +94,7 @@ export GITHUB_ACTION_PATH="$(pwd)"
 Users can provide scripts in two ways:
 
 - `script`: Inline commands (via `INPUT_SCRIPT`)
-- `script_path`: Path to a file in the repository (via `INPUT_SCRIPT_FILE`)
+- `script_path`: Path to a file in the repository (maps to `INPUT_SCRIPT_FILE` env var - note the naming difference)
 
 ### Error Handling
 
@@ -160,7 +162,7 @@ Or use ED25519 keys instead (preferred).
 
 The action pins to specific drone-ssh versions via:
 
-- Default: `DRONE_SSH_VERSION="1.8.1"` in `entrypoint.sh`
+- Default: `DRONE_SSH_VERSION="1.8.2"` in `entrypoint.sh`
 - Override: Users can specify `version` input parameter
 
 Update the default version when new drone-ssh releases are available.

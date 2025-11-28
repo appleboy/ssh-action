@@ -11,6 +11,7 @@
     - [🔌 连接设置](#-连接设置)
     - [🛠️ 指令设置](#️-指令设置)
     - [🌐 代理设置](#-代理设置)
+  - [📤 输出变量](#-输出变量)
   - [⚡ 快速开始](#-快速开始)
   - [🔑 SSH 密钥配置与 OpenSSH 兼容性](#-ssh-密钥配置与-openssh-兼容性)
     - [配置 SSH 密钥](#配置-ssh-密钥)
@@ -26,6 +27,7 @@
     - [多主机不同端口](#多主机不同端口)
     - [多主机同步执行](#多主机同步执行)
     - [传递环境变量到 shell 脚本](#传递环境变量到-shell-脚本)
+    - [捕获命令输出](#捕获命令输出)
   - [🌐 代理与跳板机用法](#-代理与跳板机用法)
   - [🛡️ 安全最佳实践](#️-安全最佳实践)
     - [保护你的私钥](#保护你的私钥)
@@ -93,6 +95,7 @@
 | debug           | 启用调试模式                                          | false  |
 | request_pty     | 向服务器请求伪终端                                    | false  |
 | curl_insecure   | 允许 curl 连接无证书的 SSL 站点                       | false  |
+| capture_stdout  | 捕获命令的标准输出作为 Action 输出                    | false  |
 | version         | drone-ssh 二进制版本，未指定时使用最新版本            |        |
 
 ---
@@ -120,6 +123,16 @@
 
 ---
 
+## 📤 输出变量
+
+本 Action 提供以下输出，可在后续步骤中使用：
+
+| 输出   | 描述                                                  |
+| ------ | ----------------------------------------------------- |
+| stdout | 执行命令的标准输出（需设置 `capture_stdout: true`） |
+
+---
+
 ## ⚡ 快速开始
 
 只需简单配置，即可在工作流中执行远程 SSH 命令：
@@ -136,7 +149,7 @@ jobs:
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.HOST }}
-          username: linuxserver.io
+          username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: whoami
@@ -148,7 +161,7 @@ jobs:
 ======CMD======
 whoami
 ======END======
-linuxserver.io
+out: your_username
 ===============================================
 ✅ Successfully executed commands to all hosts.
 ===============================================
@@ -222,7 +235,7 @@ ssh: handshake failed: ssh: unable to authenticate, attempted methods [none publ
 
 在 Ubuntu 20.04+，你可能需要显式允许 `ssh-rsa` 算法。请在 OpenSSH 配置文件（`/etc/ssh/sshd_config` 或 `/etc/ssh/sshd_config.d/` 下的 drop-in 文件）中添加：
 
-```bash
+```text
 CASignatureAlgorithms +ssh-rsa
 ```
 
@@ -366,6 +379,28 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 > _`env` 对象中的所有环境变量必须为字符串。传递整数或其他类型可能导致意外结果。_
 
+### 捕获命令输出
+
+你可以捕获远程命令的标准输出，并在后续步骤中使用：
+
+```yaml
+- name: 执行并捕获输出
+  id: ssh
+  uses: appleboy/ssh-action@v1
+  with:
+    host: ${{ secrets.HOST }}
+    username: ${{ secrets.USERNAME }}
+    key: ${{ secrets.KEY }}
+    port: ${{ secrets.PORT }}
+    capture_stdout: true
+    script: |
+      echo "Hello World"
+      hostname
+
+- name: 使用捕获的输出
+  run: echo "SSH 输出为 ${{ steps.ssh.outputs.stdout }}"
+```
+
 ---
 
 ## 🌐 代理与跳板机用法
@@ -380,7 +415,7 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
 
 示例 `~/.ssh/config`：
 
-```bash
+```text
 Host Jumphost
   HostName Jumphost
   User ubuntu

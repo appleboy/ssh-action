@@ -11,6 +11,7 @@ English | [繁體中文](./README.zh-tw.md) | [简体中文](./README.zh-cn.md)
     - [🔌 Connection Settings](#-connection-settings)
     - [🛠️ SSH Command Settings](#️-ssh-command-settings)
     - [🌐 Proxy Settings](#-proxy-settings)
+  - [📤 Output Variables](#-output-variables)
   - [⚡ Quick Start](#-quick-start)
   - [🔑 SSH Key Setup \& OpenSSH Compatibility](#-ssh-key-setup--openssh-compatibility)
     - [Setting Up SSH Keys](#setting-up-ssh-keys)
@@ -26,6 +27,7 @@ English | [繁體中文](./README.zh-tw.md) | [简体中文](./README.zh-cn.md)
     - [Multiple hosts with different ports](#multiple-hosts-with-different-ports)
     - [Synchronous execution on multiple hosts](#synchronous-execution-on-multiple-hosts)
     - [Pass environment variables to shell script](#pass-environment-variables-to-shell-script)
+    - [Capturing command output](#capturing-command-output)
   - [🌐 Proxy \& Jump Host Usage](#-proxy--jump-host-usage)
   - [🛡️ Security Best Practices](#️-security-best-practices)
     - [Protecting Your Private Key](#protecting-your-private-key)
@@ -93,6 +95,7 @@ These parameters control the commands executed on the remote host and related be
 | debug           | Enable debug mode                                                                 | false   |
 | request_pty     | Request a pseudo-terminal from the server                                         | false   |
 | curl_insecure   | Allow curl to connect to SSL sites without certificates                           | false   |
+| capture_stdout  | Capture standard output from commands as action output                            | false   |
 | version         | drone-ssh binary version. If not specified, the latest version will be used.      |         |
 
 ---
@@ -120,6 +123,16 @@ These parameters control the use of a proxy (jump host) for connecting to your t
 
 ---
 
+## 📤 Output Variables
+
+This action provides the following outputs that you can use in subsequent steps:
+
+| Output | Description                                                       |
+| ------ | ----------------------------------------------------------------- |
+| stdout | Standard output of the executed commands (requires `capture_stdout: true`) |
+
+---
+
 ## ⚡ Quick Start
 
 Run remote SSH commands in your workflow with minimal configuration:
@@ -136,7 +149,7 @@ jobs:
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.HOST }}
-          username: linuxserver.io
+          username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: whoami
@@ -148,7 +161,7 @@ jobs:
 ======CMD======
 whoami
 ======END======
-linuxserver.io
+out: your_username
 ===============================================
 ✅ Successfully executed commands to all hosts.
 ===============================================
@@ -222,7 +235,7 @@ ssh: handshake failed: ssh: unable to authenticate, attempted methods [none publ
 
 On Ubuntu 20.04+ you may need to explicitly allow the `ssh-rsa` algorithm. Add this to your OpenSSH daemon config (`/etc/ssh/sshd_config` or a drop-in under `/etc/ssh/sshd_config.d/`):
 
-```bash
+```text
 CASignatureAlgorithms +ssh-rsa
 ```
 
@@ -366,6 +379,28 @@ Default `port` is `22`.
 
 > _All environment variables in the `env` object must be strings. Using integers or other types may cause unexpected results._
 
+### Capturing command output
+
+You can capture the standard output of remote commands and use it in subsequent steps:
+
+```yaml
+- name: Execute and capture output
+  id: ssh
+  uses: appleboy/ssh-action@v1
+  with:
+    host: ${{ secrets.HOST }}
+    username: ${{ secrets.USERNAME }}
+    key: ${{ secrets.KEY }}
+    port: ${{ secrets.PORT }}
+    capture_stdout: true
+    script: |
+      echo "Hello World"
+      hostname
+
+- name: Use captured output
+  run: echo "SSH output was ${{ steps.ssh.outputs.stdout }}"
+```
+
 ---
 
 ## 🌐 Proxy & Jump Host Usage
@@ -380,7 +415,7 @@ You can connect to remote hosts via a proxy (jump host) for advanced network top
 
 Example `~/.ssh/config`:
 
-```bash
+```text
 Host Jumphost
   HostName Jumphost
   User ubuntu

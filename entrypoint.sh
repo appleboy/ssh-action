@@ -73,7 +73,7 @@ echo "======================================="
 if [[ "${INPUT_CAPTURE_STDOUT}" == 'true' ]]; then
   {
     echo 'stdout<<EOF'
-    "${TARGET}" "$@" | tee -a "${GITHUB_OUTPUT}"
+    "${TARGET}" "$@" | tee /dev/stderr
     echo 'EOF'
   } >>"${GITHUB_OUTPUT}"
 else

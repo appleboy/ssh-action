@@ -653,6 +653,31 @@ jobs:
             exit 1
           fi
 
+          # Check for duplicates - each unique line should appear exactly once
+          OUTPUT="${{ steps.stdout-multiline.outputs.stdout }}"
+          LINE1_COUNT=$(echo "$OUTPUT" | grep -c "^Line 1$" || true)
+          LINE2_COUNT=$(echo "$OUTPUT" | grep -c "^Line 2$" || true)
+          LINE3_COUNT=$(echo "$OUTPUT" | grep -c "^Line 3$" || true)
+
+          echo "Line 1 count: $LINE1_COUNT"
+          echo "Line 2 count: $LINE2_COUNT"
+          echo "Line 3 count: $LINE3_COUNT"
+
+          if [ "$LINE1_COUNT" -ne 1 ]; then
+            echo "Error: 'Line 1' appears $LINE1_COUNT times (expected 1)"
+            exit 1
+          fi
+          if [ "$LINE2_COUNT" -ne 1 ]; then
+            echo "Error: 'Line 2' appears $LINE2_COUNT times (expected 1)"
+            exit 1
+          fi
+          if [ "$LINE3_COUNT" -ne 1 ]; then
+            echo "Error: 'Line 3' appears $LINE3_COUNT times (expected 1)"
+            exit 1
+          fi
+
+          echo "✓ No duplicate lines detected"
+
       - id: stdout-with-special-chars
         name: capture output with special characters
         uses: ./

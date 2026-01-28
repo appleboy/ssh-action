@@ -71,11 +71,9 @@ if ! "${TARGET}" --version; then
 fi
 echo "======================================="
 if [[ "${INPUT_CAPTURE_STDOUT}" == 'true' ]]; then
-  {
-    echo 'stdout<<EOF'
-    "${TARGET}" "$@" | tee -a "${GITHUB_OUTPUT}"
-    echo 'EOF'
-  } >>"${GITHUB_OUTPUT}"
+  echo 'stdout<<EOF' >> "${GITHUB_OUTPUT}"
+  "${TARGET}" "$@" | tee -a "${GITHUB_OUTPUT}"
+  echo 'EOF' >> "${GITHUB_OUTPUT}"
 else
   "${TARGET}" "$@"
 fi

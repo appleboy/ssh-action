@@ -609,6 +609,77 @@ jobs:
       - name: check stdout
         run: |
           echo "stdout: ${{ steps.stdout.outputs.stdout }}"
+          if [ -z "${{ steps.stdout.outputs.stdout }}" ]; then
+            echo "Error: stdout is empty"
+            exit 1
+          fi
+
+      - id: stdout-multiline
+        name: capture multiline output
+        uses: ./
+        with:
+          host: ${{ env.REMOTE_HOST }}
+          username: linuxserver.io
+          password: password
+          port: 2222
+          capture_stdout: true
+          script: |
+            #!/usr/bin/env bash
+            set -e
+            echo "Line 1"
+            echo "Line 2"
+            echo "Line 3"
+            whoami
+            pwd
+
+      - name: check multiline output
+        run: |
+          echo "stdout: ${{ steps.stdout-multiline.outputs.stdout }}"
+          # Check if all lines are present
+          if ! echo "${{ steps.stdout-multiline.outputs.stdout }}" | grep -q "Line 1"; then
+            echo "Error: 'Line 1' not found in output"
+            exit 1
+          fi
+          if ! echo "${{ steps.stdout-multiline.outputs.stdout }}" | grep -q "Line 2"; then
+            echo "Error: 'Line 2' not found in output"
+            exit 1
+          fi
+          if ! echo "${{ steps.stdout-multiline.outputs.stdout }}" | grep -q "Line 3"; then
+            echo "Error: 'Line 3' not found in output"
+            exit 1
+          fi
+          if ! echo "${{ steps.stdout-multiline.outputs.stdout }}" | grep -q "linuxserver.io"; then
+            echo "Error: username not found in output"
+            exit 1
+          fi
+
+      - id: stdout-with-special-chars
+        name: capture output with special characters
+        uses: ./
+        with:
+          host: ${{ env.REMOTE_HOST }}
+          username: linuxserver.io
+          password: password
+          port: 2222
+          capture_stdout: true
+          script: |
+            #!/usr/bin/env bash
+            set -e
+            echo "Test with special chars: @#$%^&*()"
+            echo "Path: /home/user/test"
+            echo "JSON: {\"key\": \"value\"}"
+
+      - name: check special characters output
+        run: |
+          echo "stdout: ${{ steps.stdout-with-special-chars.outputs.stdout }}"
+          if ! echo "${{ steps.stdout-with-special-chars.outputs.stdout }}" | grep -q "special chars"; then
+            echo "Error: special characters test failed"
+            exit 1
+          fi
+          if ! echo "${{ steps.stdout-with-special-chars.outputs.stdout }}" | grep -q "/home/user/test"; then
+            echo "Error: path not found in output"
+            exit 1
+          fi
 
   testing-script-stop:
     runs-on: ubuntu-latest

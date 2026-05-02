@@ -62,6 +62,17 @@ else
     log_error "Downloaded file is missing or empty: ${TARGET}" "${ERR_INVALID_BINARY}"
   fi
 
+  # Download checksum file
+  if ! curl -fsSL --retry 5 --keepalive-time 2 --location ${INSECURE_OPTION} \
+    "${DOWNLOAD_URL_PREFIX}/checksums.txt" -o "${GITHUB_ACTION_PATH}/checksums.txt"; then
+    log_error "Failed to download checksums.txt from ${DOWNLOAD_URL_PREFIX}." "${ERR_DOWNLOAD_FAILED}"
+  fi
+
+  # Verify checksum
+  if ! (cd "${GITHUB_ACTION_PATH}" && shasum -c checksums.txt --ignore-missing); then
+    log_error "Checksum verification failed for ${CLIENT_BINARY}." "${ERR_INVALID_BINARY}"
+  fi
+
   chmod +x "${TARGET}"
 fi
 

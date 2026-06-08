@@ -84,6 +84,12 @@ inputs:
   version:
     description: |
       The version of drone-ssh to use.
+  retry_attempts:
+    description: "Number of retry attempts after the initial SSH command fails."
+    default: "0"
+  retry_delay:
+    description: "Delay between retry attempts"
+    default: "0s"
 
 outputs:
   stdout:
@@ -138,6 +144,8 @@ runs:
         INPUT_SYNC: ${{ inputs.sync }}
         INPUT_CAPTURE_STDOUT: ${{ inputs.capture_stdout }}
         INPUT_CURL_INSECURE: ${{ inputs.curl_insecure }}
+        INPUT_RETRY_ATTEMPTS: ${{ inputs.retry_attempts }}
+        INPUT_RETRY_DELAY: ${{ inputs.retry_delay }}
         DRONE_SSH_VERSION: ${{ inputs.version }}
 
 branding:

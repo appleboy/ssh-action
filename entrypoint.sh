@@ -20,6 +20,104 @@ function log_error() {
   exit "$2"
 }
 
+function validate_non_negative_integer() {
+  local name="$1"
+  local value="$2"
+
+  if [[ ! "${value}" =~ ^[0-9]+$ ]]; then
+    log_error "${name} must be a non-negative integer, got: ${value}" 1
+  fi
+}
+
+function is_retryable_connection_failure() {
+  local output="$1"
+
+  [[ "${output}" =~ dial[[:space:]]+tcp ]] || \
+  [[ "${output}" =~ i/o[[:space:]]+timeout ]] || \
+  [[ "${output}" =~ connection[[:space:]]+refused ]] || \
+  [[ "${output}" =~ connection[[:space:]]+reset ]] || \
+  [[ "${output}" =~ connection[[:space:]]+timed[[:space:]]+out ]] || \
+  [[ "${output}" =~ no[[:space:]]+route[[:space:]]+to[[:space:]]+host ]] || \
+  [[ "${output}" =~ network[[:space:]]+is[[:space:]]+unreachable ]] || \
+  [[ "${output}" =~ no[[:space:]]+such[[:space:]]+host ]] || \
+  [[ "${output}" =~ ssh:[[:space:]]+handshake[[:space:]]+failed ]]
+}
+
+function run_ssh_command() {
+  local status=0
+  local stderr=""
+
+  if [[ "${INPUT_CAPTURE_STDOUT}" == 'true' ]]; then
+    echo 'stdout<<EOF' >> "${GITHUB_OUTPUT}"
+    exec 3>&1
+    set +e
+    stderr="$(
+      {
+        "${TARGET}" "$@" 1> >(tee -a "${GITHUB_OUTPUT}" >&3)
+      } 2>&1 | tee /dev/stderr
+    )"
+    status="${PIPESTATUS[0]}"
+    set -e
+    exec 3>&-
+    echo 'EOF' >> "${GITHUB_OUTPUT}"
+    RUN_SSH_OUTPUT="${stderr}"
+    return "${status}"
+  else
+    exec 3>&1
+    set +e
+    stderr="$(
+      {
+        "${TARGET}" "$@" 1>&3
+      } 2>&1 | tee /dev/stderr
+    )"
+    status="${PIPESTATUS[0]}"
+    set -e
+    exec 3>&-
+    RUN_SSH_OUTPUT="${stderr}"
+    return "${status}"
+  fi
+}
+
+function run_ssh_command_with_retry() {
+  local retries="${INPUT_RETRY_ATTEMPTS:-0}"
+  local delay="${INPUT_RETRY_DELAY:-0}"
+  local max_attempts
+  local attempt=1
+  local status=0
+  RUN_SSH_OUTPUT=""
+
+  validate_non_negative_integer "retry_attempts" "${retries}"
+
+  max_attempts=$((retries + 1))
+
+  while true; do
+    if (( retries > 0 )); then
+      echo "SSH command attempt ${attempt}/${max_attempts}"
+    fi
+
+    run_ssh_command "$@"
+    status="$?"
+
+    if (( status == 0 )); then
+      return 0
+    fi
+
+    if (( attempt >= max_attempts )); then
+      return "${status}"
+    fi
+
+    if ! is_retryable_connection_failure "${RUN_SSH_OUTPUT}"; then
+      return "${status}"
+    fi
+
+    attempt=$((attempt + 1))
+
+    if [[ "${delay}" != "0" && "${delay}" != "0s" ]]; then
+      sleep "${delay}"
+    fi
+  done
+}
+
 function detect_client_info() {
   CLIENT_PLATFORM="${SSH_CLIENT_OS:-$(uname -s | tr '[:upper:]' '[:lower:]')}"
   CLIENT_ARCH="${SSH_CLIENT_ARCH:-$(uname -m)}"
@@ -70,10 +168,4 @@ if ! "${TARGET}" --version; then
   log_error "Failed to execute ${TARGET} --version. The binary may be corrupted." "${ERR_VERSION_CHECK_FAILED}"
 fi
 echo "======================================="
-if [[ "${INPUT_CAPTURE_STDOUT}" == 'true' ]]; then
-  echo 'stdout<<EOF' >> "${GITHUB_OUTPUT}"
-  "${TARGET}" "$@" | tee -a "${GITHUB_OUTPUT}"
-  echo 'EOF' >> "${GITHUB_OUTPUT}"
-else
-  "${TARGET}" "$@"
-fi
+run_ssh_command_with_retry "$@"

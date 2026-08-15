@@ -26,6 +26,8 @@ function detect_client_info() {
 
   case "${CLIENT_PLATFORM}" in
   darwin | linux | windows) ;;
+  # Git Bash / MSYS2 / Cygwin on Windows runners report e.g. MINGW64_NT-10.0
+  mingw* | msys* | cygwin*) CLIENT_PLATFORM="windows" ;;
   *) log_error "Unknown or unsupported platform: ${CLIENT_PLATFORM}. Supported platforms are Linux, Darwin, and Windows." "${ERR_UNKNOWN_PLATFORM}" ;;
   esac
 

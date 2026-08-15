@@ -62,15 +62,35 @@ else
     log_error "Downloaded file is missing or empty: ${TARGET}" "${ERR_INVALID_BINARY}"
   fi
 
-  # Download checksum file
-  if ! curl -fsSL --retry 5 --keepalive-time 2 --location ${INSECURE_OPTION} \
-    "${DOWNLOAD_URL_PREFIX}/checksums.txt" -o "${GITHUB_ACTION_PATH}/checksums.txt"; then
-    log_error "Failed to download checksums.txt from ${DOWNLOAD_URL_PREFIX}." "${ERR_DOWNLOAD_FAILED}"
+  # Verify checksum; container jobs may lack shasum (Perl) or sha256sum, so
+  # detect an available tool and skip verification with a warning if none exists
+  SHA256_CMD=""
+  if command -v shasum >/dev/null 2>&1; then
+    SHA256_CMD="shasum -a 256"
+  elif command -v sha256sum >/dev/null 2>&1; then
+    SHA256_CMD="sha256sum"
+  else
+    echo "Warning: neither shasum nor sha256sum is available, skipping checksum verification" >&2
   fi
 
-  # Verify checksum
-  if ! (cd "${GITHUB_ACTION_PATH}" && shasum -c checksums.txt --ignore-missing); then
-    log_error "Checksum verification failed for ${CLIENT_BINARY}." "${ERR_INVALID_BINARY}"
+  if [[ -n "${SHA256_CMD}" ]]; then
+    CHECKSUMS_FILE="${GITHUB_ACTION_PATH}/checksums.txt"
+    if ! curl -fsSL --retry 5 --keepalive-time 2 --location ${INSECURE_OPTION} \
+      "${DOWNLOAD_URL_PREFIX}/checksums.txt" -o "${CHECKSUMS_FILE}"; then
+      log_error "Failed to download checksums.txt from ${DOWNLOAD_URL_PREFIX}." "${ERR_DOWNLOAD_FAILED}"
+    fi
+
+    EXPECTED_CHECKSUM=$(awk -v bin="${CLIENT_BINARY}" '$2 == bin {print $1}' "${CHECKSUMS_FILE}")
+    if [[ -z "${EXPECTED_CHECKSUM}" ]]; then
+      log_error "No checksum entry found for ${CLIENT_BINARY} in checksums.txt." "${ERR_INVALID_BINARY}"
+    fi
+
+    ACTUAL_CHECKSUM=$(${SHA256_CMD} "${TARGET}" | awk '{print $1}')
+    if [[ "${ACTUAL_CHECKSUM}" != "${EXPECTED_CHECKSUM}" ]]; then
+      log_error "Checksum verification failed for ${CLIENT_BINARY}: expected ${EXPECTED_CHECKSUM}, got ${ACTUAL_CHECKSUM}." "${ERR_INVALID_BINARY}"
+    fi
+    echo "Checksum verification passed for ${CLIENT_BINARY}"
+    rm -f "${CHECKSUMS_FILE}"
   fi
 
   chmod +x "${TARGET}"

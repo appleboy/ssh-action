@@ -793,6 +793,20 @@ jobs:
             echo "Output contains 'True'"
           fi
 
+  windows-binary-download:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: test binary download and checksum verification
+        shell: bash
+        run: |
+          export GITHUB_ACTION_PATH="$PWD"
+          export INPUT_CURL_INSECURE=false
+          export INPUT_CAPTURE_STDOUT=false
+          ./entrypoint.sh --help
+
   testing-script-error:
     runs-on: ubuntu-latest
     steps:

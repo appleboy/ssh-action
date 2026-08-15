@@ -39,6 +39,10 @@ function detect_client_info() {
 detect_client_info
 DOWNLOAD_URL_PREFIX="${DRONE_SSH_RELEASE_URL}/v${DRONE_SSH_VERSION}"
 CLIENT_BINARY="drone-ssh-${DRONE_SSH_VERSION}-${CLIENT_PLATFORM}-${CLIENT_ARCH}"
+# Windows release assets are published with an .exe suffix
+if [[ "${CLIENT_PLATFORM}" == "windows" ]]; then
+  CLIENT_BINARY="${CLIENT_BINARY}.exe"
+fi
 TARGET="${GITHUB_ACTION_PATH}/${CLIENT_BINARY}"
 
 # Check if binary already exists and is executable (caching)

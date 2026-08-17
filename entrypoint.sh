@@ -108,9 +108,10 @@ if ! "${TARGET}" --version; then
 fi
 echo "======================================="
 if [[ "${INPUT_CAPTURE_STDOUT}" == 'true' ]]; then
-  echo 'stdout<<EOF' >> "${GITHUB_OUTPUT}"
+  OUTPUT_DELIMITER="EOF_${RANDOM}_${RANDOM}_${RANDOM}_${RANDOM}_${RANDOM}_${RANDOM}_${RANDOM}_${RANDOM}"
+  echo "stdout<<${OUTPUT_DELIMITER}" >> "${GITHUB_OUTPUT}"
   "${TARGET}" "$@" | tee -a "${GITHUB_OUTPUT}"
-  echo 'EOF' >> "${GITHUB_OUTPUT}"
+  echo "${OUTPUT_DELIMITER}" >> "${GITHUB_OUTPUT}"
 else
   "${TARGET}" "$@"
 fi

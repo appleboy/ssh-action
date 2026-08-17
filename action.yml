@@ -115,6 +115,7 @@ runs:
         INPUT_FINGERPRINT: ${{ inputs.fingerprint }}
         INPUT_PROXY_HOST: ${{ inputs.proxy_host }}
         INPUT_PROXY_PORT: ${{ inputs.proxy_port }}
+        INPUT_PROXY_PROTOCOL: ${{ inputs.proxy_protocol }}
         INPUT_PROXY_USERNAME: ${{ inputs.proxy_username }}
         INPUT_PROXY_PASSWORD: ${{ inputs.proxy_password }}
         INPUT_PROXY_PASSPHRASE: ${{ inputs.proxy_passphrase }}
@@ -129,12 +130,12 @@ runs:
         INPUT_ENVS: ${{ inputs.envs }}
         INPUT_ENVS_FORMAT: ${{ inputs.envs_format }}
         INPUT_DEBUG: ${{ inputs.debug }}
-        INPUT_ALL_ENVS: ${{ inputs.allenvs }}
+        INPUT_ALLENVS: ${{ inputs.allenvs }}
         INPUT_REQUEST_PTY: ${{ inputs.request_pty }}
         INPUT_USE_INSECURE_CIPHER: ${{ inputs.use_insecure_cipher }}
-        INPUT_CIPHER: ${{ inputs.cipher }}
+        INPUT_CIPHERS: ${{ inputs.cipher }}
         INPUT_PROXY_USE_INSECURE_CIPHER: ${{ inputs.proxy_use_insecure_cipher }}
-        INPUT_PROXY_CIPHER: ${{ inputs.proxy_cipher }}
+        INPUT_PROXY_CIPHERS: ${{ inputs.proxy_cipher }}
         INPUT_SYNC: ${{ inputs.sync }}
         INPUT_CAPTURE_STDOUT: ${{ inputs.capture_stdout }}
         INPUT_CURL_INSECURE: ${{ inputs.curl_insecure }}

@@ -109,8 +109,17 @@ fi
 echo "======================================="
 if [[ "${INPUT_CAPTURE_STDOUT}" == 'true' ]]; then
   echo 'stdout<<EOF' >> "${GITHUB_OUTPUT}"
-  "${TARGET}" "$@" | tee -a "${GITHUB_OUTPUT}"
+  if "${TARGET}" "$@" | tee -a "${GITHUB_OUTPUT}"; then
+    capture_status=0
+  else
+    capture_status=$?
+  fi
+  output_last_byte_newline_count="$(tail -c 1 "${GITHUB_OUTPUT}" | wc -l)"
+  if [[ "${output_last_byte_newline_count}" -eq 0 ]]; then
+    echo >> "${GITHUB_OUTPUT}"
+  fi
   echo 'EOF' >> "${GITHUB_OUTPUT}"
+  exit "${capture_status}"
 else
   "${TARGET}" "$@"
 fi

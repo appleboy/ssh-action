@@ -99,6 +99,8 @@ These parameters control the commands executed on the remote host and related be
 | curl_insecure   | Allow curl to connect to SSL sites without certificates                           | false   |
 | capture_stdout  | Capture standard output from commands as action output                            | false   |
 | version         | drone-ssh binary version. If not specified, the latest version will be used.      |         |
+| retry_attempts  | Number of retries after an SSH connection failure                                 | 0       |
+| retry_delay     | Delay between retry attempts                                                     | 0s      |
 
 ---
 
@@ -307,6 +309,22 @@ This section covers common and advanced usage patterns, including multi-host, pr
     key: ${{ secrets.KEY }}
     port: ${{ secrets.PORT }}
     script_path: scripts/script.sh
+```
+
+### Retry SSH connection failures
+
+Use `retry_attempts` to retry transient SSH connection failures, such as `dial tcp ...: i/o timeout`. Retries are disabled by default. Remote command failures are not retried.
+
+```yaml
+- name: Retry transient SSH connection failures
+  uses: appleboy/ssh-action@v1
+  with:
+    host: ${{ secrets.HOST }}
+    username: ${{ secrets.USERNAME }}
+    key: ${{ secrets.KEY }}
+    retry_attempts: 3
+    retry_delay: 5s
+    script: whoami
 ```
 
 ### Multiple hosts

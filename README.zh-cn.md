@@ -99,6 +99,8 @@
 | curl_insecure   | 允许 curl 连接无证书的 SSL 站点                       | false  |
 | capture_stdout  | 捕获命令的标准输出作为 Action 输出                    | false  |
 | version         | drone-ssh 二进制版本，未指定时使用最新版本            |        |
+| retry_attempts  | SSH 连接失败后的重试次数                              | 0      |
+| retry_delay     | 每次重试之间的延迟                                      | 0s     |
 
 ---
 
@@ -307,6 +309,22 @@ ssh-keygen -t ed25519 -a 200 -C "your_email@example.com"
     key: ${{ secrets.KEY }}
     port: ${{ secrets.PORT }}
     script_path: scripts/script.sh
+```
+
+### 重试 SSH 连接失败
+
+使用 `retry_attempts` 重试临时 SSH 连接失败，例如 `dial tcp ...: i/o timeout`。默认不重试。远程命令失败不会重试。
+
+```yaml
+- name: 重试临时 SSH 连接失败
+  uses: appleboy/ssh-action@v1
+  with:
+    host: ${{ secrets.HOST }}
+    username: ${{ secrets.USERNAME }}
+    key: ${{ secrets.KEY }}
+    retry_attempts: 3
+    retry_delay: 5s
+    script: whoami
 ```
 
 ### 多主机
